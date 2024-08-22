@@ -1,6 +1,10 @@
 /** @format */
 
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import {
+  S3Client,
+  PutObjectCommand,
+  DeleteObjectCommand,
+} from "@aws-sdk/client-s3";
 
 const { v4: uuidv4 } = require("uuid");
 
@@ -39,6 +43,20 @@ export const uploadImageToS3 = async (
       ? `https://${AWS_S3_BUCKET}.s3.${AWS_S3_REGION}.amazonaws.com/${key}`
       : "";
   } catch (error: unknown) {
+    return error;
+  }
+};
+
+export const deleteImageToS3 = async (name: string) => {
+  try {
+    const response = await client.send(
+      new DeleteObjectCommand({
+        Bucket: AWS_S3_BUCKET,
+        Key: name,
+      })
+    );
+    return response.$metadata.httpStatusCode === 200 ? "success" : "failed";
+  } catch (error) {
     return error;
   }
 };
