@@ -1,0 +1,34 @@
+@import '../../layout';
+@import '../../variables';
+@import '../../viewsize';
+
+.lunch-container {
+  @include flex-column(flex-start, flex-start);
+  gap: 10px;
+  width: 400px;
+  border: 1px solid $grayscale-black60;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 15px;
+
+  img {
+    width: 200px;
+    height: 200px;
+  }
+
+  .desc-container {
+    @include flex-column(flex-start, flex-start);
+    width: 100%;
+    gap: 5px;
+    .open-desc {
+      cursor: pointer;
+    }
+
+    .desc {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid $grayscale-black30;
+    }
+  }
+}

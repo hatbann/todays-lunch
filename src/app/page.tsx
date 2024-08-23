@@ -6,9 +6,11 @@ import styles from './page.module.css';
 import { useEffect, useState } from 'react';
 import { RecipeType } from '@/model/recipe';
 import style from '../styles/pages/recipe/style.module.scss';
+import { LunchType } from '@/model/lunch';
+import Lunch from '@/components/lunch/Lunch';
 
 export default function Home() {
-  const [recipe, setRecipe] = useState<RecipeType[]>([]);
+  const [lunch, setLunch] = useState<LunchType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -32,25 +34,24 @@ export default function Home() {
             console.log(e);
           });
 
-        setRecipe(response);
+        setLunch(response);
       } catch (error) {}
     };
 
     fetchData();
   }, []);
 
-  console.log(recipe);
-
   return (
     <main className={styles.main}>
       {isLoading ? (
         <p>Loading...</p>
-      ) : recipe.length !== 0 ? (
-        <section>
-          {recipe.map((item, idx) => {
+      ) : lunch.length !== 0 ? (
+        <section className={style['container']}>
+          <h2 className={style['title']}>도시락통</h2>
+          {lunch.map((item, idx) => {
             return (
-              <div>
-                <p>{item.title}</p>
+              <div key={`${idx}-${item.title}`}>
+                <Lunch item={item} />
               </div>
             );
           })}
