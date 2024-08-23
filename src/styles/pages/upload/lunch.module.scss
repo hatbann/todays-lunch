@@ -1,0 +1,34 @@
+@import '../../layout';
+@import '../../variables';
+@import '../../viewsize';
+
+.lunch-container {
+  @include flex-column(center, center);
+  gap: 40px;
+  width: 100vw;
+  min-height: calc(100vh - 80px);
+
+  .head {
+    font-size: 20px;
+  }
+}
+
+.input-section {
+  @include flex-column(flex-start, center);
+  gap: 20px;
+  width: 450px;
+
+  .write-btn {
+    width: 100px;
+    height: 40px;
+    border-radius: 8px;
+    border: none;
+    background-color: $main-color;
+    color: white;
+
+    &:disabled {
+      background-color: $grayscale-black30;
+      color: $grayscale-black80;
+    }
+  }
+}

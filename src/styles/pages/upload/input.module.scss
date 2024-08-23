@@ -1,0 +1,90 @@
+@import '../../layout';
+@import '../../variables';
+@import '../../viewsize';
+
+.input-container,
+.text-area-container {
+  width: 100%;
+  gap: 10px;
+
+  label {
+    font-size: 15px;
+    font-weight: 600;
+    width: 50px;
+  }
+
+  input,
+  textarea {
+    padding: 5px 10px;
+    border-radius: 8px;
+    width: calc(100% - 50px);
+    font-size: 12px;
+  }
+
+  input {
+    height: 35px;
+  }
+
+  textarea {
+    height: 120px;
+  }
+}
+
+.input-container {
+  @include flex-row(flex-start, center);
+}
+
+.text-area-container {
+  @include flex-row(flex-start, flex-start);
+}
+
+.input-img-container {
+  @include flex-column(flex-start, flex-start);
+  width: 100%;
+  gap: 10px;
+
+  .title {
+    font-size: 15px;
+    font-weight: 600;
+    width: 50px;
+  }
+
+  input {
+    display: none;
+  }
+
+  .custom-input {
+    width: 100%;
+    height: 100px;
+    border: 1px dashed $grayscale-black80;
+
+    @include flex-column(center, center);
+
+    label {
+      @include flex-column(center, center);
+      width: 100px;
+      height: 30px;
+      background-color: $grayscale-black90;
+      border-radius: 20px;
+      color: white;
+      font-size: 12px;
+      cursor: pointer;
+    }
+  }
+
+  .preview {
+    @include flex-row(center, center);
+    gap: 20px;
+    width: 100%;
+
+    .preview-img {
+      width: 200px;
+      height: 200px;
+    }
+
+    .delete {
+      width: 20px;
+      cursor: pointer;
+    }
+  }
+}

@@ -1,0 +1,9 @@
+@import '../../layout';
+@import '../../variables';
+@import '../../viewsize';
+
+.empty-container {
+  @include flex-row(center, center);
+  width: 100vw;
+  height: calc(100vh - 80px);
+}

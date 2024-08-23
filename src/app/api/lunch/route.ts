@@ -1,8 +1,8 @@
 /** @format */
 
-import Lunch from "@/model/lunch";
-import dbConnect from "@/utils/database";
-import { NextRequest, NextResponse } from "next/server";
+import Lunch from '@/model/lunch';
+import dbConnect from '@/utils/database';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
   try {
@@ -19,12 +19,13 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     await dbConnect();
-    const body = req.json();
+    const body = await req.json();
+    console.log(body);
     const newLunch = new Lunch(body);
 
     await newLunch.save();
 
-    return new NextResponse("upload success", { status: 200 });
+    return NextResponse.json({ message: 'success' }, { status: 200 });
   } catch (error) {
     return Response.error();
   }

@@ -1,0 +1,28 @@
+@import '../layout';
+@import '../variables';
+@import '../viewsize';
+
+.header-container {
+  @include flex-row(space-between, center);
+  padding: 10px;
+
+  .logo {
+    width: 60px;
+    cursor: pointer;
+  }
+
+  .category-container {
+    @include flex-row(center, center);
+    gap: 10px;
+
+    .category {
+      cursor: pointer;
+      padding: 3px 0;
+
+      &.active {
+        color: $main-color;
+        border-bottom: 1px solid $main-color;
+      }
+    }
+  }
+}

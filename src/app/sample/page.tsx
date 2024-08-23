@@ -1,32 +1,32 @@
 /** @format */
 
-"use client";
+'use client';
 
-import { uploadImageToS3 } from "@/utils/uploadImageToS3";
-import React, { ChangeEvent, useState } from "react";
+import { uploadImageToS3 } from '@/utils/uploadImageToS3';
+import React, { ChangeEvent, useState } from 'react';
 
 const page = () => {
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState('');
   const [img, setImg] = useState<File | null>(null);
 
   const handleWrite = async () => {
     if (img) {
       try {
-        const imgurl = await await uploadImageToS3(img);
+        const imgurl = await uploadImageToS3(img);
         const bodyData = {
           title,
           img: imgurl,
         };
         const API_URL =
-          process.env.NODE_ENV === "production"
-            ? "/api"
+          process.env.NODE_ENV === 'production'
+            ? '/api'
             : `${process.env.NEXT_PUBLIC_API_URL!}/api`;
 
         const response = await fetch(`${API_URL}/imgsample`, {
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
-          method: "POST",
+          method: 'POST',
           body: JSON.stringify(bodyData),
         })
           .then((res) => {
