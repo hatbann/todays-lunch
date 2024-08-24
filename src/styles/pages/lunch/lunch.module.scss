@@ -5,7 +5,7 @@
 .lunch-container {
   @include flex-column(flex-start, flex-start);
   gap: 10px;
-  width: 400px;
+  width: 100%;
   border: 1px solid $grayscale-black60;
   border-radius: 8px;
   padding: 10px;
@@ -20,8 +20,19 @@
     @include flex-column(flex-start, flex-start);
     width: 100%;
     gap: 5px;
-    .open-desc {
+    .open-btn {
+      @include flex-row(flex-start, center);
+      gap: 5px;
       cursor: pointer;
+
+      .arrow {
+        width: 10px;
+        height: 10px;
+
+        &.open {
+          transform: rotate(180deg);
+        }
+      }
     }
 
     .desc {

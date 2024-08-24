@@ -6,6 +6,8 @@ import moment from 'moment';
 import Input, { InputImage, TextArea } from '@/components/upload/Input';
 import { uploadImageToS3 } from '@/utils/uploadImageToS3';
 import { useRouter } from 'next/navigation';
+import { useRecoilValue } from 'recoil';
+import { userState } from '@/states/user';
 
 const page = () => {
   const router = useRouter();
@@ -14,6 +16,7 @@ const page = () => {
   const [content, setContent] = useState<string>('');
   const [author, setAuthor] = useState<string>('');
   const [img, setImg] = useState<File | null>(null);
+  const user = useRecoilValue(userState);
 
   const isDisable = title.length < 1 || content.length < 1 || img === null;
 
@@ -24,7 +27,7 @@ const page = () => {
         const bodyData = {
           title,
           content,
-          author,
+          author: user.user_id,
           img: imgurl,
         };
         const API_URL =
@@ -98,14 +101,11 @@ const page = () => {
         />
         <Input
           label={'작성자'}
-          value={author}
+          value={user.username}
           htmlFor="author"
-          onChange={(e) => {
-            if (author.length < 20) {
-              setAuthor(e.target.value);
-            }
-          }}
-          placeholder="등록할 이름을 입력하세요(20자 이내)"
+          onChange={(e) => {}}
+          placeholder=""
+          disable={true}
         />
         <button
           className={style['write-btn']}

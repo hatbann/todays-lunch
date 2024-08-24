@@ -1,18 +1,21 @@
+/** @format */
 'use client';
 
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
 import { RecipeType } from '@/model/recipe';
-import React, { useEffect, useState } from 'react';
-import style from '../../styles/pages/recipe/style.module.scss';
+import style from '../../styles/pages/lunch/style.module.scss';
+import { LunchType } from '@/model/lunch';
+import Lunch from '@/components/lunch/Lunch';
 import { useRouter } from 'next/navigation';
 import { useRecoilValue } from 'recoil';
 import { userState } from '@/states/user';
 
-const page = () => {
-  const [recipes, setRecipes] = useState<RecipeType[]>([]);
+export default function Home() {
+  const [lunch, setLunch] = useState<LunchType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
   const user = useRecoilValue(userState);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -21,7 +24,7 @@ const page = () => {
             ? '/api'
             : `${process.env.NEXT_PUBLIC_API_URL!}/api`;
 
-        const response = await fetch(`${API_URL}/recipe`, {
+        const response = await fetch(`${API_URL}/lunch`, {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -34,7 +37,7 @@ const page = () => {
             console.log(e);
           });
 
-        setRecipes(response);
+        setLunch(response);
         setIsLoading(false);
       } catch (error) {}
     };
@@ -43,22 +46,31 @@ const page = () => {
   }, []);
 
   return (
-    <div>
+    <main className={style['main']}>
       {isLoading ? (
         <p>Loading...</p>
-      ) : recipes.length !== 0 ? (
+      ) : lunch.length !== 0 ? (
         <section className={style['container']}>
-          <h2 className={style['title']}>레시피</h2>
-          {recipes.map((recipe, idx) => (
-            <article key={idx}>
-              <h3>{recipe.title}</h3>
-            </article>
-          ))}
+          <h2 className={style['title']}>도시락통</h2>
+          <p
+            className={style['upload']}
+            onClick={() => {
+              router.push('/upload/lunch');
+            }}
+          >
+            도시락 올리기
+          </p>
+          {lunch.map((item, idx) => {
+            return (
+              <div key={`${idx}-${item.title}`} className={style['lunch-item']}>
+                <Lunch item={item} />
+              </div>
+            );
+          })}
         </section>
       ) : (
         <div className={style['empty-container']}>
-          <h3>레시피가 없습니다</h3>
-
+          <h3>글이 없습니다</h3>
           <button
             onClick={() => {
               if (user.user_id === '') {
@@ -71,12 +83,10 @@ const page = () => {
               }
             }}
           >
-            레시피 올리기
+            도시락 올리기
           </button>
         </div>
       )}
-    </div>
+    </main>
   );
-};
-
-export default page;
+}

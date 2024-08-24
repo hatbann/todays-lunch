@@ -27,12 +27,29 @@
   }
 }
 
+.main {
+  width: 100vw;
+  @include flex-column(flex-start, center);
+}
+
 .container {
   @include flex-column(flex-start, center);
   gap: 20px;
   padding: 30px 0;
+  width: 400px;
 
   .title {
     font-size: 20px;
+  }
+
+  .upload {
+    cursor: pointer;
+    font-size: 13px;
+    text-align: end;
+    width: 100%;
+  }
+
+  .lunch-item {
+    width: 100%;
   }
 }

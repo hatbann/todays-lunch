@@ -1,6 +1,45 @@
-import React from 'react';
+'use client';
 
+import React, { useEffect } from 'react';
+import { useRecoilState } from 'recoil';
+import { userState } from '@/states/user';
 const Main = ({ children }: { children: React.ReactNode }) => {
+  const [user, setUser] = useRecoilState(userState);
+
+  useEffect(() => {
+    const getUserInfo = async () => {
+      const API_URL =
+        process.env.NODE_ENV === 'production'
+          ? '/api'
+          : `${process.env.NEXT_PUBLIC_API_URL!}/api`;
+
+      const res: { message: any; token: any; user: any } = await fetch(
+        `${API_URL}/token`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      )
+        .then((res) => {
+          return res.json();
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+
+      if (res.message === 'OK') {
+        setUser({
+          username: res.user.nickname,
+          user_id: String(res.user._id),
+        });
+      }
+    };
+
+    getUserInfo();
+  }, []);
+
   return <div>{children}</div>;
 };
 

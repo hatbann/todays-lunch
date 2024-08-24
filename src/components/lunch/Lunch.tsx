@@ -11,14 +11,22 @@ const Lunch = ({ item }: { item: LunchType }) => {
       <span>작성자 : {item.author}</span>
       {item.img && <img src={item.img} alt="img" />}
       <div className={style['desc-container']}>
-        <span
-          className={style['open-desc']}
+        <div
+          className={style['open-btn']}
           onClick={() => {
             setIsOpen((prev) => !prev);
           }}
         >
-          설명
-        </span>
+          <span className={style['open-desc']}>설명</span>
+          <img
+            src="/images/png/opendesc.png"
+            className={
+              isOpen
+                ? `${style['arrow']} ${style['open']}`
+                : `${style['arrow']} ${style['close']}`
+            }
+          />
+        </div>
         {isOpen && <div className={style['desc']}>{item.content}</div>}
       </div>
     </div>
