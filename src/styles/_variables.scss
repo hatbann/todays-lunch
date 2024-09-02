@@ -1,3 +1,7 @@
+/** @format */
+// dvh
+$dvh: var(--vh, 1vh);
+
 // break point
 $breakpoint-mobile: 768px;
 $breakpoint-desktop: 1200px;
@@ -39,3 +43,12 @@ $grayscale-black40: #dfdfe2;
 $grayscale-black30: #eaebee;
 $grayscale-black20: #f3f3f6;
 $grayscale-white: #ffffff;
+
+//Shadow
+$shadow-xs: 0px 1px 2px 0px #1018280d;
+$shadow-sm: 0px 1px 2px 0px #1018280f, 0px 1px 3px 0px #1018281a;
+$shadow-md: 0px 2px 4px -2px #1018280f, 0px 4px 8px -2px #1018281a;
+$shadow-lg: 0px 4px 6px -2px #10182808, 0px 12px 16px -4px #10182814;
+$shadow-xl: 0px 8px 8px -4px #10182808, 0px 20px 24px -4px #10182814;
+$shadow-2xl: 0px 24px 48px -12px #1018282e;
+$shadow-3xl: 0px 32px 64px -12px #10182824;

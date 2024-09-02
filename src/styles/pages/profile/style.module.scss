@@ -1,0 +1,135 @@
+/** @format */
+
+@import "../../layout";
+@import "../../variables";
+@import "../../viewsize";
+
+.loading {
+  width: 100%;
+  height: calc($dvh * 100 - 80px);
+  @include flex-column(center, center);
+}
+
+.container {
+  width: 100%;
+  min-height: calc($dvh * 100 - 80px);
+  padding: 70px 100px;
+  @include flex-column(flex-start, center);
+
+  section {
+    width: 800px;
+    max-width: 100%;
+    padding: 30px 0;
+    @include flex-column(flex-start, flex-start);
+    border-bottom: 1px solid $grayscale-black30;
+
+    .title {
+      font-weight: 600;
+      font-size: 20px;
+    }
+
+    .more {
+      width: 100%;
+      text-align: end;
+      font-size: 13px;
+      color: $grayscale-black60;
+      cursor: pointer;
+    }
+
+    .table {
+      width: 100%;
+      @include flex-column(flex-start, flex-start);
+      border: 1px solid $grayscale-black50;
+      border-radius: 5px;
+
+      .head {
+        width: 100%;
+        font-size: 15px;
+        font-weight: 600;
+        @include flex-row(flex-start, center);
+        border-bottom: 1px solid $grayscale-black30;
+        padding: 10px;
+      }
+
+      .body {
+        width: 100%;
+        font-size: 15px;
+        @include flex-column(flex-start, flex-start);
+
+        .body-item {
+          width: 100%;
+          @include flex-row(flex-start, center);
+          border-radius: 5px;
+          padding: 10px;
+        }
+      }
+    }
+  }
+}
+
+.user-profile-container {
+  gap: 30px;
+  width: 100%;
+  .profile-items {
+    @include flex-column(flex-start, flex-start);
+    gap: 10px;
+    width: 100%;
+
+    .profile-item {
+      @include flex-row(flex-start, center);
+      gap: 5px;
+    }
+  }
+
+  .btn-container {
+    width: 100%;
+    @include flex-row(flex-end, center);
+    button {
+      width: 70px;
+      height: 30px;
+      border-radius: 8px;
+      font-size: 14px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+
+      &.cancel {
+        background-color: $grayscale-black20;
+      }
+
+      &.edit {
+        background-color: $main-color;
+        color: white;
+
+        &:hover {
+          background-color: $main-dark-color;
+        }
+      }
+    }
+  }
+}
+
+.user-lunchbox-container,
+.user-recipe-container {
+  width: 100%;
+  gap: 10px;
+}
+
+.empty-container {
+  width: 100%;
+  @include flex-column(center, center);
+  gap: 20px;
+  margin-top: 40px;
+  padding-bottom: 40px;
+
+  p {
+    font-size: 18px;
+  }
+
+  a {
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 600;
+    color: $main-color;
+  }
+}

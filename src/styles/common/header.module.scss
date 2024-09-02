@@ -1,14 +1,16 @@
-@import '../layout';
-@import '../variables';
-@import '../viewsize';
+/** @format */
+
+@import "../layout";
+@import "../variables";
+@import "../viewsize";
 
 .header-container {
   @include flex-row(space-between, center);
-  padding: 10px 20px;
+  padding: 20px 40px;
   height: 80px;
 }
 
-.right {
+.left {
   @include flex-row(flex-start, center);
   gap: 40px;
 
@@ -28,7 +30,45 @@
       &.active {
         color: $main-color;
         border-bottom: 1px solid $main-color;
+        font-weight: 600;
       }
+    }
+  }
+}
+
+.right {
+  position: relative;
+  span {
+    cursor: pointer;
+  }
+}
+
+.popup-container {
+  position: absolute;
+  width: 200px;
+  height: auto;
+  background-color: white;
+  z-index: 100;
+  top: 30px;
+  right: 0;
+  box-shadow: $shadow-md;
+  font-size: 14px;
+  outline: 1px solid #f4f2f2;
+
+  .popup-item {
+    padding: 20px;
+    @include flex-row(flex-start, center);
+    gap: 10px;
+    border-bottom: 1px solid #f4f2f2;
+    background-color: white;
+    &:hover {
+      background-color: rgb(247, 247, 247);
+    }
+    cursor: pointer;
+
+    img {
+      width: 20px;
+      height: 20px;
     }
   }
 }

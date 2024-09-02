@@ -26,6 +26,12 @@ const RecipeSchema = new Schema({
     required: false,
   },
   ingredients: [IngredientSchema],
+  created_at: String,
+  updated_at: String,
+  views: {
+    type: Number,
+    default: 0,
+  },
 });
 
 RecipeSchema.set("timestamps", {

@@ -1,0 +1,59 @@
+/** @format */
+
+@import "../../layout";
+@import "../../variables";
+@import "../../viewsize";
+
+.loading-container {
+  width: 100%;
+  height: calc($dvh * 100 - 80px);
+  @include flex-column(center, center);
+}
+
+.container {
+  width: 100%;
+  min-height: calc($dvh * 100 - 80px);
+  padding: 70px 100px;
+  @include flex-column(flex-start, center);
+  gap: 30px;
+
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  section {
+    width: 100%;
+    @include flex-column(flex-start, center);
+  }
+}
+
+.table {
+  width: 100%;
+  max-width: 700px;
+  @include flex-column(flex-start, flex-start);
+  border: 1px solid $grayscale-black50;
+  border-radius: 5px;
+
+  .head {
+    width: 100%;
+    font-size: 15px;
+    font-weight: 600;
+    @include flex-row(flex-start, center);
+    border-bottom: 1px solid $grayscale-black30;
+    padding: 10px;
+  }
+
+  .body {
+    width: 100%;
+    font-size: 15px;
+    @include flex-column(flex-start, flex-start);
+
+    .body-item {
+      width: 100%;
+      @include flex-row(flex-start, center);
+      border-radius: 5px;
+      padding: 10px;
+    }
+  }
+}
