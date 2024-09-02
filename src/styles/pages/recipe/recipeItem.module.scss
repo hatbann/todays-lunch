@@ -1,0 +1,45 @@
+/** @format */
+
+@import "../../layout";
+@import "../../variables";
+@import "../../viewsize";
+
+.item-container {
+  width: 30%;
+  aspect-ratio: 1;
+  border: 1px solid $grayscale-black60;
+  padding: 15px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  @include flex-column(flex-start, flex-start);
+  gap: 7px;
+}
+
+.title {
+  font-weight: 700;
+  font-size: 15px;
+  display: inline-block;
+  width: 100%;
+  @include make-ellipsis;
+}
+
+.author {
+  width: 100%;
+  @include flex-row(flex-end, center);
+  gap: 4px;
+  font-size: 12px;
+  color: $grayscale-black80;
+
+  .value {
+    max-width: calc(100% - 40px);
+    @include make-ellipsis;
+  }
+}
+
+.desc {
+  width: 100%;
+  height: calc(100% - 50px);
+  @include make-ellipsis;
+  font-size: 13px;
+  color: $grayscale-black70;
+}

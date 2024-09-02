@@ -1,12 +1,15 @@
-@import '../../layout';
-@import '../../variables';
-@import '../../viewsize';
+/** @format */
+
+@import "../../layout";
+@import "../../variables";
+@import "../../viewsize";
 
 .lunch-container {
   @include flex-column(center, center);
   gap: 40px;
-  width: 100vw;
-  min-height: calc(100vh - 80px);
+  width: 100%;
+  min-height: calc($dvh * 100 - 80px);
+  padding: 80px 0;
 
   .head {
     font-size: 20px;
@@ -15,8 +18,9 @@
 
 .input-section {
   @include flex-column(flex-start, center);
-  gap: 20px;
-  width: 450px;
+  gap: 40px;
+  width: 700px;
+  max-width: 100%;
 
   .write-btn {
     width: 100px;

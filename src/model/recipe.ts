@@ -40,7 +40,9 @@ RecipeSchema.set("timestamps", {
 });
 
 type RecipeType = InferSchemaType<typeof RecipeSchema>;
+type IngredientType = InferSchemaType<typeof IngredientSchema>;
+type StepType = InferSchemaType<typeof StepSchema>;
 
 export default mongoose.models.Recipes ||
   mongoose.model("Recipes", RecipeSchema);
-export type { RecipeType };
+export type { RecipeType, IngredientType, StepType };

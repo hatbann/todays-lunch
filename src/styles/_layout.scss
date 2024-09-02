@@ -1,3 +1,5 @@
+/** @format */
+
 @mixin flex-row($justifyContent: flex-start, $alignItems: center) {
   display: flex;
   flex-direction: row;
@@ -10,4 +12,11 @@
   flex-direction: column;
   justify-content: $justifyContent;
   align-items: $alignItems;
+}
+
+@mixin make-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-break: break-all;
 }

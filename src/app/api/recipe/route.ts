@@ -19,12 +19,13 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     await dbConnect();
-    const body = req.json();
+    const body = await req.json();
+    console.log(body);
     const newRecipe = new Recipe(body);
 
     await newRecipe.save();
 
-    return new NextResponse("upload success", { status: 200 });
+    return NextResponse.json({ message: "success" }, { status: 200 });
   } catch (error) {
     return Response.error();
   }

@@ -1,5 +1,7 @@
-import React from 'react';
-import style from '../../styles/pages/upload/input.module.scss';
+/** @format */
+
+import React from "react";
+import style from "../../styles/pages/upload/input.module.scss";
 
 type InputProps = {
   label: string;
@@ -19,7 +21,7 @@ const Input = ({
   disable = false,
 }: InputProps) => {
   return (
-    <div className={style['input-container']}>
+    <div className={style["input-container"]}>
       <label htmlFor={htmlFor}>{label}</label>
       <input
         type="text"
@@ -34,11 +36,12 @@ const Input = ({
 };
 
 type TextAreaProps = {
-  label: string;
+  label?: string;
   value: string;
   htmlFor: string;
   onChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
   placeholder: string;
+  customStyle?: any;
 };
 
 const TextArea = ({
@@ -47,15 +50,17 @@ const TextArea = ({
   onChange,
   htmlFor,
   placeholder,
+  customStyle,
 }: TextAreaProps) => {
   return (
-    <div className={style['text-area-container']}>
-      <label htmlFor={htmlFor}>{label}</label>
+    <div className={style["text-area-container"]}>
+      {label && <label htmlFor={htmlFor}>{label}</label>}
       <textarea
         id={htmlFor}
         value={value}
         placeholder={placeholder}
         onChange={onChange}
+        style={customStyle ?? {}}
       />
     </div>
   );
@@ -77,25 +82,25 @@ const InputImage = ({
   onDelete,
 }: InputImageProps) => {
   return (
-    <div className={style['input-img-container']}>
-      {label && <span className={style['title']}>{label}</span>}
+    <div className={style["input-img-container"]}>
+      {label && <span className={style["title"]}>{label}</span>}
       {!value && (
         <>
           <input type="file" id={htmlFor} onChange={onChange} />
-          <div className={style['custom-input']}>
+          <div className={style["custom-input"]}>
             <label htmlFor={htmlFor}>파일선택</label>
           </div>
         </>
       )}
       {value && (
-        <div className={style['preview']}>
+        <div className={style["preview"]}>
           <img
             src={URL.createObjectURL(value)}
-            className={style['preview-img']}
+            className={style["preview-img"]}
           />
           <img
             src="/images/png/close.png"
-            className={style['delete']}
+            className={style["delete"]}
             onClick={onDelete}
           />
         </div>

@@ -1,6 +1,8 @@
-@import '../../layout';
-@import '../../variables';
-@import '../../viewsize';
+/** @format */
+
+@import "../../layout";
+@import "../../variables";
+@import "../../viewsize";
 
 .input-container,
 .text-area-container {
@@ -10,23 +12,28 @@
   label {
     font-size: 15px;
     font-weight: 600;
-    width: 50px;
+    width: 80px;
   }
 
   input,
   textarea {
-    padding: 5px 10px;
+    padding: 10px;
     border-radius: 8px;
-    width: calc(100% - 50px);
-    font-size: 12px;
+    width: calc(100% - 80px);
+    font-size: 14px;
+    border: 1px solid $grayscale-black50;
+
+    &:focus {
+      outline: none;
+    }
   }
 
   input {
-    height: 35px;
+    height: 40px;
   }
 
   textarea {
-    height: 120px;
+    height: 130px;
   }
 }
 
@@ -41,12 +48,12 @@
 .input-img-container {
   @include flex-column(flex-start, flex-start);
   width: 100%;
-  gap: 10px;
+  gap: 15px;
 
   .title {
     font-size: 15px;
     font-weight: 600;
-    width: 50px;
+    width: 80px;
   }
 
   input {
@@ -55,7 +62,7 @@
 
   .custom-input {
     width: 100%;
-    height: 100px;
+    height: 140px;
     border: 1px dashed $grayscale-black80;
 
     @include flex-column(center, center);
