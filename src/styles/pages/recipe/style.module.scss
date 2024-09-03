@@ -28,6 +28,11 @@
     }
   }
 }
+.loading-container {
+  width: 100%;
+  height: calc(100vh - 80px);
+  @include flex-column(center, center);
+}
 
 .main {
   width: 100vw;

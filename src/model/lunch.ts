@@ -5,6 +5,7 @@ import mongoose, { InferSchemaType } from "mongoose";
 const { Schema } = mongoose;
 
 const LunchSchema = new Schema({
+  _id: String,
   title: String,
   content: String,
   img: String,

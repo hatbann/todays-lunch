@@ -23,7 +23,6 @@ const RecipeView = ({
 }) => {
   const query = useSearchParams();
   const temppage = query.get("page") ?? "1";
-  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const user = useRecoilValue(userState);
   const [page, setPage] = useState(Number(temppage));
@@ -36,9 +35,7 @@ const RecipeView = ({
 
   return (
     <div className={style["main"]}>
-      {isLoading ? (
-        <p>Loading...</p>
-      ) : recipes.length !== 0 ? (
+      {recipes.length !== 0 ? (
         <section className={style["container"]}>
           <h2 className={style["title"]}>레시피</h2>
           <p
