@@ -17,6 +17,7 @@ const IngredientSchema = new Schema({
 });
 
 const RecipeSchema = new Schema({
+  _id: String,
   title: String,
   description: String,
   steps: [StepSchema],

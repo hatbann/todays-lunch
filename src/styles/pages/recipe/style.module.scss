@@ -39,7 +39,7 @@
   gap: 20px;
   padding: 30px 100px;
   width: 100%;
-  max-width: 800px;
+  max-width: 900px;
 
   .title {
     font-size: 20px;
@@ -55,7 +55,7 @@
 .recipes-container {
   width: 100%;
   padding: 10px;
-  @include flex-row(space-between, flex-start);
+  @include flex-row(flex-start, flex-start);
   gap: 20px;
   flex-wrap: wrap; // 복수의 행
 }

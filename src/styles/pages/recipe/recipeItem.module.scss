@@ -12,6 +12,12 @@
   border-radius: 5px;
   cursor: pointer;
   @include flex-column(flex-start, flex-start);
+  gap: 20px;
+}
+
+.top {
+  width: 100%;
+  @include flex-column(flex-start, flex-start);
   gap: 7px;
 }
 
@@ -42,4 +48,6 @@
   @include make-ellipsis;
   font-size: 13px;
   color: $grayscale-black70;
+  border: 1px dashed $grayscale-black50;
+  padding: 5px;
 }

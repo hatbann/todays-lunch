@@ -54,6 +54,7 @@ const page = () => {
               (data) => data.id === item.author
             )?.nickname;
             const temp: RecipeType = {
+              _id: item._id,
               title: item.title,
               description: item.description,
               img: item.img,
@@ -91,7 +92,12 @@ const page = () => {
           </p>
           <div className={style["recipes-container"]}>
             {recipes.map((recipe, idx) => (
-              <RecipeItem recipe={recipe} />
+              <RecipeItem
+                recipe={recipe}
+                handleClick={() => {
+                  router.push(`/recipe/${recipe._id}`);
+                }}
+              />
             ))}
           </div>
         </section>

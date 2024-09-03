@@ -1,0 +1,136 @@
+/** @format */
+
+@import "../../layout";
+@import "../../variables";
+@import "../../viewsize";
+
+.loading-container {
+  width: 100%;
+  height: calc($dvh * 100 - 80px);
+  @include flex-column(center, center);
+}
+
+.container {
+  width: 100%;
+  min-height: calc($dvh * 100 - 80px);
+  padding: 70px 100px;
+  @include flex-column(flex-start, center);
+}
+
+.info {
+  @include flex-column(flex-start, flex-start);
+  gap: 15px;
+  width: 100%;
+  border-bottom: 1px solid $grayscale-black30;
+  padding: 10px 0;
+  .title {
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  .additional-info {
+    width: 100%;
+    font-size: 13px;
+    color: $grayscale-black70;
+    @include flex-row(space-between, flex-start);
+
+    .left {
+      @include flex-column(flex-start, flex-start);
+      gap: 3px;
+    }
+  }
+}
+
+.desc-container,
+.ingredient-container,
+.step-container,
+.img-container {
+  @include flex-column(flex-start, flex-start);
+  gap: 15px;
+  width: 100%;
+  padding: 20px 0;
+
+  .index {
+    @include flex-row(flex-start, center);
+    gap: 5px;
+    font-size: 16px;
+    font-weight: 600;
+
+    img {
+      width: 17px;
+    }
+  }
+}
+
+.desc-container {
+  .desc {
+    width: 100%;
+    border: 1px dashed $grayscale-black60;
+    font-size: 14px;
+    color: $grayscale-black80;
+    padding: 10px;
+    min-height: 70px;
+    border-radius: 5px;
+  }
+}
+
+.ingredient-container {
+  width: 100%;
+
+  .ingredients {
+    border: 1px solid $grayscale-black60;
+    border-radius: 5px;
+    @include flex-row(flex-start, flex-start);
+    gap: 5px;
+    padding: 10px;
+    min-height: 80px;
+    width: 100%;
+
+    .ingredient {
+      border: 1px solid $main-color;
+      border-radius: 14px;
+      color: $main-color;
+      font-size: 14px;
+      padding: 5px 10px;
+      cursor: default;
+
+      &.link {
+        text-decoration: underline;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.step-container {
+  .steps {
+    width: 100%;
+    @include flex-column(flex-start, flex-start);
+    gap: 10px;
+
+    .step {
+      @include flex-column(flex-start, flex-start);
+      gap: 7px;
+      width: 100%;
+      font-size: 14px;
+
+      span {
+        font-weight: 700;
+      }
+
+      p {
+        width: 100%;
+        border-radius: 5px;
+        border: 1px solid $grayscale-black60;
+        min-height: 60px;
+        padding: 10px;
+      }
+    }
+  }
+}
+
+.go-back {
+  text-decoration: underline;
+  font-size: 14px;
+  margin-top: 50px;
+}
