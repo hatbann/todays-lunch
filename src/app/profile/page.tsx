@@ -43,6 +43,7 @@ const page = () => {
 
           console.log(response);
           setLunchItems(response.lunch);
+          setRecipeItems(response.recipe);
           setIsLoading(false);
         } catch (error) {
           setIsError(true);
@@ -146,7 +147,13 @@ const page = () => {
                   {recipeItems.map((item, idx) => {
                     return (
                       <div className={style["body-item"]}>
-                        <span style={{ width: "70%" }}>{item.title}</span>
+                        <span
+                          style={{ width: "70%", cursor: "pointer" }}
+                          onClick={() => {
+                            router.push(`/recipe/${item._id}`);
+                          }}>
+                          {item.title}
+                        </span>
                         <span style={{ width: "20%" }}>
                           {moment(item.created_at).format("YYYY-MM-DD")}
                         </span>

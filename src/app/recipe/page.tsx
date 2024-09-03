@@ -1,127 +1,104 @@
 /** @format */
 
-"use client";
+/* "use client"; */
+"use server";
 
 import { RecipeType } from "@/model/recipe";
-import React, { useEffect, useState } from "react";
-import style from "../../styles/pages/recipe/style.module.scss";
-import { useRouter } from "next/navigation";
-import { useRecoilValue } from "recoil";
-import { userState } from "@/states/user";
-import RecipeItem from "@/components/recipe/RecipeItem";
+import React from "react";
+import RecipeView from "@/components/recipe/view";
+import { revalidatePath } from "next/cache";
+type Props = {
+  searchParams: { [key: string]: string | string[] | undefined };
+};
 
-const page = () => {
-  const [recipes, setRecipes] = useState<RecipeType[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const router = useRouter();
-  const user = useRecoilValue(userState);
+const getInitialPageData = async ({ searchParams }: Props) => {
+  const page = searchParams.page ?? "1";
+  try {
+    const API_URL =
+      process.env.NODE_ENV === "production"
+        ? "/api"
+        : `${process.env.NEXT_PUBLIC_API_URL!}/api`;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const API_URL =
-          process.env.NODE_ENV === "production"
-            ? "/api"
-            : `${process.env.NEXT_PUBLIC_API_URL!}/api`;
-
-        const response = await fetch(`${API_URL}/recipe`, {
+    const response = await fetch(`${API_URL}/recipe?page=${page}`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "GET",
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+    const recipes = response.recipes;
+    const totalCount = response.total;
+    if (recipes) {
+      const users = recipes.map((res: RecipeType) => {
+        if (res.author) return res.author;
+      });
+      if (users.length !== 0) {
+        const id = String(users);
+        const userData = await fetch(`${API_URL}/user/nickname/${id}`, {
           headers: {
             "Content-Type": "application/json",
           },
           method: "GET",
-        })
-          .then((res) => {
-            return res.json();
-          })
-          .catch((e) => {
-            console.log(e);
-          });
-        if (response) {
-          const users = response.map((res: RecipeType) => {
-            if (res.author) return res.author;
-          });
-          const id = String(users);
-          const userData = await fetch(`${API_URL}/user/nickname/${id}`, {
-            headers: {
-              "Content-Type": "application/json",
-            },
-            method: "GET",
-          }).then((res) => res.json());
-          const userArr: { id: string; nickname: string }[] = userData.data;
-          const recipeRes: RecipeType[] = [];
-          response.map((item: RecipeType) => {
-            const name = userArr.find(
-              (data) => data.id === item.author
-            )?.nickname;
-            const temp: RecipeType = {
-              _id: item._id,
-              title: item.title,
-              description: item.description,
-              img: item.img,
-              views: item.views,
-              steps: item.steps,
-              ingredients: item.ingredients,
-              author: name,
-              created_at: item.created_at,
-              updated_at: item.updated_at,
-            };
-            recipeRes.push(temp);
-          });
-          setRecipes(recipeRes);
-        }
-        setIsLoading(false);
-      } catch (error) {}
-    };
-
-    fetchData();
-  }, []);
-
-  return (
-    <div className={style["main"]}>
-      {isLoading ? (
-        <p>Loading...</p>
-      ) : recipes.length !== 0 ? (
-        <section className={style["container"]}>
-          <h2 className={style["title"]}>레시피</h2>
-          <p
-            className={style["upload"]}
-            onClick={() => {
-              router.push("/upload/recipe");
-            }}>
-            레시피 올리기
-          </p>
-          <div className={style["recipes-container"]}>
-            {recipes.map((recipe, idx) => (
-              <RecipeItem
-                recipe={recipe}
-                handleClick={() => {
-                  router.push(`/recipe/${recipe._id}`);
-                }}
-              />
-            ))}
-          </div>
-        </section>
-      ) : (
-        <div className={style["empty-container"]}>
-          <h3>레시피가 없습니다</h3>
-
-          <button
-            onClick={() => {
-              if (user.user_id === "") {
-                const result = confirm("로그인 후 이용해주세요");
-                if (result) {
-                  router.push("/login");
-                }
-              } else {
-                router.push("/upload/recipe");
-              }
-            }}>
-            레시피 올리기
-          </button>
-        </div>
-      )}
-    </div>
-  );
+        }).then((res) => res.json());
+        const userArr: { id: string; nickname: string }[] = userData.data;
+        const recipeRes: RecipeType[] = [];
+        recipes.map((item: RecipeType) => {
+          const name = userArr.find(
+            (data) => data.id === item.author
+          )?.nickname;
+          const temp: RecipeType = {
+            _id: item._id,
+            title: item.title,
+            description: item.description,
+            img: item.img,
+            views: item.views,
+            steps: item.steps,
+            ingredients: item.ingredients,
+            author: name,
+            created_at: item.created_at,
+            updated_at: item.updated_at,
+          };
+          recipeRes.push(temp);
+        });
+        return {
+          recipeRes,
+          totalCount,
+        };
+      } else {
+        return {
+          recipeRes: [],
+          totalCount: 0,
+        };
+      }
+    } else {
+      return {
+        recipeRes: [],
+        totalCount: 0,
+      };
+    }
+  } catch (error) {
+    return Promise.reject(error);
+  }
 };
 
-export default page;
+export default async function ({ searchParams }: Props) {
+  async function revalidate() {
+    "use server";
+    revalidatePath("/recipe");
+  }
+
+  revalidate();
+  const initialData = await getInitialPageData({ searchParams });
+
+  return (
+    <RecipeView
+      recipes={initialData.recipeRes}
+      totalCount={initialData.totalCount}
+    />
+  );
+}

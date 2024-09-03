@@ -94,7 +94,10 @@ const Header = () => {
           </span>
         )}
         {isOpenPopup && (
-          <HeaderPopup logout={logout} /*  ref={userMenuRef} */ />
+          <HeaderPopup
+            logout={logout}
+            setIsOpenPopup={setIsOpenPopup} /*  ref={userMenuRef} */
+          />
         )}
       </div>
     </div>

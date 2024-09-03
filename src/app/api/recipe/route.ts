@@ -7,10 +7,24 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(req: NextRequest) {
   try {
     await dbConnect();
-    const recipes = await Recipe.find().sort({ created_at: -1 });
-    console.log(recipes);
+    const RECIPE_MAX = 20;
+    const page = Number(req.nextUrl.searchParams.get("page"));
+    const skipNum = (page - 1) * RECIPE_MAX;
+    const recipes = await Recipe.find()
+      .sort({ created_at: -1 })
+      .skip(skipNum)
+      .limit(RECIPE_MAX);
+    const total = await Recipe.countDocuments();
 
-    return new NextResponse(JSON.stringify(recipes), { status: 200 });
+    console.log("passNum : ", page);
+
+    return new NextResponse(
+      JSON.stringify({
+        recipes,
+        total,
+      }),
+      { status: 200 }
+    );
   } catch (error) {
     return Response.error();
   }

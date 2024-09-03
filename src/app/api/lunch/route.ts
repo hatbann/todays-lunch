@@ -1,8 +1,8 @@
 /** @format */
 
-import Lunch from '@/model/lunch';
-import dbConnect from '@/utils/database';
-import { NextRequest, NextResponse } from 'next/server';
+import Lunch from "@/model/lunch";
+import dbConnect from "@/utils/database";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   try {
@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
 
     await newLunch.save();
 
-    return NextResponse.json({ message: 'success' }, { status: 200 });
+    return NextResponse.json({ message: "success" }, { status: 200 });
   } catch (error) {
     return Response.error();
   }

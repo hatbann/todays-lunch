@@ -5,10 +5,12 @@ import { RecipeType } from "@/model/recipe";
 import React, { useEffect, useState } from "react";
 import style from "../../../styles/pages/recipe/recipeDetail.module.scss";
 import moment from "moment";
+import { useRouter } from "next/navigation";
 
 const page = ({ params }: { params: { id: string } }) => {
   const [data, setData] = useState<undefined | RecipeType>(undefined);
   const [isLoadingData, setIsLoadingData] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     const getData = async () => {
@@ -130,9 +132,13 @@ const page = ({ params }: { params: { id: string } }) => {
           </div>
         </div>
       )}
-      <a href="/recipe" className={style["go-back"]}>
+      <span
+        onClick={() => {
+          router.back();
+        }}
+        className={style["go-back"]}>
         목록
-      </a>
+      </span>
     </div>
   ) : (
     <div className={style["error"]}>에러가 발생했습니다.</div>

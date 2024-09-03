@@ -34,9 +34,11 @@ const PopupItems: PopupTypes[] = [
 
 const HeaderPopup = ({
   logout,
+  setIsOpenPopup,
 }: /*  ref, */
 {
   logout: () => void;
+  setIsOpenPopup: React.Dispatch<React.SetStateAction<boolean>>;
   /*   ref: React.ForwardedRef<HTMLDivElement>; */
 }) => {
   const router = useRouter();
@@ -47,8 +49,8 @@ const HeaderPopup = ({
           <div
             className={style["popup-item"]}
             onClick={() => {
-              console.log("FAfads");
               router.push(item.routeUrl);
+              setIsOpenPopup(false);
             }}>
             <img src={item.imgUrl} alt={item.alt} />
             <span>{item.name}</span>

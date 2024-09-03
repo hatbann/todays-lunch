@@ -1,0 +1,93 @@
+/** @format */
+
+@import "../layout";
+@import "../variables";
+@import "../viewsize";
+
+.pagination-btn-wrap {
+  @include flex-row(space-between, center);
+  gap: 24px;
+
+  width: auto;
+  height: 100%;
+  font-family: Pretendard;
+  touch-action: pan-y;
+}
+.arrow {
+  width: 20px;
+  height: 24px;
+  @include flex-row(center, center);
+
+  &.active {
+    opacity: 0.54;
+    cursor: pointer;
+  }
+
+  &.none {
+    opacity: 0.15;
+  }
+
+  .arrow-img {
+    width: 20px;
+
+    &.before {
+      transform: rotate(180deg);
+    }
+  }
+}
+
+.page-btn {
+  @include flex-row(center, center);
+  height: 24px;
+  z-index: 1;
+
+  span {
+    @include flex-row(center, center);
+    width: 24px;
+    height: 100%;
+    color: rgba(0, 0, 0, 0.54);
+    margin-right: 7px;
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 13.3px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    cursor: pointer;
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+  .active {
+    color: $main-color;
+    background-color: white;
+    font-weight: 700;
+  }
+}
+
+.gray {
+  .arrow-btn {
+    .none {
+      opacity: 1;
+    }
+  }
+
+  .page-btn {
+    height: 30px;
+
+    span {
+      width: 30px;
+      height: 30px;
+      margin: 0px 3px;
+      color: #666666;
+      font-size: 13px;
+      line-height: 14px;
+      cursor: pointer;
+    }
+
+    .active {
+      color: black;
+      background-color: #e9e9e9;
+    }
+  }
+}
