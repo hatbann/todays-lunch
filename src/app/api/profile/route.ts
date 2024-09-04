@@ -16,18 +16,19 @@ export async function GET(
 ) {
   try {
     await dbConnect();
-    const lunch = await Lunch.find({
-      author: params.id,
-    }).limit(3);
-    const recipe = await Recipe.find({
-      author: params.id,
-    }).limit(3);
     const token = req.cookies.get("token")?.value || "";
     if (token) {
       const decodedToken: any = jwt.verify(token, secret);
       const userId = decodedToken.user.id;
       console.log(decodedToken);
       const user = await User.findOne({ _id: userId });
+      const lunch = await Lunch.find({
+        author: userId,
+      }).limit(3);
+      const recipe = await Recipe.find({
+        author: userId,
+      }).limit(3);
+
       if (user) {
         const payload = {
           user: {
@@ -61,6 +62,50 @@ export async function GET(
       return response;
     }
   } catch (error) {
+    return Response.error();
+  }
+}
+
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    await dbConnect();
+    const token = req.cookies.get("token")?.value || "";
+    if (token) {
+      const decodedToken: any = jwt.verify(token, secret);
+      const userId = decodedToken.user.id;
+      const user = await User.findOne({ _id: userId });
+      if (user) {
+        const changeNickname = req.nextUrl.searchParams.get("nickname");
+        user.nickname = changeNickname;
+        await user.save();
+        const body = {
+          message: "OK",
+          user,
+        };
+
+        const response = NextResponse.json(body);
+
+        return response;
+      } else {
+        const body = {
+          message: "Failed",
+        };
+        const response = NextResponse.json(body);
+        return response;
+      }
+    } else {
+      const body = {
+        message: "Failed",
+        user: {},
+      };
+      const response = NextResponse.json(body);
+      return response;
+    }
+  } catch (error) {
+    console.error("Error connecting to MongoDB:", error);
     return Response.error();
   }
 }

@@ -8,7 +8,8 @@
   @include flex-column(flex-start, flex-start);
   gap: 10px;
   width: 100%;
-  border: 1px solid $grayscale-black60;
+  outline: 1px solid #d5d5d5;
+  box-shadow: $shadow-md;
   border-radius: 8px;
   padding: 10px;
   font-size: 15px;

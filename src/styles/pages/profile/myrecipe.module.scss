@@ -1,0 +1,62 @@
+/** @format */
+
+@import "../../layout";
+@import "../../variables";
+@import "../../viewsize";
+
+.loading-container {
+  width: 100%;
+  height: calc($dvh * 100 - 80px);
+  @include flex-column(center, center);
+}
+
+.container {
+  width: 100%;
+  min-height: calc($dvh * 100 - 80px);
+  padding: 70px 100px;
+  @include flex-column(flex-start, center);
+  gap: 30px;
+
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  section {
+    width: 100%;
+    @include flex-column(flex-start, center);
+  }
+}
+
+.recipe-items {
+  width: 900px;
+  padding: 10px;
+  @include flex-row(flex-start, flex-start);
+  gap: 20px;
+  flex-wrap: wrap; // 복수의 행
+}
+
+.empty-container {
+  @include flex-column(center, center);
+  gap: 40px;
+  width: 100vw;
+  height: calc(100vh - 80px);
+  margin-top: -50px;
+
+  h3 {
+    font-size: 20px;
+  }
+
+  button {
+    border: none;
+    background-color: $main-color;
+    padding: 15px 30px;
+    color: white;
+    border-radius: 8px;
+
+    cursor: pointer;
+    &:hover {
+      background-color: $main-dark-color;
+    }
+  }
+}

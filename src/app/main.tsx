@@ -4,11 +4,12 @@
 
 import React, { useEffect } from "react";
 import { useRecoilState } from "recoil";
-import { userState } from "@/states/user";
+import { isLoginLoading, userState } from "@/states/user";
 import style from "../styles/pages/main.module.scss";
 import { useSetVh } from "@/hooks/useSetVh";
 const Main = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useRecoilState(userState);
+  const [isLoading, setIsLoading] = useRecoilState(isLoginLoading);
 
   useEffect(() => {
     const getUserInfo = async () => {
@@ -40,6 +41,7 @@ const Main = ({ children }: { children: React.ReactNode }) => {
           like: res.user.like,
         });
       }
+      setIsLoading(false);
     };
 
     getUserInfo();

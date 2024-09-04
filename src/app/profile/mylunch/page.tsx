@@ -18,9 +18,7 @@ const page = () => {
   const router = useRouter();
 
   useEffect(() => {
-    console.log(user.user_id);
     if (user.user_id !== "") {
-      console.log("here");
       const fetchData = async () => {
         try {
           const API_URL =
@@ -28,15 +26,12 @@ const page = () => {
               ? "/api"
               : `${process.env.NEXT_PUBLIC_API_URL!}/api`;
 
-          const response = await fetch(
-            `${API_URL}/profile/${user.user_id}/mylunch`,
-            {
-              headers: {
-                "Content-Type": "application/json",
-              },
-              method: "GET",
-            }
-          )
+          const response = await fetch(`${API_URL}/profile/mylunch`, {
+            headers: {
+              "Content-Type": "application/json",
+            },
+            method: "GET",
+          })
             .then((res) => {
               return res.json();
             })

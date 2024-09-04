@@ -6,7 +6,7 @@ import React, { createRef, useState } from "react";
 import style from "../../styles/common/header.module.scss";
 import { usePathname, useRouter } from "next/navigation";
 import { useRecoilValue, useResetRecoilState } from "recoil";
-import { userState } from "@/states/user";
+import { isLoginLoading, userState } from "@/states/user";
 import { useClickOutside } from "@/hooks/useClickOutSide";
 import HeaderPopup from "./HeaderPopup";
 
@@ -14,6 +14,7 @@ const Header = () => {
   const pathname = usePathname();
   const router = useRouter();
   const user = useRecoilValue(userState);
+  const isLoading = useRecoilValue(isLoginLoading);
   const resetUser = useResetRecoilState(userState);
   const [isOpenPopup, setIsOpenPopup] = useState(false);
   const userMenuRef = createRef<HTMLDivElement>();
@@ -77,29 +78,31 @@ const Header = () => {
           </span>
         </div>
       </div>
-      <div className={style["right"]} ref={userMenuRef}>
-        {user.user_id !== "" ? (
-          <span
-            onClick={() => {
-              setIsOpenPopup((prev) => !prev);
-            }}>
-            {user.username}
-          </span>
-        ) : (
-          <span
-            onClick={() => {
-              router.push("/login");
-            }}>
-            로그인
-          </span>
-        )}
-        {isOpenPopup && (
-          <HeaderPopup
-            logout={logout}
-            setIsOpenPopup={setIsOpenPopup} /*  ref={userMenuRef} */
-          />
-        )}
-      </div>
+      {!isLoading && (
+        <div className={style["right"]} ref={userMenuRef}>
+          {user.user_id !== "" ? (
+            <span
+              onClick={() => {
+                setIsOpenPopup((prev) => !prev);
+              }}>
+              {user.username}
+            </span>
+          ) : (
+            <span
+              onClick={() => {
+                router.push("/login");
+              }}>
+              로그인
+            </span>
+          )}
+          {isOpenPopup && (
+            <HeaderPopup
+              logout={logout}
+              setIsOpenPopup={setIsOpenPopup} /*  ref={userMenuRef} */
+            />
+          )}
+        </div>
+      )}
     </div>
   );
 };

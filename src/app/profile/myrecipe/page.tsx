@@ -1,9 +1,108 @@
 /** @format */
+"use client";
 
-import React from "react";
+import recipe, { RecipeType } from "@/model/recipe";
+import { userState } from "@/states/user";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { useRecoilValue } from "recoil";
+import style from "../../../styles/pages/profile/myrecipe.module.scss";
+import RecipeItem from "@/components/recipe/RecipeItem";
 
 const myrecipe = () => {
-  return <div></div>;
+  const user = useRecoilValue(userState);
+  const [recipeItems, setRecipeItems] = useState<RecipeType[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user.user_id !== "") {
+      const fetchData = async () => {
+        try {
+          const API_URL =
+            process.env.NODE_ENV === "production"
+              ? "/api"
+              : `${process.env.NEXT_PUBLIC_API_URL!}/api`;
+
+          const response = await fetch(`${API_URL}/profile/myrecipe`, {
+            headers: {
+              "Content-Type": "application/json",
+            },
+            method: "GET",
+          })
+            .then((res) => {
+              return res.json();
+            })
+            .catch((e) => {
+              console.log(e);
+            });
+
+          if (response.recipe && response.recipe.length !== 0) {
+            const res: RecipeType[] = [];
+            response.recipe.map((item: RecipeType) => {
+              const temp = item;
+              temp.author = user.username;
+              res.push(temp);
+            });
+            setRecipeItems(res);
+          }
+
+          setIsLoading(false);
+        } catch (error) {
+          setIsError(true);
+          setIsLoading(false);
+        }
+      };
+
+      fetchData();
+    }
+  }, [user.user_id]);
+
+  return isLoading ? (
+    <div className={style["loading-container"]}>Loading...</div>
+  ) : (
+    <div className={style["container"]}>
+      {!isError && (
+        <>
+          <h2>나만의 레시피</h2>
+          <section>
+            {recipeItems.length !== 0 ? (
+              <div className={style["recipe-items"]}>
+                {recipeItems.map((item, idx) => {
+                  return (
+                    <RecipeItem
+                      recipe={item}
+                      handleClick={() => {
+                        router.push(`/recipe/${item._id}`);
+                      }}
+                    />
+                  );
+                })}
+              </div>
+            ) : (
+              <div className={style["empty-container"]}>
+                <h3>글이 없습니다</h3>
+                <button
+                  onClick={() => {
+                    if (user.user_id === "") {
+                      const result = confirm("로그인 후 이용해주세요");
+                      if (result) {
+                        router.push("/login");
+                      }
+                    } else {
+                      router.push("/upload/recipe");
+                    }
+                  }}>
+                  레시피 작성하기
+                </button>
+              </div>
+            )}
+          </section>
+        </>
+      )}
+    </div>
+  );
 };
 
 export default myrecipe;

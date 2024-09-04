@@ -28,7 +28,7 @@ const page = () => {
               ? "/api"
               : `${process.env.NEXT_PUBLIC_API_URL!}/api`;
 
-          const response = await fetch(`${API_URL}/profile/${user.user_id}`, {
+          const response = await fetch(`${API_URL}/profile`, {
             headers: {
               "Content-Type": "application/json",
             },
