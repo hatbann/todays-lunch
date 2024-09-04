@@ -3,18 +3,30 @@
 
 import recipe, { RecipeType } from "@/model/recipe";
 import { userState } from "@/states/user";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import style from "../../../styles/pages/profile/myrecipe.module.scss";
 import RecipeItem from "@/components/recipe/RecipeItem";
+import Pagenation from "@/components/common/Pagenation";
+
+type Props = {
+  searchParams: { [key: string]: string | string[] | undefined };
+};
+
+const RECIPE_MAX = 20;
+const RECIPE_PAGE_MAX = 5;
 
 const myrecipe = () => {
   const user = useRecoilValue(userState);
   const [recipeItems, setRecipeItems] = useState<RecipeType[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const router = useRouter();
+  const query = useSearchParams();
+  const temppage = query.get("page") ?? "1";
+  const [page, setPage] = useState(Number(temppage));
 
   useEffect(() => {
     if (user.user_id !== "") {
@@ -25,12 +37,15 @@ const myrecipe = () => {
               ? "/api"
               : `${process.env.NEXT_PUBLIC_API_URL!}/api`;
 
-          const response = await fetch(`${API_URL}/profile/myrecipe`, {
-            headers: {
-              "Content-Type": "application/json",
-            },
-            method: "GET",
-          })
+          const response = await fetch(
+            `${API_URL}/profile/myrecipe?page=${temppage}`,
+            {
+              headers: {
+                "Content-Type": "application/json",
+              },
+              method: "GET",
+            }
+          )
             .then((res) => {
               return res.json();
             })
@@ -47,6 +62,7 @@ const myrecipe = () => {
             });
             setRecipeItems(res);
           }
+          setTotalCount(response.total);
 
           setIsLoading(false);
         } catch (error) {
@@ -68,18 +84,33 @@ const myrecipe = () => {
           <h2>나만의 레시피</h2>
           <section>
             {recipeItems.length !== 0 ? (
-              <div className={style["recipe-items"]}>
-                {recipeItems.map((item, idx) => {
-                  return (
-                    <RecipeItem
-                      recipe={item}
-                      handleClick={() => {
-                        router.push(`/recipe/${item._id}`);
-                      }}
-                    />
-                  );
-                })}
-              </div>
+              <>
+                <div className={style["recipe-items"]}>
+                  {recipeItems.map((item, idx) => {
+                    return (
+                      <RecipeItem
+                        recipe={item}
+                        handleClick={() => {
+                          router.push(`/recipe/${item._id}`);
+                        }}
+                      />
+                    );
+                  })}
+                </div>
+                <div className={style["pagenation-container"]}>
+                  <Pagenation
+                    page={page}
+                    setPage={(value) => {
+                      if (value !== page) {
+                        setPage(value);
+                      }
+                    }}
+                    total={totalCount}
+                    listLimit={RECIPE_MAX}
+                    pageLimit={RECIPE_PAGE_MAX}
+                  />
+                </div>
+              </>
             ) : (
               <div className={style["empty-container"]}>
                 <h3>글이 없습니다</h3>

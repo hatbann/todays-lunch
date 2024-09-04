@@ -38,8 +38,8 @@
   @include flex-column(center, center);
   gap: 40px;
   width: 100vw;
-  height: calc(100vh - 80px);
-  margin-top: -50px;
+  height: calc($dvh * 100 - 180px);
+  /*   margin-top: -50px; */
 
   h3 {
     font-size: 20px;

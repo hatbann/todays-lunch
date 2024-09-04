@@ -50,7 +50,14 @@ const RecipeView = ({
               <RecipeItem
                 recipe={recipe}
                 handleClick={() => {
-                  router.push(`/recipe/${recipe._id}`);
+                  if (user.user_id !== "") {
+                    router.push(`/recipe/${recipe._id}`);
+                  } else {
+                    const result = confirm("로그인 후 이용해주세요");
+                    if (result) {
+                      router.push("/login");
+                    }
+                  }
                 }}
               />
             ))}

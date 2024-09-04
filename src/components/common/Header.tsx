@@ -66,7 +66,7 @@ const Header = () => {
           </span>
           <span
             className={
-              pathname.includes("recipe")
+              pathname.includes("recipe") && !pathname.includes("profile")
                 ? `${style["category"]} ${style["active"]}`
                 : style["category"]
             }

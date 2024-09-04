@@ -5,19 +5,20 @@ import { LunchType } from "@/model/lunch";
 import { RecipeType } from "@/model/recipe";
 import { userState } from "@/states/user";
 import React, { useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import style from "../../styles/pages/profile/style.module.scss";
 import moment from "moment";
 import { useRouter } from "next/navigation";
 
 const page = () => {
-  const user = useRecoilValue(userState);
+  const [user, setUser] = useRecoilState(userState);
   const [lunchItems, setLunchItems] = useState<LunchType[]>([]);
   const [recipeItems, setRecipeItems] = useState<RecipeType[]>([]);
   const [isEditMode, setIsEditMode] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const router = useRouter();
+  const [nickname, setNickname] = useState("");
 
   useEffect(() => {
     if (user.user_id !== "") {
@@ -52,8 +53,43 @@ const page = () => {
       };
 
       fetchData();
+      setNickname(user.username);
     }
   }, [user.user_id]);
+
+  const handleChangeNickname = async () => {
+    try {
+      setIsLoading(true);
+      const API_URL =
+        process.env.NODE_ENV === "production"
+          ? "/api"
+          : `${process.env.NEXT_PUBLIC_API_URL!}/api`;
+
+      const response = await fetch(`${API_URL}/profile?nickname=${nickname}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "PUT",
+      })
+        .then((res) => {
+          return res.json();
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+
+      console.log(response.user);
+      setUser({
+        user_id: response.user._id,
+        username: response.user.nickname,
+        like: response.user.like,
+      });
+      setIsLoading(false);
+    } catch (error) {
+      setIsError(true);
+      setIsLoading(false);
+    }
+  };
 
   return isLoading ? (
     <div className={style["loading"]}>Loading...</div>
@@ -66,7 +102,15 @@ const page = () => {
             <div className={style["profile-items"]}>
               <div className={style["profile-item"]}>
                 <span>닉네임 | </span>
-                <span>{user.username}</span>
+                <input
+                  type="text"
+                  /*             placeholder={user.username} */
+                  disabled={!isEditMode}
+                  value={nickname}
+                  onChange={(e) => {
+                    setNickname(e.target.value);
+                  }}
+                />
               </div>
               <div className={style["btn-container"]}>
                 {isEditMode ? (
@@ -78,7 +122,14 @@ const page = () => {
                       }}>
                       취소
                     </button>
-                    <button className={style["confirm"]}>완료</button>
+                    <button
+                      className={style["confirm"]}
+                      onClick={() => {
+                        handleChangeNickname();
+                        setIsEditMode(false);
+                      }}>
+                      완료
+                    </button>
                   </>
                 ) : (
                   <button

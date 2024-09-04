@@ -5,12 +5,13 @@ import React, { useState } from "react";
 import style from "../../styles/pages/lunch/lunch.module.scss";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { userState } from "@/states/user";
+import { useRouter } from "next/navigation";
 
 const Lunch = ({ item }: { item: LunchType }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useRecoilState(userState);
   const [lunchItem, setLunchItem] = useState<LunchType>(item);
-
+  const router = useRouter();
   const isFill = user.like.find((likevalue) => likevalue === item._id);
 
   const handleLike = async () => {
@@ -62,13 +63,31 @@ const Lunch = ({ item }: { item: LunchType }) => {
           <img
             src="/images/png/fillheart.png"
             alt="liked"
-            onClick={handleLike}
+            onClick={() => {
+              if (user.user_id !== "") {
+                handleLike();
+              } else {
+                const result = confirm("로그인 후 이용해주세요");
+                if (result) {
+                  router.push("/login");
+                }
+              }
+            }}
           />
         ) : (
           <img
             src="/images/png/emptyheart.png"
             alt="not liked"
-            onClick={handleLike}
+            onClick={() => {
+              if (user.user_id !== "") {
+                handleLike();
+              } else {
+                const result = confirm("로그인 후 이용해주세요");
+                if (result) {
+                  router.push("/login");
+                }
+              }
+            }}
           />
         )}
       </div>

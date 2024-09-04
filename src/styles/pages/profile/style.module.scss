@@ -74,16 +74,39 @@
     @include flex-column(flex-start, flex-start);
     gap: 10px;
     width: 100%;
+    font-size: 15px;
 
     .profile-item {
       @include flex-row(flex-start, center);
       gap: 5px;
+
+      input {
+        font-size: 15px;
+        border: none;
+        border-bottom: 1px solid $grayscale-black60;
+        width: 100px;
+        background-color: white;
+        padding: 5px;
+        &:focus {
+          outline: none;
+        }
+
+        &:disabled {
+          border: none;
+        }
+
+        &::placeholder {
+          color: black;
+          font-size: 15px;
+        }
+      }
     }
   }
 
   .btn-container {
     width: 100%;
     @include flex-row(flex-end, center);
+    gap: 5px;
     button {
       width: 70px;
       height: 30px;
@@ -97,7 +120,8 @@
         background-color: $grayscale-black20;
       }
 
-      &.edit {
+      &.edit,
+      &.confirm {
         background-color: $main-color;
         color: white;
 
