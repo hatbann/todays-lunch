@@ -38,7 +38,6 @@ export async function POST(req: NextRequest) {
     const newRecipe = new Recipe(body);
 
     await newRecipe.save();
-
     return NextResponse.json({ message: "success" }, { status: 200 });
   } catch (error) {
     return Response.error();

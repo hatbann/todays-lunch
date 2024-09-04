@@ -14,8 +14,6 @@ export async function GET(
       _id: params.id,
     });
 
-    lunch.views += 1;
-    await lunch.save();
     return new NextResponse(JSON.stringify(lunch), { status: 200 });
   } catch (error) {
     console.error("Error connecting to MongoDB:", error);

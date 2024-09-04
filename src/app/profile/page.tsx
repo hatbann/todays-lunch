@@ -108,7 +108,7 @@ const page = () => {
                 <div className={style["head"]}>
                   <span style={{ width: "70%" }}>제목</span>
                   <span style={{ width: "20%" }}>작성일</span>
-                  <span style={{ width: "10%" }}>조회수</span>
+                  <span style={{ width: "10%" }}>좋아요 수</span>
                 </div>
                 <div className={style["body"]}>
                   {lunchItems.map((item, idx) => {
@@ -118,7 +118,9 @@ const page = () => {
                         <span style={{ width: "20%" }}>
                           {moment(item.created_at).format("YYYY-MM-DD")}
                         </span>
-                        <span style={{ width: "10%" }}>{item.views}회</span>
+                        <span style={{ width: "10%", textAlign: "center" }}>
+                          {item.like}
+                        </span>
                       </div>
                     );
                   })}
@@ -155,7 +157,7 @@ const page = () => {
                           {item.title}
                         </span>
                         <span style={{ width: "20%" }}>
-                          {moment(item.created_at).format("YYYY-MM-DD")}
+                          {/*              {moment(item.created_at).format("YYYY-MM-DD")} */}
                         </span>
                         <span style={{ width: "10%" }}>{item.views}회</span>
                       </div>

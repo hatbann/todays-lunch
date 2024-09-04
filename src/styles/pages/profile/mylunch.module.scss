@@ -28,32 +28,33 @@
   }
 }
 
-.table {
-  width: 100%;
-  max-width: 700px;
-  @include flex-column(flex-start, flex-start);
-  border: 1px solid $grayscale-black50;
-  border-radius: 5px;
+.lunch-items {
+  width: 400px;
+  @include flex-column(flex-start, center);
+  gap: 20px;
+}
 
-  .head {
-    width: 100%;
-    font-size: 15px;
-    font-weight: 600;
-    @include flex-row(flex-start, center);
-    border-bottom: 1px solid $grayscale-black30;
-    padding: 10px;
+.empty-container {
+  @include flex-column(center, center);
+  gap: 40px;
+  width: 100vw;
+  height: calc(100vh - 80px);
+  margin-top: -50px;
+
+  h3 {
+    font-size: 20px;
   }
 
-  .body {
-    width: 100%;
-    font-size: 15px;
-    @include flex-column(flex-start, flex-start);
+  button {
+    border: none;
+    background-color: $main-color;
+    padding: 15px 30px;
+    color: white;
+    border-radius: 8px;
 
-    .body-item {
-      width: 100%;
-      @include flex-row(flex-start, center);
-      border-radius: 5px;
-      padding: 10px;
+    cursor: pointer;
+    &:hover {
+      background-color: $main-dark-color;
     }
   }
 }

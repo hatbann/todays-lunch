@@ -1,6 +1,8 @@
-@import '../../layout';
-@import '../../variables';
-@import '../../viewsize';
+/** @format */
+
+@import "../../layout";
+@import "../../variables";
+@import "../../viewsize";
 
 .lunch-container {
   @include flex-column(flex-start, flex-start);
@@ -14,6 +16,34 @@
   img {
     width: 200px;
     height: 200px;
+  }
+
+  .title {
+    width: 100%;
+    @include make-ellipsis;
+    font-weight: 700;
+    font-size: 15px;
+  }
+
+  .author {
+    font-size: 12px;
+    width: 100%;
+    @include make-ellipsis;
+  }
+
+  .heart {
+    span {
+      font-size: 14px;
+      width: 100%;
+    }
+    width: 100%;
+    @include flex-row(space-between, center);
+
+    img {
+      width: 25px;
+      height: 25px;
+      cursor: pointer;
+    }
   }
 
   .desc-container {

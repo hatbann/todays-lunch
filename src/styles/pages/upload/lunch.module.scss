@@ -29,6 +29,7 @@
     border: none;
     background-color: $main-color;
     color: white;
+    cursor: pointer;
 
     &:disabled {
       background-color: $grayscale-black30;

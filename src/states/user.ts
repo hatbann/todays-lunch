@@ -1,16 +1,19 @@
-import { userType } from '@/types/user.type';
-import { atom } from 'recoil';
+/** @format */
+
+import { userType } from "@/types/user.type";
+import { atom } from "recoil";
 
 export const isLoginLoading = atom({
-  key: 'isLoginLoading',
+  key: "isLoginLoading",
   default: true,
 });
 
 export const userState = atom<userType>({
-  key: 'user',
+  key: "user",
   default: {
-    user_id: '',
-    username: '',
+    user_id: "",
+    username: "",
+    like: [],
     /*     userId: 1,
     username: '햇반', */
   },

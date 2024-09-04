@@ -16,6 +16,8 @@ export async function GET(req: NextRequest) {
       .limit(LUNCH_MAX);
     const total = await Lunch.countDocuments();
 
+    /*    return NextResponse.json({ lunches, total }, { status: 200 }); */
+
     return new NextResponse(
       JSON.stringify({
         lunches,
@@ -32,11 +34,17 @@ export async function POST(req: NextRequest) {
   try {
     await dbConnect();
     const body = await req.json();
-    console.log(body);
     const newLunch = new Lunch(body);
+    console.log(newLunch);
 
     await newLunch.save();
-
+    console.log("success");
+    /*     return new NextResponse(
+      JSON.stringify({
+        message: "success",
+      }),
+      { status: 200 }
+    ); */
     return NextResponse.json({ message: "success" }, { status: 200 });
   } catch (error) {
     return Response.error();

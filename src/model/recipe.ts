@@ -17,7 +17,6 @@ const IngredientSchema = new Schema({
 });
 
 const RecipeSchema = new Schema({
-  _id: String,
   title: String,
   description: String,
   steps: [StepSchema],
@@ -27,8 +26,6 @@ const RecipeSchema = new Schema({
     required: false,
   },
   ingredients: [IngredientSchema],
-  created_at: String,
-  updated_at: String,
   views: {
     type: Number,
     default: 0,
@@ -40,7 +37,11 @@ RecipeSchema.set("timestamps", {
   updatedAt: "updated_at",
 });
 
-type RecipeType = InferSchemaType<typeof RecipeSchema>;
+type RecipeType = InferSchemaType<typeof RecipeSchema> & {
+  created_at: string;
+  updated_at: string;
+  _id: string;
+};
 type IngredientType = InferSchemaType<typeof IngredientSchema>;
 type StepType = InferSchemaType<typeof StepSchema>;
 

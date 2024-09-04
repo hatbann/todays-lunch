@@ -37,6 +37,7 @@ const Main = ({ children }: { children: React.ReactNode }) => {
         setUser({
           username: res.user.nickname,
           user_id: String(res.user._id),
+          like: res.user.like,
         });
       }
     };

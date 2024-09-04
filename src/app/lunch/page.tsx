@@ -44,7 +44,14 @@ const getInitialPageData = async ({ searchParams }: Props) => {
             "Content-Type": "application/json",
           },
           method: "GET",
-        }).then((res) => res.json());
+        })
+          .then((res) => {
+            return res.json();
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+        console.log(userData, "!!!!!");
         const userArr: { id: string; nickname: string }[] = userData.data;
         const lunchRes: LunchType[] = [];
         lunches.map((item: LunchType) => {
@@ -56,7 +63,7 @@ const getInitialPageData = async ({ searchParams }: Props) => {
             title: item.title,
             content: item.content,
             img: item.img,
-            views: item.views,
+            like: item.like,
             author: name,
             created_at: item.created_at,
             updated_at: item.updated_at,

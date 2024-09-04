@@ -5,17 +5,15 @@ import mongoose, { InferSchemaType } from "mongoose";
 const { Schema } = mongoose;
 
 const LunchSchema = new Schema({
-  _id: String,
+  /*   _id: String, */
   title: String,
   content: String,
+  author: String,
   img: String,
-  views: {
+  like: {
     type: Number,
     default: 0,
   },
-  author: String,
-  created_at: String,
-  updated_at: String,
 });
 
 LunchSchema.set("timestamps", {
@@ -23,7 +21,10 @@ LunchSchema.set("timestamps", {
   updatedAt: "updated_at",
 });
 
-type LunchType = InferSchemaType<typeof LunchSchema>;
-
+type LunchType = InferSchemaType<typeof LunchSchema> & {
+  created_at: string;
+  updated_at: string;
+  _id: string;
+};
 export default mongoose.models.Lunchs || mongoose.model("Lunchs", LunchSchema);
 export type { LunchType };

@@ -7,15 +7,20 @@ import { useRecoilValue } from "recoil";
 import { userState } from "@/states/user";
 import { LunchType } from "@/model/lunch";
 import moment from "moment";
+import Lunch from "@/components/lunch/Lunch";
+import { useRouter } from "next/navigation";
 
 const page = () => {
   const user = useRecoilValue(userState);
   const [lunchItems, setLunchItems] = useState<LunchType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
+    console.log(user.user_id);
     if (user.user_id !== "") {
+      console.log("here");
       const fetchData = async () => {
         try {
           const API_URL =
@@ -59,26 +64,30 @@ const page = () => {
         <>
           <h2>내 도시락</h2>
           <section>
-            <div className={style["table"]}>
-              <div className={style["head"]}>
-                <span style={{ width: "70%" }}>제목</span>
-                <span style={{ width: "20%" }}>작성일</span>
-                <span style={{ width: "10%" }}>조회수</span>
-              </div>
-              <div className={style["body"]}>
+            {lunchItems.length !== 0 ? (
+              <div className={style["lunch-items"]}>
                 {lunchItems.map((item, idx) => {
-                  return (
-                    <div className={style["body-item"]}>
-                      <span style={{ width: "70%" }}>{item.title}</span>
-                      <span style={{ width: "20%" }}>
-                        {moment(item.created_at).format("YYYY-MM-DD")}
-                      </span>
-                      <span style={{ width: "10%" }}>{item.views}회</span>
-                    </div>
-                  );
+                  return <Lunch item={item} />;
                 })}
               </div>
-            </div>
+            ) : (
+              <div className={style["empty-container"]}>
+                <h3>글이 없습니다</h3>
+                <button
+                  onClick={() => {
+                    if (user.user_id === "") {
+                      const result = confirm("로그인 후 이용해주세요");
+                      if (result) {
+                        router.push("/login");
+                      }
+                    } else {
+                      router.push("/upload/lunch");
+                    }
+                  }}>
+                  도시락 올리기
+                </button>
+              </div>
+            )}
           </section>
         </>
       )}
