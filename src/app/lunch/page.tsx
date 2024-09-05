@@ -1,8 +1,6 @@
 /** @format */
 "use server";
 
-import { RecipeType } from "@/model/recipe";
-
 import LunchView from "@/components/lunch/view";
 import { revalidatePath } from "next/cache";
 import { LunchType } from "@/model/lunch";
@@ -11,15 +9,14 @@ type Props = {
   searchParams: { [key: string]: string | string[] | undefined };
 };
 
-const getInitialPageData = async ({ searchParams }: Props) => {
-  const page = searchParams.page ?? "1";
+const getInitialPageData = async () => {
   try {
     const API_URL =
       process.env.NODE_ENV === "production"
         ? "/api"
         : `${process.env.NEXT_PUBLIC_API_URL!}/api`;
 
-    const response = await fetch(`${API_URL}/lunch?page=${page}`, {
+    const response = await fetch(`${API_URL}/lunch?page=1`, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -91,14 +88,14 @@ const getInitialPageData = async ({ searchParams }: Props) => {
   }
 };
 
-export default async function Home({ searchParams }: Props) {
+export default async function Home() {
   async function revalidate() {
     "use server";
     revalidatePath("/recipe");
   }
 
   revalidate();
-  const initialData = await getInitialPageData({ searchParams });
+  const initialData = await getInitialPageData();
   return (
     <LunchView
       lunch={initialData.lunchRes}

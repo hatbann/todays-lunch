@@ -7,7 +7,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(req: NextRequest) {
   try {
     await dbConnect();
-    const LUNCH_MAX = 20;
+    const LUNCH_MAX = 2;
     const page = Number(req.nextUrl.searchParams.get("page"));
     const skipNum = (page - 1) * LUNCH_MAX;
     const lunches = await Lunch.find()
