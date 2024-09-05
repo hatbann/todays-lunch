@@ -1,11 +1,13 @@
-@import '../../layout';
-@import '../../variables';
-@import '../../viewsize';
+/** @format */
+
+@import "../../layout";
+@import "../../variables";
+@import "../../viewsize";
 
 .empty-container {
   @include flex-column(center, center);
   gap: 40px;
-  width: 100vw;
+  width: 100%;
   height: calc(100vh - 80px);
   margin-top: -50px;
 
@@ -28,13 +30,13 @@
 }
 
 .main {
-  width: 100vw;
+  width: 100%;
   @include flex-column(flex-start, center);
 }
 
 .container {
   @include flex-column(flex-start, center);
-  gap: 20px;
+  gap: 40px;
   padding: 30px 0;
   width: 400px;
 
@@ -51,5 +53,6 @@
 
   .lunch-item {
     width: 100%;
+    margin-top: -20px;
   }
 }

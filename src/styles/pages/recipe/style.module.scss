@@ -41,7 +41,7 @@
 
 .container {
   @include flex-column(flex-start, center);
-  gap: 20px;
+  gap: 40px;
   padding: 30px 100px;
   width: 100%;
   max-width: 900px;

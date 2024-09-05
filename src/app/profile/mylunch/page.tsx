@@ -53,39 +53,41 @@ const page = () => {
 
   return isLoading ? (
     <div className={style["loading-container"]}>Loading...</div>
-  ) : (
+  ) : !isError ? (
     <div className={style["container"]}>
-      {!isError && (
-        <>
-          <h2>내 도시락</h2>
-          <section>
-            {lunchItems.length !== 0 ? (
-              <div className={style["lunch-items"]}>
-                {lunchItems.map((item, idx) => {
-                  return <Lunch item={item} />;
-                })}
-              </div>
-            ) : (
-              <div className={style["empty-container"]}>
-                <h3>글이 없습니다</h3>
-                <button
-                  onClick={() => {
-                    if (user.user_id === "") {
-                      const result = confirm("로그인 후 이용해주세요");
-                      if (result) {
-                        router.push("/login");
-                      }
-                    } else {
-                      router.push("/upload/lunch");
-                    }
-                  }}>
-                  도시락 올리기
-                </button>
-              </div>
-            )}
-          </section>
-        </>
+      <h2>내 도시락</h2>
+      {lunchItems.length !== 0 ? (
+        <section>
+          {" "}
+          <div className={style["lunch-items"]}>
+            {lunchItems.map((item, idx) => {
+              return <Lunch item={item} />;
+            })}
+          </div>
+        </section>
+      ) : (
+        <div className={style["empty-container"]}>
+          <h3>글이 없습니다</h3>
+          <button
+            onClick={() => {
+              if (user.user_id === "") {
+                const result = confirm("로그인 후 이용해주세요");
+                if (result) {
+                  router.push("/login");
+                }
+              } else {
+                router.push("/upload/lunch");
+              }
+            }}>
+            도시락 올리기
+          </button>
+        </div>
       )}
+    </div>
+  ) : (
+    <div className={style["error-container"]}>
+      <h2>에러가 발생했습니다</h2>
+      <p>잠시후 다시 시도해주세요</p>
     </div>
   );
 };

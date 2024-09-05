@@ -77,61 +77,60 @@ const myrecipe = () => {
 
   return isLoading ? (
     <div className={style["loading-container"]}>Loading...</div>
-  ) : (
+  ) : !isError ? (
     <div className={style["container"]}>
-      {!isError && (
+      <h2>나만의 레시피</h2>
+      {recipeItems.length !== 0 ? (
         <>
-          <h2>나만의 레시피</h2>
-          <section>
-            {recipeItems.length !== 0 ? (
-              <>
-                <div className={style["recipe-items"]}>
-                  {recipeItems.map((item, idx) => {
-                    return (
-                      <RecipeItem
-                        recipe={item}
-                        handleClick={() => {
-                          router.push(`/recipe/${item._id}`);
-                        }}
-                      />
-                    );
-                  })}
-                </div>
-                <div className={style["pagenation-container"]}>
-                  <Pagenation
-                    page={page}
-                    setPage={(value) => {
-                      if (value !== page) {
-                        setPage(value);
-                      }
-                    }}
-                    total={totalCount}
-                    listLimit={RECIPE_MAX}
-                    pageLimit={RECIPE_PAGE_MAX}
-                  />
-                </div>
-              </>
-            ) : (
-              <div className={style["empty-container"]}>
-                <h3>글이 없습니다</h3>
-                <button
-                  onClick={() => {
-                    if (user.user_id === "") {
-                      const result = confirm("로그인 후 이용해주세요");
-                      if (result) {
-                        router.push("/login");
-                      }
-                    } else {
-                      router.push("/upload/recipe");
-                    }
-                  }}>
-                  레시피 작성하기
-                </button>
-              </div>
-            )}
-          </section>
+          <div className={style["recipe-items"]}>
+            {recipeItems.map((item, idx) => {
+              return (
+                <RecipeItem
+                  recipe={item}
+                  handleClick={() => {
+                    router.push(`/recipe/${item._id}`);
+                  }}
+                />
+              );
+            })}
+          </div>
+          <div className={style["pagenation-container"]}>
+            <Pagenation
+              page={page}
+              setPage={(value) => {
+                if (value !== page) {
+                  setPage(value);
+                }
+              }}
+              total={totalCount}
+              listLimit={RECIPE_MAX}
+              pageLimit={RECIPE_PAGE_MAX}
+            />
+          </div>
         </>
+      ) : (
+        <div className={style["empty-container"]}>
+          <h3>글이 없습니다</h3>
+          <button
+            onClick={() => {
+              if (user.user_id === "") {
+                const result = confirm("로그인 후 이용해주세요");
+                if (result) {
+                  router.push("/login");
+                }
+              } else {
+                router.push("/upload/recipe");
+              }
+            }}>
+            레시피 작성하기
+          </button>
+        </div>
       )}
+    </div>
+  ) : (
+    <div className={style["error-container"]}>
+      <h2>에러가 발생했습니다</h2>
+      <p>잠시후 다시 시도해주세요</p>
     </div>
   );
 };

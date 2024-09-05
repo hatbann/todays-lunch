@@ -37,3 +37,35 @@
     }
   }
 }
+
+.success-container {
+  width: 100%;
+  height: calc($dvh * 100 - 200px);
+  @include flex-column(center, center);
+  gap: 50px;
+
+  img {
+    width: 140px;
+  }
+
+  .btn-container {
+    @include flex-row(center, center);
+    gap: 20px;
+
+    button {
+      border: none;
+      font-size: 15px;
+      padding: 12px 20px;
+      width: 135px;
+      border-radius: 8px;
+      cursor: pointer;
+      color: white;
+      font-weight: 600;
+      background-color: $main-color;
+
+      &:hover {
+        background-color: $main-dark-color;
+      }
+    }
+  }
+}
