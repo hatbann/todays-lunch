@@ -39,6 +39,7 @@ const page = ({ params }: { params: { id: string } }) => {
         }).then((res) => res.json());
 
         const result: RecipeType = {
+          _id: res._id,
           title: res.title,
           description: res.description,
           author: userData.data.nickname,
@@ -47,6 +48,7 @@ const page = ({ params }: { params: { id: string } }) => {
           ingredients: res.ingredients,
           views: res.views,
           created_at: res.created_at,
+          updated_at: res.updated_at,
         };
         console.log(result);
         setData(result);

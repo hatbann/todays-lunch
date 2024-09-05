@@ -8,6 +8,12 @@
   @include flex-row(space-between, center);
   padding: 20px 40px;
   height: 80px;
+
+  @include mobile {
+    padding: 15px;
+    height: 60px;
+    border-bottom: 1px solid $grayscale-black30;
+  }
 }
 
 .left {
@@ -17,6 +23,10 @@
   .logo {
     width: 60px;
     cursor: pointer;
+
+    @include mobile {
+      width: 40px;
+    }
   }
 
   .category-container {
@@ -33,6 +43,10 @@
         font-weight: 600;
       }
     }
+
+    @include mobile {
+      display: none;
+    }
   }
 }
 
@@ -40,6 +54,10 @@
   position: relative;
   span {
     cursor: pointer;
+  }
+
+  @include mobile {
+    display: none;
   }
 }
 
@@ -69,6 +87,30 @@
     img {
       width: 20px;
       height: 20px;
+    }
+  }
+}
+
+.burger {
+  display: none;
+
+  @include mobile {
+    display: block;
+
+    img {
+      width: 27px;
+    }
+  }
+}
+
+.close-mobile-popup {
+  display: none;
+
+  @include mobile {
+    display: block;
+
+    img {
+      width: 27px;
     }
   }
 }

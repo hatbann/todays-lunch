@@ -2,13 +2,15 @@
 
 "use client";
 
-import React, { createRef, useState } from "react";
+import React, { createRef, useEffect, useState } from "react";
 import style from "../../styles/common/header.module.scss";
 import { usePathname, useRouter } from "next/navigation";
 import { useRecoilValue, useResetRecoilState } from "recoil";
 import { isLoginLoading, userState } from "@/states/user";
 import { useClickOutside } from "@/hooks/useClickOutSide";
 import HeaderPopup from "./HeaderPopup";
+import { scrollable } from "@/utils/scrollable";
+import HeaderMobilePopup from "./HeaderMobilePopup";
 
 const Header = () => {
   const pathname = usePathname();
@@ -17,11 +19,20 @@ const Header = () => {
   const isLoading = useRecoilValue(isLoginLoading);
   const resetUser = useResetRecoilState(userState);
   const [isOpenPopup, setIsOpenPopup] = useState(false);
+  const [isOpenMobilePopup, setIsOpenMobilePopup] = useState(false);
   const userMenuRef = createRef<HTMLDivElement>();
 
   useClickOutside(userMenuRef, () => {
     setIsOpenPopup(false);
   });
+
+  useEffect(() => {
+    if (isOpenMobilePopup) {
+      scrollable(false);
+    } else {
+      scrollable(true);
+    }
+  }, [isOpenMobilePopup]);
 
   const logout = async () => {
     const API_URL =
@@ -102,6 +113,28 @@ const Header = () => {
             />
           )}
         </div>
+      )}
+      <div
+        className={style["burger"]}
+        style={isOpenMobilePopup ? { display: "none" } : {}}
+        onClick={() => {
+          setIsOpenMobilePopup(true);
+        }}>
+        <img src="/images/png/burger.png" alt="burger menu" />
+      </div>
+      <div
+        className={style["close-mobile-popup"]}
+        style={!isOpenMobilePopup ? { display: "none" } : {}}
+        onClick={() => {
+          setIsOpenMobilePopup(false);
+        }}>
+        <img src="/images/png/close.png" alt="close menu" />
+      </div>
+      {isOpenMobilePopup && (
+        <HeaderMobilePopup
+          setIsOpen={setIsOpenMobilePopup}
+          handleLogout={logout}
+        />
       )}
     </div>
   );

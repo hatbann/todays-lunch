@@ -13,6 +13,10 @@
   cursor: pointer;
   @include flex-column(flex-start, flex-start);
   gap: 20px;
+
+  @include mobile {
+    width: 100%;
+  }
 }
 
 .top {

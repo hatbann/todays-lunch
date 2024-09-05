@@ -157,21 +157,19 @@ const page = () => {
             {lunchItems.length !== 0 ? (
               <div className={style["table"]}>
                 <div className={style["head"]}>
-                  <span style={{ width: "70%" }}>제목</span>
-                  <span style={{ width: "20%" }}>작성일</span>
-                  <span style={{ width: "10%" }}>좋아요 수</span>
+                  <span>제목</span>
+                  <span>작성일</span>
+                  <span>좋아요</span>
                 </div>
                 <div className={style["body"]}>
                   {lunchItems.map((item, idx) => {
                     return (
                       <div className={style["body-item"]}>
-                        <span style={{ width: "70%" }}>{item.title}</span>
-                        <span style={{ width: "20%" }}>
+                        <span>{item.title}</span>
+                        <span>
                           {moment(item.created_at).format("YYYY-MM-DD")}
                         </span>
-                        <span style={{ width: "10%", textAlign: "center" }}>
-                          {item.like}
-                        </span>
+                        <span style={{ textAlign: "center" }}>{item.like}</span>
                       </div>
                     );
                   })}
@@ -192,25 +190,25 @@ const page = () => {
             {recipeItems.length !== 0 ? (
               <div className={style["table"]}>
                 <div className={style["head"]}>
-                  <span style={{ width: "70%" }}>제목</span>
-                  <span style={{ width: "20%" }}>작성일</span>
-                  <span style={{ width: "10%" }}>조회수</span>
+                  <span>제목</span>
+                  <span>작성일</span>
+                  <span>조회수</span>
                 </div>
                 <div className={style["body"]}>
                   {recipeItems.map((item, idx) => {
                     return (
                       <div className={style["body-item"]}>
                         <span
-                          style={{ width: "70%", cursor: "pointer" }}
+                          style={{ cursor: "pointer" }}
                           onClick={() => {
                             router.push(`/recipe/${item._id}`);
                           }}>
                           {item.title}
                         </span>
-                        <span style={{ width: "20%" }}>
+                        <span>
                           {/*              {moment(item.created_at).format("YYYY-MM-DD")} */}
                         </span>
-                        <span style={{ width: "10%" }}>{item.views}회</span>
+                        <span>{item.views}회</span>
                       </div>
                     );
                   })}

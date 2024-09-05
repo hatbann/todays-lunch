@@ -26,6 +26,10 @@
     .title {
       font-weight: 600;
       font-size: 20px;
+
+      @include mobile {
+        font-size: 17px;
+      }
     }
 
     .more {
@@ -49,6 +53,10 @@
         @include flex-row(flex-start, center);
         border-bottom: 1px solid $grayscale-black30;
         padding: 10px;
+
+        @include mobile {
+          font-size: 13px;
+        }
       }
 
       .body {
@@ -62,14 +70,53 @@
           border-radius: 5px;
           padding: 10px;
         }
+
+        @include mobile {
+          font-size: 13px;
+        }
+      }
+
+      .head,
+      .body-item {
+        span {
+          &:nth-child(1) {
+            width: 70%;
+
+            @include mobile {
+              width: 50%;
+            }
+          }
+
+          &:nth-child(2) {
+            width: 35%;
+          }
+
+          &:nth-child(3) {
+            width: 10%;
+            @include mobile {
+              width: 15%;
+            }
+          }
+        }
       }
     }
+
+    @include mobile {
+      padding: 20px 10px;
+      border: none;
+    }
+  }
+
+  @include mobile {
+    padding: 0px 10px 20px;
+    gap: 10px;
   }
 }
 
 .user-profile-container {
   gap: 30px;
   width: 100%;
+
   .profile-items {
     @include flex-column(flex-start, flex-start);
     gap: 10px;
@@ -98,8 +145,20 @@
         &::placeholder {
           color: black;
           font-size: 15px;
+          @include mobile {
+            font-size: 13px;
+          }
+        }
+
+        @include mobile {
+          font-size: 13px;
         }
       }
+    }
+
+    @include mobile {
+      gap: 5px;
+      font-size: 13px;
     }
   }
 
@@ -129,7 +188,15 @@
           background-color: $main-dark-color;
         }
       }
+
+      @include mobile {
+        font-size: 13px;
+      }
     }
+  }
+
+  @include mobile {
+    gap: 10px;
   }
 }
 

@@ -8,7 +8,7 @@
   @include flex-column(center, center);
   gap: 40px;
   width: 100vw;
-  height: calc(100vh - 80px);
+  height: calc($dvh * 100 - 80px);
   /*   margin-top: -50px; */
 
   h3 {
@@ -27,15 +27,19 @@
       background-color: $main-dark-color;
     }
   }
+
+  @include mobile {
+    height: calc($dvh * 100 - 60px);
+  }
 }
 .loading-container {
   width: 100%;
-  height: calc(100vh - 80px);
+  height: calc($dvh * 100 - 80px);
   @include flex-column(center, center);
 }
 
 .main {
-  width: 100vw;
+  width: 100%;
   @include flex-column(flex-start, center);
 }
 
@@ -55,6 +59,12 @@
     text-align: end;
     width: 100%;
   }
+
+  @include mobile {
+    max-width: 100%;
+    padding: 40px 20px 20px;
+    gap: 20px;
+  }
 }
 
 .recipes-container {
@@ -63,4 +73,9 @@
   @include flex-row(flex-start, flex-start);
   gap: 20px;
   flex-wrap: wrap; // 복수의 행
+
+  @include mobile {
+    @include flex-column(flex-start, flex-start);
+    padding: 0;
+  }
 }

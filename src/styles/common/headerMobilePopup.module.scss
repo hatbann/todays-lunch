@@ -1,0 +1,75 @@
+/** @format */
+
+@import "../layout";
+@import "../variables";
+@import "../viewsize";
+
+.container {
+  display: none;
+
+  @include mobile {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    height: calc($dvh * 100 - 60px);
+    z-index: 600;
+    background-color: white;
+    width: 100%;
+
+    @include flex-column(flex-start, flex-start);
+  }
+}
+
+.user-info,
+.menus,
+.line {
+  width: 100%;
+  padding: 20px 24px;
+}
+
+.line {
+  height: 8px;
+  background-color: $grayscale-black30;
+  padding: 0;
+}
+
+.user-info {
+  @include flex-row(space-between, center);
+
+  h2 {
+    color: #383838;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  img {
+    width: 24px;
+  }
+}
+
+.menus {
+  @include flex-column(flex-start, flex-start);
+  padding-top: 6px;
+  .menu {
+    padding: 24px 8px;
+    color: #383838;
+    font-family: Pretendard;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 100%;
+    letter-spacing: -0.2px;
+    cursor: pointer;
+  }
+}
+
+.logout,
+.login {
+  width: 100%;
+  background-color: #383838;
+  color: white;
+  font-weight: 600;
+  height: 56px;
+  border-radius: 5px;
+  font-size: 16px;
+  margin-top: 16px;
+}

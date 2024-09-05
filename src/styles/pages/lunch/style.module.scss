@@ -8,7 +8,7 @@
   @include flex-column(center, center);
   gap: 40px;
   width: 100%;
-  height: calc(100vh - 80px);
+  height: calc($dvh * 100 - 80px);
   margin-top: -50px;
 
   h3 {
@@ -26,6 +26,10 @@
     &:hover {
       background-color: $main-dark-color;
     }
+  }
+
+  @include mobile {
+    height: calc($dvh * 100 - 60px);
   }
 }
 
@@ -54,5 +58,15 @@
   .lunch-item {
     width: 100%;
     margin-top: -20px;
+
+    @include mobile {
+      margin-top: 0;
+    }
+  }
+
+  @include mobile {
+    width: 100%;
+    padding: 40px 20px 20px;
+    gap: 20px;
   }
 }

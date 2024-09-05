@@ -1,16 +1,27 @@
-@import '../../layout';
-@import '../../variables';
+/** @format */
+
+@import "../../layout";
+@import "../../variables";
+@import "../../viewsize";
 
 .container {
   @include flex-column(flex-start, center);
   gap: 30px;
   font-size: $font-size-caption1;
   width: 100%;
-  height: calc(100vh - 95px);
+  height: calc($dvh * 100 - 80px);
   padding: 150px 0;
 
   h1 {
     font-size: 30px;
+    @include mobile {
+      font-size: 20px;
+      margin-top: -20px;
+    }
+  }
+
+  @include mobile {
+    height: calc($dvh * 100 - 60px);
   }
 }
 .form-section {
