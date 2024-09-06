@@ -1,16 +1,16 @@
 /** @format */
 
-"use client";
+'use client';
 
-import React, { createRef, useEffect, useState } from "react";
-import style from "../../styles/common/header.module.scss";
-import { usePathname, useRouter } from "next/navigation";
-import { useRecoilValue, useResetRecoilState } from "recoil";
-import { isLoginLoading, userState } from "@/states/user";
-import { useClickOutside } from "@/hooks/useClickOutSide";
-import HeaderPopup from "./HeaderPopup";
-import { scrollable } from "@/utils/scrollable";
-import HeaderMobilePopup from "./HeaderMobilePopup";
+import React, { createRef, useEffect, useState } from 'react';
+import style from '../../styles/common/header.module.scss';
+import { usePathname, useRouter } from 'next/navigation';
+import { useRecoilValue, useResetRecoilState } from 'recoil';
+import { isLoginLoading, userState } from '@/states/user';
+import { useClickOutside } from '@/hooks/useClickOutSide';
+import HeaderPopup from './HeaderPopup';
+import { scrollable } from '@/utils/scrollable';
+import HeaderMobilePopup from './HeaderMobilePopup';
 
 const Header = () => {
   const pathname = usePathname();
@@ -36,73 +36,79 @@ const Header = () => {
 
   const logout = async () => {
     const API_URL =
-      process.env.NODE_ENV === "production"
-        ? "/api"
+      process.env.NODE_ENV === 'production'
+        ? '/api'
         : `${process.env.NEXT_PUBLIC_API_URL}/api`!;
 
     const res = await fetch(`${API_URL}/user/logout`, {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
 
     resetUser();
     setIsOpenPopup(false);
-    router.replace("/");
+    router.replace('/');
   };
 
   return (
-    <div className={style["header-container"]}>
-      <div className={style["left"]}>
+    <div className={style['header-container']}>
+      <div className={style['left']}>
         <img
           src="/images/png/logo.png"
           alt="logo"
-          className={style["logo"]}
+          className={style['logo']}
           onClick={() => {
-            router.push("/");
+            router.push('/');
+            setIsOpenMobilePopup(false);
+            setIsOpenPopup(false);
           }}
         />
-        <div className={style["category-container"]}>
+        <div className={style['category-container']}>
           <span
             className={
-              pathname.includes("lunch") && !pathname.includes("profile")
-                ? `${style["category"]} ${style["active"]}`
-                : style["category"]
+              pathname.includes('lunch') && !pathname.includes('profile')
+                ? `${style['category']} ${style['active']}`
+                : style['category']
             }
             onClick={() => {
-              router.push("/lunch");
-            }}>
+              router.push('/lunch');
+            }}
+          >
             도시락
           </span>
           <span
             className={
-              pathname.includes("recipe") && !pathname.includes("profile")
-                ? `${style["category"]} ${style["active"]}`
-                : style["category"]
+              pathname.includes('recipe') && !pathname.includes('profile')
+                ? `${style['category']} ${style['active']}`
+                : style['category']
             }
             onClick={() => {
-              console.log("dsaf");
-              router.push("/recipe");
-            }}>
+              console.log('dsaf');
+              router.push('/recipe');
+            }}
+          >
             레시피
           </span>
         </div>
       </div>
       {!isLoading && (
-        <div className={style["right"]} ref={userMenuRef}>
-          {user.user_id !== "" ? (
+        <div className={style['right']} ref={userMenuRef}>
+          {user.user_id !== '' ? (
             <span
               onClick={() => {
                 setIsOpenPopup((prev) => !prev);
-              }}>
+              }}
+            >
               {user.username}
             </span>
           ) : (
             <span
               onClick={() => {
-                router.push("/login");
-              }}>
+                router.push('/login');
+              }}
+            >
               로그인
             </span>
           )}
@@ -115,19 +121,21 @@ const Header = () => {
         </div>
       )}
       <div
-        className={style["burger"]}
-        style={isOpenMobilePopup ? { display: "none" } : {}}
+        className={style['burger']}
+        style={isOpenMobilePopup ? { display: 'none' } : {}}
         onClick={() => {
           setIsOpenMobilePopup(true);
-        }}>
+        }}
+      >
         <img src="/images/png/burger.png" alt="burger menu" />
       </div>
       <div
-        className={style["close-mobile-popup"]}
-        style={!isOpenMobilePopup ? { display: "none" } : {}}
+        className={style['close-mobile-popup']}
+        style={!isOpenMobilePopup ? { display: 'none' } : {}}
         onClick={() => {
           setIsOpenMobilePopup(false);
-        }}>
+        }}
+      >
         <img src="/images/png/close.png" alt="close menu" />
       </div>
       {isOpenMobilePopup && (
