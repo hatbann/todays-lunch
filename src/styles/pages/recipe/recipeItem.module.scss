@@ -1,8 +1,8 @@
 /** @format */
 
-@import "../../layout";
-@import "../../variables";
-@import "../../viewsize";
+@import '../../layout';
+@import '../../variables';
+@import '../../viewsize';
 
 .item-container {
   width: 30%;
@@ -49,8 +49,9 @@
 .desc {
   width: 100%;
   height: calc(100% - 50px);
-  @include make-ellipsis;
   font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
   color: $grayscale-black70;
   border: 1px dashed $grayscale-black50;
   padding: 5px;
