@@ -1,26 +1,26 @@
 /** @format */
 
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import style from "../../../styles/pages/upload/recipe.module.scss";
-import Input, { InputImage, TextArea } from "@/components/upload/Input";
-import { IngredientType, StepType } from "@/model/recipe";
-import { uploadImageToS3 } from "@/utils/uploadImageToS3";
-import { useRecoilValue } from "recoil";
-import { userState } from "@/states/user";
-import { useRouter } from "next/navigation";
+import React, { useState } from 'react';
+import style from '../../../styles/pages/upload/recipe.module.scss';
+import Input, { InputImage, TextArea } from '@/components/upload/Input';
+import { IngredientType, StepType } from '@/model/recipe';
+import { uploadImageToS3 } from '@/utils/uploadImageToS3';
+import { useRecoilValue } from 'recoil';
+import { userState } from '@/states/user';
+import { useRouter } from 'next/navigation';
 
 const page = () => {
-  const [title, setTitle] = useState<string>("");
-  const [description, setDiscription] = useState<string>("");
+  const [title, setTitle] = useState<string>('');
+  const [description, setDiscription] = useState<string>('');
   const [ingredients, setIngredients] = useState<IngredientType[]>([]);
   const [steps, setSteps] = useState<StepType[]>([]);
-  const [ingredientName, setIngredientName] = useState("");
+  const [ingredientName, setIngredientName] = useState('');
   const [ingredientLink, setIngredientLink] = useState<string | undefined>(
     undefined
   );
-  const [tempStep, setTempStep] = useState<string>("");
+  const [tempStep, setTempStep] = useState<string>('');
   const [ingredientNameError, setIngredientError] = useState(false);
   const [stepError, setStepError] = useState(false);
   const [img, setImg] = useState<File | null>(null);
@@ -51,16 +51,13 @@ const page = () => {
         ingredients: ingredients,
         steps: steps,
       };
-      const API_URL =
-        process.env.NODE_ENV === "production"
-          ? "/api"
-          : `${process.env.NEXT_PUBLIC_API_URL!}/api`;
+      const API_URL = `${process.env.NEXT_PUBLIC_API_URL!}/api`;
 
       const response = await fetch(`${API_URL}/recipe`, {
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-        method: "POST",
+        method: 'POST',
         body: JSON.stringify(bodyData),
       })
         .then((res) => {
@@ -70,8 +67,8 @@ const page = () => {
           console.log(e);
         });
 
-      if (response.message === "success") {
-        router.push("/upload/recipe/success");
+      if (response.message === 'success') {
+        router.push('/upload/recipe/success');
       }
     } catch (error) {
       console.log(error);
@@ -79,11 +76,11 @@ const page = () => {
   };
 
   return (
-    <div className={style["container"]}>
-      <h2 className={style["title"]}>레시피</h2>
-      <section className={style["input-section"]}>
+    <div className={style['container']}>
+      <h2 className={style['title']}>레시피</h2>
+      <section className={style['input-section']}>
         <Input
-          label={"제목"}
+          label={'제목'}
           value={title}
           htmlFor="title"
           onChange={(e) => {
@@ -94,7 +91,7 @@ const page = () => {
           placeholder="제목을 입력하세요(50자 이내)"
         />
         <TextArea
-          label={"설명"}
+          label={'설명'}
           value={description}
           htmlFor="description"
           onChange={(e) => {
@@ -104,39 +101,40 @@ const page = () => {
           }}
           placeholder="레시피에 대해 간단히 설명해주세요(500자 이내)"
         />
-        <div className={style["ingredient-container"]}>
-          <div className={style["added-ingredient"]}>
+        <div className={style['ingredient-container']}>
+          <div className={style['added-ingredient']}>
             <h3>재료</h3>
             {ingredients.length !== 0 ? (
-              <div className={style["ingredient-items"]}>
+              <div className={style['ingredient-items']}>
                 {ingredients.map((ingredient, idx) => {
                   return (
                     <span
                       className={
                         ingredient.link
-                          ? `${style["link"]} ${style["ingredient"]}`
-                          : style["ingredient"]
+                          ? `${style['link']} ${style['ingredient']}`
+                          : style['ingredient']
                       }
                       onClick={() => {
                         if (ingredient.link) {
                           window.open(ingredient.link);
                         }
-                      }}>
+                      }}
+                    >
                       {ingredient.name}
-                      {idx !== ingredients.length - 1 && ", "}
+                      {idx !== ingredients.length - 1 && ', '}
                     </span>
                   );
                 })}
               </div>
             ) : (
-              <div className={style["empty-ingredient"]}>
+              <div className={style['empty-ingredient']}>
                 추가한 재료가 없습니다
               </div>
             )}
           </div>
-          <div className={style["ingredient-input"]}>
+          <div className={style['ingredient-input']}>
             <Input
-              label={"재료 이름"}
+              label={'재료 이름'}
               value={ingredientName}
               htmlFor="ingredientName"
               onChange={(e) => {
@@ -148,13 +146,13 @@ const page = () => {
               placeholder="재료 이름을 입력하세요(20자 이내)"
             />
             {ingredientNameError && (
-              <div className={style["ingredient-error"]}>
+              <div className={style['ingredient-error']}>
                 재료 이름은 필수입니다.
               </div>
             )}
             <Input
-              label={"재료 구매처"}
-              value={ingredientLink ?? ""}
+              label={'재료 구매처'}
+              value={ingredientLink ?? ''}
               htmlFor="ingredientLink"
               onChange={(e) => {
                 setIngredientLink(e.target.value);
@@ -162,42 +160,43 @@ const page = () => {
               placeholder="재료 구매처 링크를 입력하세요(필수 X)"
             />
           </div>
-          <div className={style["add-btn"]}>
+          <div className={style['add-btn']}>
             <button
               onClick={() => {
-                if (ingredientName !== "") {
+                if (ingredientName !== '') {
                   const newIngredient: IngredientType = {
                     name: ingredientName,
                     link: ingredientLink,
                   };
                   setIngredients((prev) => [...prev, newIngredient]);
                   setIngredientLink(undefined);
-                  setIngredientName("");
+                  setIngredientName('');
                 } else {
                   setIngredientError(true);
                 }
-              }}>
+              }}
+            >
               재료 추가
             </button>
           </div>
         </div>
-        <div className={style["step-container"]}>
-          <h3 className={style["title"]}>단계</h3>
+        <div className={style['step-container']}>
+          <h3 className={style['title']}>단계</h3>
           {steps.length !== 0 && (
-            <div className={style["added-steps"]}>
+            <div className={style['added-steps']}>
               {steps.map((step, idx) => {
                 console.log(step);
                 return (
-                  <div className={style["step-item"]}>
-                    <span className={style["step-name"]}>{idx + 1} 단계</span>
-                    <div className={style["step-content"]}>{step.content}</div>
+                  <div className={style['step-item']}>
+                    <span className={style['step-name']}>{idx + 1} 단계</span>
+                    <div className={style['step-content']}>{step.content}</div>
                   </div>
                 );
               })}
             </div>
           )}
-          <div className={style["steps-input"]}>
-            <span className={style["step-num"]}>{steps.length + 1}단계</span>
+          <div className={style['steps-input']}>
+            <span className={style['step-num']}>{steps.length + 1}단계</span>
             <TextArea
               value={tempStep}
               htmlFor={`step-${steps.length + 1}`}
@@ -206,32 +205,33 @@ const page = () => {
                   setTempStep(e.target.value);
                 }
               }}
-              customStyle={{ width: "100%" }}
+              customStyle={{ width: '100%' }}
               placeholder="조리 방법을 단계별로 작정해주세요(500자 이내)"
             />
             {stepError && (
-              <div className={style["step-error"]}>설명을 작성해주세요</div>
+              <div className={style['step-error']}>설명을 작성해주세요</div>
             )}
           </div>
-          <div className={style["add-btn"]}>
+          <div className={style['add-btn']}>
             <button
               onClick={() => {
-                if (tempStep !== "") {
+                if (tempStep !== '') {
                   const newStep: StepType = {
                     content: tempStep,
                   };
                   setSteps((prev) => [...prev, newStep]);
-                  setTempStep("");
+                  setTempStep('');
                 } else {
                   setStepError(true);
                 }
-              }}>
+              }}
+            >
               단계 추가
             </button>
           </div>
         </div>
         <InputImage
-          label={"완성사진"}
+          label={'완성사진'}
           value={img}
           htmlFor="img"
           onChange={(e) => {
@@ -244,9 +244,10 @@ const page = () => {
           }}
         />
         <button
-          className={style["write-btn"]}
+          className={style['write-btn']}
           disabled={isDisable}
-          onClick={handleWrite}>
+          onClick={handleWrite}
+        >
           글쓰기
         </button>
       </section>

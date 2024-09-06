@@ -11,10 +11,7 @@ type Props = {
 
 const getInitialPageData = async () => {
   try {
-    const API_URL =
-      process.env.NODE_ENV === 'production'
-        ? '/api'
-        : `${process.env.NEXT_PUBLIC_API_URL!}/api`;
+    const API_URL = `${process.env.NEXT_PUBLIC_API_URL!}/api`;
 
     const response = await fetch(`${API_URL}/lunch?page=1`, {
       headers: {

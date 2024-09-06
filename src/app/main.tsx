@@ -1,29 +1,26 @@
 /** @format */
 
-"use client";
+'use client';
 
-import React, { useEffect } from "react";
-import { useRecoilState } from "recoil";
-import { isLoginLoading, userState } from "@/states/user";
-import style from "../styles/pages/main.module.scss";
-import { useSetVh } from "@/hooks/useSetVh";
+import React, { useEffect } from 'react';
+import { useRecoilState } from 'recoil';
+import { isLoginLoading, userState } from '@/states/user';
+import style from '../styles/pages/main.module.scss';
+import { useSetVh } from '@/hooks/useSetVh';
 const Main = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useRecoilState(userState);
   const [isLoading, setIsLoading] = useRecoilState(isLoginLoading);
 
   useEffect(() => {
     const getUserInfo = async () => {
-      const API_URL =
-        process.env.NODE_ENV === "production"
-          ? "/api"
-          : `${process.env.NEXT_PUBLIC_API_URL!}/api`;
+      const API_URL = `${process.env.NEXT_PUBLIC_API_URL!}/api`;
 
       const res: { message: any; token: any; user: any } = await fetch(
         `${API_URL}/token`,
         {
-          method: "GET",
+          method: 'GET',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
         }
       )
@@ -34,7 +31,7 @@ const Main = ({ children }: { children: React.ReactNode }) => {
           console.log(e);
         });
 
-      if (res.message === "OK") {
+      if (res.message === 'OK') {
         setUser({
           username: res.user.nickname,
           user_id: String(res.user._id),
@@ -48,7 +45,7 @@ const Main = ({ children }: { children: React.ReactNode }) => {
   }, []);
   useSetVh();
 
-  return <main className={style["main-container"]}>{children}</main>;
+  return <main className={style['main-container']}>{children}</main>;
 };
 
 export default Main;

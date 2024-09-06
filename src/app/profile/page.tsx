@@ -1,14 +1,14 @@
 /** @format */
-"use client";
+'use client';
 
-import { LunchType } from "@/model/lunch";
-import { RecipeType } from "@/model/recipe";
-import { userState } from "@/states/user";
-import React, { useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
-import style from "../../styles/pages/profile/style.module.scss";
-import moment from "moment";
-import { useRouter } from "next/navigation";
+import { LunchType } from '@/model/lunch';
+import { RecipeType } from '@/model/recipe';
+import { userState } from '@/states/user';
+import React, { useEffect, useState } from 'react';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import style from '../../styles/pages/profile/style.module.scss';
+import moment from 'moment';
+import { useRouter } from 'next/navigation';
 
 const page = () => {
   const [user, setUser] = useRecoilState(userState);
@@ -18,22 +18,19 @@ const page = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const router = useRouter();
-  const [nickname, setNickname] = useState("");
+  const [nickname, setNickname] = useState('');
 
   useEffect(() => {
-    if (user.user_id !== "") {
+    if (user.user_id !== '') {
       const fetchData = async () => {
         try {
-          const API_URL =
-            process.env.NODE_ENV === "production"
-              ? "/api"
-              : `${process.env.NEXT_PUBLIC_API_URL!}/api`;
+          const API_URL = `${process.env.NEXT_PUBLIC_API_URL!}/api`;
 
           const response = await fetch(`${API_URL}/profile`, {
             headers: {
-              "Content-Type": "application/json",
+              'Content-Type': 'application/json',
             },
-            method: "GET",
+            method: 'GET',
           })
             .then((res) => {
               return res.json();
@@ -60,16 +57,13 @@ const page = () => {
   const handleChangeNickname = async () => {
     try {
       setIsLoading(true);
-      const API_URL =
-        process.env.NODE_ENV === "production"
-          ? "/api"
-          : `${process.env.NEXT_PUBLIC_API_URL!}/api`;
+      const API_URL = `${process.env.NEXT_PUBLIC_API_URL!}/api`;
 
       const response = await fetch(`${API_URL}/profile?nickname=${nickname}`, {
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-        method: "PUT",
+        method: 'PUT',
       })
         .then((res) => {
           return res.json();
@@ -92,15 +86,15 @@ const page = () => {
   };
 
   return isLoading ? (
-    <div className={style["loading"]}>Loading...</div>
+    <div className={style['loading']}>Loading...</div>
   ) : (
-    <div className={style["container"]}>
+    <div className={style['container']}>
       {!isError && (
         <>
-          <section className={style["user-profile-container"]}>
-            <h3 className={style["title"]}>프로필</h3>
-            <div className={style["profile-items"]}>
-              <div className={style["profile-item"]}>
+          <section className={style['user-profile-container']}>
+            <h3 className={style['title']}>프로필</h3>
+            <div className={style['profile-items']}>
+              <div className={style['profile-item']}>
                 <span>닉네임 | </span>
                 <input
                   type="text"
@@ -112,97 +106,102 @@ const page = () => {
                   }}
                 />
               </div>
-              <div className={style["btn-container"]}>
+              <div className={style['btn-container']}>
                 {isEditMode ? (
                   <>
                     <button
-                      className={style["cancel"]}
+                      className={style['cancel']}
                       onClick={() => {
                         setIsEditMode(false);
-                      }}>
+                      }}
+                    >
                       취소
                     </button>
                     <button
-                      className={style["confirm"]}
+                      className={style['confirm']}
                       onClick={() => {
                         handleChangeNickname();
                         setIsEditMode(false);
-                      }}>
+                      }}
+                    >
                       완료
                     </button>
                   </>
                 ) : (
                   <button
-                    className={style["edit"]}
+                    className={style['edit']}
                     onClick={() => {
                       setIsEditMode(true);
-                    }}>
+                    }}
+                  >
                     수정
                   </button>
                 )}
               </div>
             </div>
           </section>
-          <section className={style["user-lunchbox-container"]}>
-            <h3 className={style["title"]}>최근 도시락</h3>
+          <section className={style['user-lunchbox-container']}>
+            <h3 className={style['title']}>최근 도시락</h3>
             {lunchItems.length !== 0 && (
               <p
-                className={style["more"]}
+                className={style['more']}
                 onClick={() => {
-                  router.push("/profile/mylunch");
-                }}>
+                  router.push('/profile/mylunch');
+                }}
+              >
                 더보기
               </p>
             )}
             {lunchItems.length !== 0 ? (
-              <div className={style["table"]}>
-                <div className={style["head"]}>
+              <div className={style['table']}>
+                <div className={style['head']}>
                   <span>제목</span>
                   <span>작성일</span>
                   <span>좋아요</span>
                 </div>
-                <div className={style["body"]}>
+                <div className={style['body']}>
                   {lunchItems.map((item, idx) => {
                     return (
-                      <div className={style["body-item"]}>
+                      <div className={style['body-item']}>
                         <span>{item.title}</span>
                         <span>
-                          {moment(item.created_at).format("YYYY-MM-DD")}
+                          {moment(item.created_at).format('YYYY-MM-DD')}
                         </span>
-                        <span style={{ textAlign: "center" }}>{item.like}</span>
+                        <span style={{ textAlign: 'center' }}>{item.like}</span>
                       </div>
                     );
                   })}
                 </div>
               </div>
             ) : (
-              <div className={style["empty-container"]}>
+              <div className={style['empty-container']}>
                 <p>등록한 도시락이 없습니다</p>
                 <a>도시락 올리기</a>
               </div>
             )}
           </section>
-          <section className={style["user-recipe-container"]}>
-            <h3 className={style["title"]}>최근 레시피</h3>
+          <section className={style['user-recipe-container']}>
+            <h3 className={style['title']}>최근 레시피</h3>
             {recipeItems.length !== 0 && (
-              <p className={style["more"]}>더보기</p>
+              <p className={style['more']}>더보기</p>
             )}
             {recipeItems.length !== 0 ? (
-              <div className={style["table"]}>
-                <div className={style["head"]}>
+              <div className={style['table']}>
+                <div className={style['head']}>
                   <span>제목</span>
                   <span>작성일</span>
                   <span>조회수</span>
                 </div>
-                <div className={style["body"]}>
+                <div className={style['body']}>
                   {recipeItems.map((item, idx) => {
                     return (
-                      <div className={style["body-item"]}>
+                      <div className={style['body-item']}>
                         <span
-                          style={{ cursor: "pointer" }}
+                          style={{ cursor: 'pointer' }}
                           onClick={() => {
                             router.push(`/recipe/${item._id}`);
-                          }}>
+                          }}
+                        >
                           {item.title}
                         </span>
                         <span>
@@ -215,7 +214,7 @@ const page = () => {
                 </div>
               </div>
             ) : (
-              <div className={style["empty-container"]}>
+              <div className={style['empty-container']}>
                 <p>등록한 레시피가 없습니다</p>
                 <a>레시피 올리기</a>
               </div>

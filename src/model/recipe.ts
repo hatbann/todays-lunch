@@ -1,6 +1,6 @@
 /** @format */
 
-import mongoose, { InferSchemaType } from "mongoose";
+import mongoose, { InferSchemaType } from 'mongoose';
 
 const { Schema } = mongoose;
 
@@ -12,7 +12,6 @@ const IngredientSchema = new Schema({
   name: String,
   link: {
     type: String,
-    required: false,
   },
 });
 
@@ -32,9 +31,9 @@ const RecipeSchema = new Schema({
   },
 });
 
-RecipeSchema.set("timestamps", {
-  createdAt: "created_at",
-  updatedAt: "updated_at",
+RecipeSchema.set('timestamps', {
+  createdAt: 'created_at',
+  updatedAt: 'updated_at',
 });
 
 type RecipeType = InferSchemaType<typeof RecipeSchema> & {
@@ -46,5 +45,5 @@ type IngredientType = InferSchemaType<typeof IngredientSchema>;
 type StepType = InferSchemaType<typeof StepSchema>;
 
 export default mongoose.models.Recipes ||
-  mongoose.model("Recipes", RecipeSchema);
+  mongoose.model('Recipes', RecipeSchema);
 export type { RecipeType, IngredientType, StepType };

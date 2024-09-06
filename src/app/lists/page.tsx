@@ -1,23 +1,20 @@
 /** @format */
-"use client";
+'use client';
 
-import { SampleType } from "@/model/sample";
-import React, { useEffect, useState } from "react";
+import { SampleType } from '@/model/sample';
+import React, { useEffect, useState } from 'react';
 
 const page = () => {
   const [samples, setSamples] = useState<SampleType[]>([]);
 
   useEffect(() => {
     const getSamples = async () => {
-      const API_URL =
-        process.env.NODE_ENV === "production"
-          ? "/api"
-          : `${process.env.NEXT_PUBLIC_API_URL!}/api`;
+      const API_URL = `${process.env.NEXT_PUBLIC_API_URL!}/api`;
       const response = await fetch(`${API_URL}/lists`, {
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-        method: "GET",
+        method: 'GET',
       })
         .then((res) => {
           return res.json();
@@ -37,7 +34,7 @@ const page = () => {
         return (
           <div>
             <p>{sample.title}</p>
-            <img src={sample.img ?? ""} alt="" />
+            <img src={sample.img ?? ''} alt="" />
           </div>
         );
       })}
