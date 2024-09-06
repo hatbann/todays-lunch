@@ -21,7 +21,8 @@ export const metadata: Metadata = {
     '맛있는 도시락, 함께 나누는 즐거움 🍱!  나만의 특별한 도시락 레시피를 공유하고, 다른 사람들의 창의적인 아이디어도 만나보세요. 간편하면서도 건강한 도시락 레시피로 매일 새로운 맛을 즐기세요! 여러분의 도시락 이야기를 기다립니다',
   openGraph: {
     title: "Today's lunch",
-    description: '제로웨이브를 통해 일상 속에서 환경보호를 실천해보세요',
+    description:
+      '맛있는 도시락, 함께 나누는 즐거움 🍱!  나만의 특별한 도시락 레시피를 공유하고, 다른 사람들의 창의적인 아이디어도 만나보세요. 간편하면서도 건강한 도시락 레시피로 매일 새로운 맛을 즐기세요! 여러분의 도시락 이야기를 기다립니다',
     url: 'https://todayslunch.vercel.app/',
     siteName: 'Todays Lunch',
     images: [
