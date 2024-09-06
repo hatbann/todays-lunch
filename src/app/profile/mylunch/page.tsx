@@ -36,7 +36,17 @@ const page = () => {
               console.log(e);
             });
 
-          setLunchItems(response.lunch);
+          if (response.lunch && response.lunch.length !== 0) {
+            const res: LunchType[] = [];
+
+            response.lunch.map((item: LunchType) => {
+              const temp = item;
+              temp.author = user.username;
+              res.push(temp);
+            });
+            setLunchItems(response.lunch);
+          }
+
           setIsLoading(false);
         } catch (error) {
           setIsError(true);

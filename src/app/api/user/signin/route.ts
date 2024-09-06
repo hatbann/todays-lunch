@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
 
     if (user == null) {
       return new NextResponse(
-        JSON.stringify({ message: '계정이 존재하지 않습니다', result: '' })
+        JSON.stringify({ message: 'NOTFOUND', result: '' })
       );
     }
 
@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
     });
 
     const body = {
-      message: isMatched ? 'OK' : '아이디 혹은 비밀번호를 확인해주세요.',
+      message: isMatched ? 'OK' : 'WRONG',
       /*       token: {
         accessToken: isMatched && token,
       }, */

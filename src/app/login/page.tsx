@@ -31,7 +31,7 @@ const page = () => {
 
       const API_URL = `${process.env.NEXT_PUBLIC_API_URL!}/api`;
 
-      const res: { user: any; token: any } = await fetch(
+      const res: { user: any; token: any; message: any } = await fetch(
         `${API_URL}/user/signin`,
         {
           method: 'POST',
@@ -43,13 +43,23 @@ const page = () => {
       ).then((res) => {
         return res.json();
       });
-      console.log(res.user._id);
-      setUser({
-        username: res.user.nickname,
-        user_id: res.user._id,
-        like: res.user.like,
-      });
-      router.push('/');
+      if (res.message === 'OK') {
+        setUser({
+          username: res.user.nickname,
+          user_id: res.user._id,
+          like: res.user.like,
+        });
+        router.push('/');
+      } else if (res.message === 'NOTFOUND') {
+        const confirmed = confirm(
+          '계정이 존재하지 않습니다. 회원가입을 해주세요.'
+        );
+        if (confirmed) {
+          router.push('/join');
+        }
+      } else if (res.message === 'WRONG') {
+        alert('비밀번호 및 아이디를 다시 확인해주세요');
+      }
     } catch (error) {
       console.log(error);
     }
