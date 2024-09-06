@@ -1,9 +1,9 @@
 /** @format */
-"use server";
+'use server';
 
-import LunchView from "@/components/lunch/view";
-import { revalidatePath } from "next/cache";
-import { LunchType } from "@/model/lunch";
+import LunchView from '@/components/lunch/view';
+import { revalidatePath } from 'next/cache';
+import { LunchType } from '@/model/lunch';
 
 type Props = {
   searchParams: { [key: string]: string | string[] | undefined };
@@ -12,15 +12,15 @@ type Props = {
 const getInitialPageData = async () => {
   try {
     const API_URL =
-      process.env.NODE_ENV === "production"
-        ? "/api"
+      process.env.NODE_ENV === 'production'
+        ? '/api'
         : `${process.env.NEXT_PUBLIC_API_URL!}/api`;
 
     const response = await fetch(`${API_URL}/lunch?page=1`, {
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-      method: "GET",
+      method: 'GET',
     })
       .then((res) => {
         return res.json();
@@ -28,49 +28,57 @@ const getInitialPageData = async () => {
       .catch((e) => {
         console.log(e);
       });
-    const lunches = response.lunches;
-    const totalCount = response.total;
-    if (lunches) {
-      const users = lunches.map((res: LunchType) => {
-        if (res.author) return res.author;
-      });
-      if (users.length !== 0) {
-        const id = String(users);
-        const userData = await fetch(`${API_URL}/user/nickname/${id}`, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          method: "GET",
-        })
-          .then((res) => {
-            return res.json();
-          })
-          .catch((e) => {
-            console.log(e);
-          });
-        console.log(userData, "!!!!!");
-        const userArr: { id: string; nickname: string }[] = userData.data;
-        const lunchRes: LunchType[] = [];
-        lunches.map((item: LunchType) => {
-          const name = userArr.find(
-            (data) => data.id === item.author
-          )?.nickname;
-          const temp: LunchType = {
-            _id: item._id,
-            title: item.title,
-            content: item.content,
-            img: item.img,
-            like: item.like,
-            author: name,
-            created_at: item.created_at,
-            updated_at: item.updated_at,
-          };
-          lunchRes.push(temp);
+
+    if (response) {
+      const lunches = response.lunches;
+      const totalCount = response.total;
+      if (lunches) {
+        const users = lunches.map((res: LunchType) => {
+          if (res.author) return res.author;
         });
-        return {
-          lunchRes,
-          totalCount,
-        };
+        if (users.length !== 0) {
+          const id = String(users);
+          const userData = await fetch(`${API_URL}/user/nickname/${id}`, {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            method: 'GET',
+          })
+            .then((res) => {
+              return res.json();
+            })
+            .catch((e) => {
+              console.log(e);
+            });
+          console.log(userData, '!!!!!');
+          const userArr: { id: string; nickname: string }[] = userData.data;
+          const lunchRes: LunchType[] = [];
+          lunches.map((item: LunchType) => {
+            const name = userArr.find(
+              (data) => data.id === item.author
+            )?.nickname;
+            const temp: LunchType = {
+              _id: item._id,
+              title: item.title,
+              content: item.content,
+              img: item.img,
+              like: item.like,
+              author: name,
+              created_at: item.created_at,
+              updated_at: item.updated_at,
+            };
+            lunchRes.push(temp);
+          });
+          return {
+            lunchRes,
+            totalCount,
+          };
+        } else {
+          return {
+            lunchRes: [],
+            totalCount: 0,
+          };
+        }
       } else {
         return {
           lunchRes: [],
@@ -90,8 +98,8 @@ const getInitialPageData = async () => {
 
 export default async function Home() {
   async function revalidate() {
-    "use server";
-    revalidatePath("/recipe");
+    'use server';
+    revalidatePath('/recipe');
   }
 
   revalidate();

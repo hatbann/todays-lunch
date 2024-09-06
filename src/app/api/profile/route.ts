@@ -63,10 +63,7 @@ export async function GET(req: NextRequest) {
   }
 }
 
-export async function PUT(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PUT(req: NextRequest) {
   try {
     await dbConnect();
     const token = req.cookies.get('token')?.value || '';
