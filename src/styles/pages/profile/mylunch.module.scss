@@ -1,8 +1,8 @@
 /** @format */
 
-@import "../../layout";
-@import "../../variables";
-@import "../../viewsize";
+@import '../../layout';
+@import '../../variables';
+@import '../../viewsize';
 
 .loading-container {
   width: 100%;
@@ -30,22 +30,21 @@
   section {
     width: 100%;
     @include flex-column(flex-start, center);
+
+    @include mobile {
+      padding: 0 0 40px;
+    }
   }
 
   @include mobile {
-    padding: 40px 20px 20px;
+    padding: 40px 20px;
   }
 }
 
 .lunch-items {
-  width: 400px;
+  width: 300px;
   @include flex-column(flex-start, center);
   gap: 20px;
-
-  @include mobile {
-    width: 100%;
-    max-width: 400px;
-  }
 }
 
 .empty-container,

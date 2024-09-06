@@ -1,8 +1,8 @@
 /** @format */
 
-@import "../../layout";
-@import "../../variables";
-@import "../../viewsize";
+@import '../../layout';
+@import '../../variables';
+@import '../../viewsize';
 
 .loading-container {
   width: 100%;
@@ -43,7 +43,7 @@
     @include flex-column(flex-start, flex-start);
     padding: 0;
     width: 100%;
-    max-width: 400px;
+    max-width: 300px;
   }
 }
 

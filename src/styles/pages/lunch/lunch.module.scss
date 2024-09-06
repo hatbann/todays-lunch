@@ -1,8 +1,8 @@
 /** @format */
 
-@import "../../layout";
-@import "../../variables";
-@import "../../viewsize";
+@import '../../layout';
+@import '../../variables';
+@import '../../viewsize';
 
 .lunch-container {
   @include flex-column(flex-start, flex-start);
@@ -14,9 +14,13 @@
   padding: 10px;
   font-size: 15px;
 
-  img {
-    width: 200px;
-    height: 200px;
+  .img-wrapper {
+    width: 100%;
+    @include flex-column(center, center);
+    img {
+      width: 200px;
+      height: 200px;
+    }
   }
 
   .title {
