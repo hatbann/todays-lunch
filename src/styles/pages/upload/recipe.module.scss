@@ -1,19 +1,23 @@
 /** @format */
 
-@import "../../layout";
-@import "../../variables";
-@import "../../viewsize";
+@import '../../layout';
+@import '../../variables';
+@import '../../viewsize';
 
 .container {
   width: 100%;
   min-height: calc($dvh * 100 - 80px);
-  padding: 70px 100px;
+  padding: 80px 0;
   @include flex-column(flex-start, center);
   gap: 30px;
 
   .title {
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 600;
+  }
+
+  @include mobile {
+    padding: 80px 30px;
   }
 }
 
@@ -22,6 +26,10 @@
   width: 700px;
   @include flex-column(flex-start, center);
   gap: 40px;
+
+  @include mobile {
+    gap: 20px;
+  }
 }
 
 .ingredient-container {
@@ -152,6 +160,7 @@
   background-color: $main-color;
   color: white;
   cursor: pointer;
+  margin-top: 20px;
 
   &:disabled {
     background-color: $grayscale-black30;

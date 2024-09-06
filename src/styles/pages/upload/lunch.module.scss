@@ -1,8 +1,8 @@
 /** @format */
 
-@import "../../layout";
-@import "../../variables";
-@import "../../viewsize";
+@import '../../layout';
+@import '../../variables';
+@import '../../viewsize';
 
 .lunch-container {
   @include flex-column(center, center);
@@ -13,6 +13,10 @@
 
   .head {
     font-size: 20px;
+  }
+
+  @include mobile {
+    padding: 80px 30px;
   }
 }
 
@@ -30,11 +34,17 @@
     background-color: $main-color;
     color: white;
     cursor: pointer;
+    margin-top: 20px;
 
     &:disabled {
       background-color: $grayscale-black30;
       color: $grayscale-black80;
     }
+  }
+
+  @include mobile {
+    width: 100%;
+    gap: 20px;
   }
 }
 
