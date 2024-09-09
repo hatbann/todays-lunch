@@ -1,14 +1,14 @@
 /** @format */
 
-'use client';
+"use client";
 
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import style from '../../styles/pages/lunch/style.module.scss';
-import { LunchType } from '@/model/lunch';
-import { useRouter } from 'next/navigation';
-import Lunch from './Lunch';
-import { useRecoilValue } from 'recoil';
-import { userState } from '@/states/user';
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import style from "../../styles/pages/lunch/style.module.scss";
+import { LunchType } from "@/model/lunch";
+import { useRouter } from "next/navigation";
+import Lunch from "./Lunch";
+import { useRecoilValue } from "recoil";
+import { userState } from "@/states/user";
 
 const LunchView = ({
   lunch,
@@ -32,9 +32,9 @@ const LunchView = ({
 
       const response = await fetch(`${API_URL}/lunch?page=${page}`, {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        method: 'GET',
+        method: "GET",
       })
         .then((res) => {
           return res.json();
@@ -52,9 +52,9 @@ const LunchView = ({
           const id = String(users);
           const userData = await fetch(`${API_URL}/user/nickname/${id}`, {
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
             },
-            method: 'GET',
+            method: "GET",
           })
             .then((res) => {
               return res.json();
@@ -62,7 +62,6 @@ const LunchView = ({
             .catch((e) => {
               console.log(e);
             });
-          console.log(userData, '!!!!!');
           const userArr: { id: string; nickname: string }[] = userData.data;
           const lunchRes: LunchType[] = [];
           lunches.map((item: LunchType) => {
@@ -122,9 +121,17 @@ const LunchView = ({
     [page]
   );
 
+  const handleRoute = () => {
+    if (user.user_id !== "") {
+      router.push("/upload/lunch");
+    } else {
+      router.push("/login");
+    }
+  };
+
   useEffect(() => {
     observerRef.current = new IntersectionObserver(handleObserver, {
-      rootMargin: '20px',
+      rootMargin: "20px",
     });
 
     if (loadMoreRef.current) {
@@ -139,23 +146,18 @@ const LunchView = ({
   }, [handleObserver]);
 
   return (
-    <main className={style['main']}>
+    <main className={style["main"]}>
       {lunch.length !== 0 ? (
-        <section className={style['container']}>
-          <h2 className={style['title']}>도시락통</h2>
-          <p
-            className={style['upload']}
-            onClick={() => {
-              router.push('/upload/lunch');
-            }}
-          >
-            도시락 올리기
-          </p>
+        <section className={style["container"]}>
+          <h2 className={style["title"]}>도시락통</h2>
+          <div className={style["upload-button"]}>
+            <button onClick={handleRoute}>도시락 올리기</button>
+          </div>
           {lunchItems.map((item, idx) => {
             return (
               <div
                 key={`${idx}-${item.title}`}
-                className={style['lunch-item']}
+                className={style["lunch-item"]}
                 /*    ref={lunchItems.length === idx + 1 ? loadMoreRef : null} */
               >
                 <Lunch item={item} />
@@ -164,25 +166,24 @@ const LunchView = ({
           })}
           <div
             ref={loadMoreRef}
-            style={{ height: '20px', backgroundColor: 'transparent' }}
+            style={{ height: "20px", backgroundColor: "transparent" }}
           />
-          {isLoading && <div className={style['loading']}>Loading...</div>}
+          {isLoading && <div className={style["loading"]}>Loading...</div>}
         </section>
       ) : (
-        <div className={style['empty-container']}>
+        <div className={style["empty-container"]}>
           <h3>글이 없습니다</h3>
           <button
             onClick={() => {
-              if (user.user_id === '') {
-                const result = confirm('로그인 후 이용해주세요');
+              if (user.user_id === "") {
+                const result = confirm("로그인 후 이용해주세요");
                 if (result) {
-                  router.push('/login');
+                  router.push("/login");
                 }
               } else {
-                router.push('/upload/lunch');
+                router.push("/upload/lunch");
               }
-            }}
-          >
+            }}>
             도시락 올리기
           </button>
         </div>

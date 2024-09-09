@@ -1,8 +1,8 @@
 /** @format */
 
-@import '../../layout';
-@import '../../variables';
-@import '../../viewsize';
+@import "../../layout";
+@import "../../variables";
+@import "../../viewsize";
 
 .empty-container {
   @include flex-column(center, center);
@@ -47,11 +47,16 @@
     font-size: 20px;
   }
 
-  .upload {
-    cursor: pointer;
-    font-size: 13px;
-    text-align: end;
+  .upload-button {
     width: 100%;
+    @include flex-row(flex-end, center);
+
+    button {
+      cursor: pointer;
+      font-size: 13px;
+      background-color: white;
+      border: none;
+    }
   }
 
   .lunch-item {

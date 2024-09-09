@@ -1,9 +1,9 @@
 /** @format */
-'use server';
+"use server";
 
-import LunchView from '@/components/lunch/view';
-import { revalidatePath } from 'next/cache';
-import { LunchType } from '@/model/lunch';
+import LunchView from "@/components/lunch/view";
+import { revalidatePath } from "next/cache";
+import { LunchType } from "@/model/lunch";
 
 type Props = {
   searchParams: { [key: string]: string | string[] | undefined };
@@ -15,9 +15,9 @@ const getInitialPageData = async () => {
 
     const response = await fetch(`${API_URL}/lunch?page=1`, {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
-      method: 'GET',
+      method: "GET",
     })
       .then((res) => {
         return res.json();
@@ -37,9 +37,9 @@ const getInitialPageData = async () => {
           const id = String(users);
           const userData = await fetch(`${API_URL}/user/nickname/${id}`, {
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
             },
-            method: 'GET',
+            method: "GET",
           })
             .then((res) => {
               return res.json();
@@ -47,7 +47,6 @@ const getInitialPageData = async () => {
             .catch((e) => {
               console.log(e);
             });
-          console.log(userData, '!!!!!');
           const userArr: { id: string; nickname: string }[] = userData.data;
           const lunchRes: LunchType[] = [];
           lunches.map((item: LunchType) => {
@@ -95,8 +94,8 @@ const getInitialPageData = async () => {
 
 export default async function Home() {
   async function revalidate() {
-    'use server';
-    revalidatePath('/recipe');
+    "use server";
+    revalidatePath("/lunch");
   }
 
   revalidate();
