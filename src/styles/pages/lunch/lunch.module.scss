@@ -36,6 +36,7 @@
       background-color: white;
       padding: 3px;
       @include make-ellipsis;
+      color: black;
 
       &:focus {
         outline: none;
@@ -45,6 +46,10 @@
         overflow: auto;
         text-overflow: clip;
         border-bottom: 1px solid $grayscale-black50;
+      }
+
+      &:disabled {
+        color: black;
       }
     }
   }
@@ -94,9 +99,11 @@
       padding: 10px;
       border-radius: 8px;
       border: 1px solid $grayscale-black30;
+      color: black;
 
       &:disabled {
         background-color: white;
+        color: black;
       }
 
       &:focus {
