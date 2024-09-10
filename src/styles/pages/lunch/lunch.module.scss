@@ -1,11 +1,12 @@
 /** @format */
 
-@import '../../layout';
-@import '../../variables';
-@import '../../viewsize';
+@import "../../layout";
+@import "../../variables";
+@import "../../viewsize";
 
 .lunch-container {
   @include flex-column(flex-start, flex-start);
+  position: relative;
   gap: 10px;
   width: 100%;
   outline: 1px solid #d5d5d5;
@@ -25,9 +26,27 @@
 
   .title {
     width: 100%;
-    @include make-ellipsis;
     font-weight: 700;
     font-size: 15px;
+
+    input {
+      width: calc(100% - 50px);
+      border: none;
+      font-size: 15px;
+      background-color: white;
+      padding: 3px;
+      @include make-ellipsis;
+
+      &:focus {
+        outline: none;
+      }
+
+      &.edit {
+        overflow: auto;
+        text-overflow: clip;
+        border-bottom: 1px solid $grayscale-black50;
+      }
+    }
   }
 
   .author {
@@ -75,6 +94,77 @@
       padding: 10px;
       border-radius: 8px;
       border: 1px solid $grayscale-black30;
+
+      &:disabled {
+        background-color: white;
+      }
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+}
+
+.modal-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  img {
+    width: 15px;
+    height: 15px;
+  }
+}
+
+.modal {
+  position: absolute;
+  top: 30px;
+  right: 10px;
+  width: 150px;
+  height: 80px;
+  box-shadow: $shadow-md;
+  font-size: 14px;
+  outline: 1px solid #f4f2f2;
+  background-color: white;
+  z-index: 110;
+  @include flex-column(flex-start, flex-start);
+
+  .modal-item {
+    width: 100%;
+    height: 50%;
+    @include flex-row(flex-start, center);
+    cursor: pointer;
+    padding: 10px;
+    &:nth-child(1) {
+      border-bottom: 1px solid $grayscale-black30;
+    }
+
+    &:hover {
+      background-color: $grayscale-black20;
+    }
+  }
+}
+
+.edit-btn-container {
+  width: 100%;
+  @include flex-row(flex-end, center);
+  gap: 5px;
+  button {
+    width: 50px;
+    height: 30px;
+    border-radius: 10px;
+    color: white;
+    font-size: 13px;
+    border: none;
+    cursor: pointer;
+
+    &.cancel {
+      background-color: $negative-normal-color;
+    }
+
+    &.edit {
+      background-color: $success-normal;
     }
   }
 }

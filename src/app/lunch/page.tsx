@@ -4,6 +4,7 @@
 import LunchView from "@/components/lunch/view";
 import { revalidatePath } from "next/cache";
 import { LunchType } from "@/model/lunch";
+import { LunchItemType } from "@/types/global.type";
 
 type Props = {
   searchParams: { [key: string]: string | string[] | undefined };
@@ -48,18 +49,19 @@ const getInitialPageData = async () => {
               console.log(e);
             });
           const userArr: { id: string; nickname: string }[] = userData.data;
-          const lunchRes: LunchType[] = [];
+          const lunchRes: LunchItemType[] = [];
           lunches.map((item: LunchType) => {
             const name = userArr.find(
               (data) => data.id === item.author
             )?.nickname;
-            const temp: LunchType = {
+            const temp: LunchItemType = {
               _id: item._id,
-              title: item.title,
-              content: item.content,
-              img: item.img,
+              title: item.title ?? "",
+              content: item.content ?? "",
+              img: item.img ?? "",
               like: item.like,
-              author: name,
+              author: item.author ?? "",
+              authorName: name ?? "",
               created_at: item.created_at,
               updated_at: item.updated_at,
             };

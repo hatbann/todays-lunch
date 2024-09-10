@@ -33,9 +33,14 @@ export async function PUT(
     const data = await req.json();
     lunch.title = data.title;
     lunch.content = data.content;
-    lunch.img = data.img;
+    /*     lunch.img = data.img; */
     await lunch.save();
-    return new NextResponse(JSON.stringify(lunch), { status: 200 });
+    return new NextResponse(
+      JSON.stringify({
+        message: "OK",
+      }),
+      { status: 200 }
+    );
   } catch (error) {
     console.error("Error connecting to MongoDB:", error);
     return Response.error();
@@ -51,7 +56,12 @@ export async function DELETE(
     const res = await Lunch.deleteOne({
       _id: params.id,
     });
-    return new NextResponse(JSON.stringify(res), { status: 200 });
+    return new NextResponse(
+      JSON.stringify({
+        message: "OK",
+      }),
+      { status: 200 }
+    );
   } catch (error) {
     console.error("Error connecting to MongoDB:", error);
     return Response.error();

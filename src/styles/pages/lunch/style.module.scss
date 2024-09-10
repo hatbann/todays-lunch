@@ -32,6 +32,12 @@
   }
 }
 
+.load-again-container {
+  width: 100%;
+  height: calc($dvh * 100 - 80px);
+  @include flex-column(center, center);
+}
+
 .main {
   width: 100%;
   @include flex-column(flex-start, center);
