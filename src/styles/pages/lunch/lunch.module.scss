@@ -50,6 +50,7 @@
 
       &:disabled {
         color: black;
+        opacity: 1; /* required on iOS */
       }
     }
   }
@@ -104,6 +105,7 @@
       &:disabled {
         background-color: white;
         color: black;
+        opacity: 1; /* required on iOS */
       }
 
       &:focus {
