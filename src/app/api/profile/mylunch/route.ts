@@ -38,3 +38,45 @@ export async function GET(req: NextRequest) {
     return Response.error();
   }
 }
+
+export async function PUT(req: NextRequest) {
+  try {
+    await dbConnect();
+    const id = req.nextUrl.searchParams.get("id");
+    const lunch = await Lunch.findOne({
+      _id: id,
+    });
+    const data = await req.json();
+    lunch.title = data.title;
+    lunch.content = data.content;
+    await lunch.save();
+    return new NextResponse(
+      JSON.stringify({
+        message: "OK",
+      }),
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Error connecting to MongoDB:", error);
+    return Response.error();
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  try {
+    await dbConnect();
+    const id = req.nextUrl.searchParams.get("id");
+    const res = await Lunch.deleteOne({
+      _id: id,
+    });
+    return new NextResponse(
+      JSON.stringify({
+        message: "OK",
+      }),
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Error connecting to MongoDB:", error);
+    return Response.error();
+  }
+}
