@@ -40,6 +40,6 @@ export async function POST(req: NextRequest) {
     await newRecipe.save();
     return NextResponse.json({ message: "success" }, { status: 200 });
   } catch (error) {
-    return Response.error();
+    return NextResponse.json({ message: "Failed" }, { status: 201 });
   }
 }

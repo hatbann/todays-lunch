@@ -10,6 +10,7 @@ import { uploadImageToS3 } from "@/utils/uploadImageToS3";
 import { useRecoilValue } from "recoil";
 import { userState } from "@/states/user";
 import { useRouter } from "next/navigation";
+import { API } from "@/hooks/API";
 
 const page = () => {
   const [title, setTitle] = useState<string>("");
@@ -53,28 +54,22 @@ const page = () => {
         ingredients: ingredients,
         steps: steps,
       };
-      const API_URL = `${process.env.NEXT_PUBLIC_API_URL!}/api`;
 
-      const response = await fetch(`${API_URL}/recipe`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-        body: JSON.stringify(bodyData),
-      })
-        .then((res) => {
-          return res.json();
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+      const response = await API.post<{ message: string }>(
+        "/recipe",
+        JSON.stringify(bodyData)
+      );
 
       if (response.message === "success") {
         router.push("/upload/recipe/success");
-        setIsLoading(false);
+      } else if (response.message === "Failed") {
+        alert("업로드를 실패했습니다! 잠시후에 다시 시도해주세요");
+        router.push("/recipe");
       }
+      setIsLoading(false);
     } catch (error) {
-      console.log(error);
+      alert("업로드를 실패했습니다! 잠시후에 다시 시도해주세요");
+      router.push("/recipe");
       setIsLoading(false);
     }
   };

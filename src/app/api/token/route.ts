@@ -1,14 +1,16 @@
-import User from '@/model/user';
-import dbConnect from '@/utils/database';
-import { NextRequest, NextResponse } from 'next/server';
+/** @format */
+
+import User from "@/model/user";
+import dbConnect from "@/utils/database";
+import { NextRequest, NextResponse } from "next/server";
 
 const secret = process.env.TOKEN_SECRET!;
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
 export async function GET(req: NextRequest) {
   try {
     await dbConnect();
-    const token = req.cookies.get('token')?.value || '';
+    const token = req.cookies.get("token")?.value || "";
     if (token) {
       const decodedToken: any = jwt.verify(token, secret);
       const userId = decodedToken.user.id;
@@ -22,40 +24,40 @@ export async function GET(req: NextRequest) {
             nickname: user.nickname,
           },
         };
-        /*         const accessToken = await jwt.sign(payload, process.env.TOKEN_SECRET!, {
-          expiresIn: '1d',
-        });
-        user.token = token;
-        await user.save(); */
         const body = {
-          message: 'OK',
+          message: "OK",
           user,
         };
 
         const response = NextResponse.json(body);
-
-        // Set the token as an HTTP-only cookie
-        /*        response.cookies.set('token', accessToken, {
-          httpOnly: true,
-        });
- */
         return response;
       } else {
         const body = {
-          message: 'Failed',
+          message: "Failed",
         };
         const response = NextResponse.json(body);
         return response;
       }
     } else {
       const body = {
-        message: 'Failed',
+        message: "Token Expired",
         user: {},
       };
       const response = NextResponse.json(body);
       return response;
     }
   } catch (error) {
-    throw error;
+    console.log(error);
+    if (error instanceof Error) {
+      console.log(error.message, "*********");
+      if (error.name === "TokenExpiredError") {
+        const body = {
+          message: "Token Expired",
+          user: {},
+        };
+        const response = NextResponse.json(body);
+        return response;
+      }
+    }
   }
 }

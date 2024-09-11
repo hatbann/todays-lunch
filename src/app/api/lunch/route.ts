@@ -38,15 +38,8 @@ export async function POST(req: NextRequest) {
     console.log(newLunch);
 
     await newLunch.save();
-    console.log("success");
-    /*     return new NextResponse(
-      JSON.stringify({
-        message: "success",
-      }),
-      { status: 200 }
-    ); */
     return NextResponse.json({ message: "success" }, { status: 200 });
   } catch (error) {
-    return Response.error();
+    return NextResponse.json({ message: "Failed" }, { status: 201 });
   }
 }

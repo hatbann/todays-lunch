@@ -10,8 +10,14 @@ import Lunch from "./Lunch";
 import { useRecoilValue } from "recoil";
 import { userState } from "@/states/user";
 import { LunchItemType } from "@/types/global.type";
-
-const API_URL = `${process.env.NEXT_PUBLIC_API_URL!}/api`;
+import { API } from "@/hooks/API";
+import {
+  InfiniteData,
+  UseInfiniteQueryResult,
+  useInfiniteQuery,
+  useSuspenseInfiniteQuery,
+} from "@tanstack/react-query";
+import { AxiosError } from "axios";
 
 const LunchView = ({
   lunch,
@@ -33,18 +39,12 @@ const LunchView = ({
 
   const fetchData = async (page: number) => {
     try {
-      const response = await fetch(`${API_URL}/lunch?page=${page}`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        method: "GET",
-      })
-        .then((res) => {
-          return res.json();
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+      const response = await API.get<{ lunches: LunchType[]; total: number }>(
+        "/lunch",
+        {
+          page: page,
+        }
+      );
       const lunches = response.lunches;
       const totalCount = response.total;
       if (lunches) {
@@ -53,18 +53,10 @@ const LunchView = ({
         });
         if (users.length !== 0) {
           const id = String(users);
-          const userData = await fetch(`${API_URL}/user/nickname/${id}`, {
-            headers: {
-              "Content-Type": "application/json",
-            },
-            method: "GET",
-          })
-            .then((res) => {
-              return res.json();
-            })
-            .catch((e) => {
-              console.log(e);
-            });
+          const userData = await API.get<{
+            data: { id: string; nickname: string }[];
+          }>(`/user/nickname/${id}`);
+
           const userArr: { id: string; nickname: string }[] = userData.data;
           const lunchRes: LunchItemType[] = [];
           lunches.map((item: LunchType) => {
@@ -119,36 +111,16 @@ const LunchView = ({
       title,
       content: desc,
     };
-    const response = await fetch(`${API_URL}/lunch/${id}`, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "PUT",
-      body: JSON.stringify(body),
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-    return response;
+    const response = await API.put<{ message: string }>(
+      `/lunch/${id}`,
+      JSON.stringify(body)
+    );
+    return { message: response.message };
   };
 
   const handleDelete = async (id: string) => {
-    const response = await fetch(`${API_URL}/lunch/${id}`, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "DELETE",
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-    return response;
+    const response = await API.delete<{ message: string }>(`/lunch/${id}`);
+    return { message: response.message };
   };
 
   const handleObserver = useCallback(
@@ -172,18 +144,12 @@ const LunchView = ({
 
   const loadAgain = async () => {
     try {
-      const response = await fetch(`${API_URL}/lunch/loadagain?page=${page}`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        method: "GET",
-      })
-        .then((res) => {
-          return res.json();
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+      const response = await API.get<{ lunches: LunchType[]; total: number }>(
+        "/lunch/loadagain",
+        {
+          page: page,
+        }
+      );
       const lunches = response.lunches;
       const totalCount = response.total;
       if (lunches) {
@@ -192,18 +158,9 @@ const LunchView = ({
         });
         if (users.length !== 0) {
           const id = String(users);
-          const userData = await fetch(`${API_URL}/user/nickname/${id}`, {
-            headers: {
-              "Content-Type": "application/json",
-            },
-            method: "GET",
-          })
-            .then((res) => {
-              return res.json();
-            })
-            .catch((e) => {
-              console.log(e);
-            });
+          const userData = await API.get<{
+            data: { id: string; nickname: string }[];
+          }>(`/user/nickname/${id}`);
           const userArr: { id: string; nickname: string }[] = userData.data;
           const lunchRes: LunchItemType[] = [];
           lunches.map((item: LunchType) => {

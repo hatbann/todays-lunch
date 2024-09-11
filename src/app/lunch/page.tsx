@@ -5,6 +5,7 @@ import LunchView from "@/components/lunch/view";
 import { revalidatePath } from "next/cache";
 import { LunchType } from "@/model/lunch";
 import { LunchItemType } from "@/types/global.type";
+import { API } from "@/hooks/API";
 
 type Props = {
   searchParams: { [key: string]: string | string[] | undefined };
@@ -12,20 +13,9 @@ type Props = {
 
 const getInitialPageData = async () => {
   try {
-    const API_URL = `${process.env.NEXT_PUBLIC_API_URL!}/api`;
-
-    const response = await fetch(`${API_URL}/lunch?page=1`, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "GET",
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    const response = await API.get<{ lunches: LunchType[]; total: number }>(
+      "/lunch?page=1"
+    );
 
     if (response) {
       const lunches = response.lunches;
@@ -36,18 +26,10 @@ const getInitialPageData = async () => {
         });
         if (users.length !== 0) {
           const id = String(users);
-          const userData = await fetch(`${API_URL}/user/nickname/${id}`, {
-            headers: {
-              "Content-Type": "application/json",
-            },
-            method: "GET",
-          })
-            .then((res) => {
-              return res.json();
-            })
-            .catch((e) => {
-              console.log(e);
-            });
+          const userData = await API.get<{
+            data: { id: string; nickname: string }[];
+          }>(`/user/nickname/${id}`);
+
           const userArr: { id: string; nickname: string }[] = userData.data;
           const lunchRes: LunchItemType[] = [];
           lunches.map((item: LunchType) => {
