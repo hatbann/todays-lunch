@@ -22,34 +22,35 @@ const page = () => {
       setError,
       setValue,
       getValues,
-      formState: { errors },
+      formState: { errors, isValid },
     },
     r,
   } = useSignupForm();
   const router = useRouter();
 
   const handleSubmit = async () => {
-    // TODO 형식확인해서 회원가입 막기
-    try {
-      const bodyData = {
-        nickname: getValues("nickname"),
-        userId: getValues("userId"),
-        password: getValues("password"),
-      };
+    if (isValid) {
+      try {
+        const bodyData = {
+          nickname: getValues("nickname"),
+          userId: getValues("userId"),
+          password: getValues("password"),
+        };
 
-      const res = await API.post<{ type: string; message: string }>(
-        "/user/signup",
-        JSON.stringify(bodyData)
-      );
+        const res = await API.post<{ type: string; message: string }>(
+          "/user/signup",
+          JSON.stringify(bodyData)
+        );
 
-      if (res.type === "success") {
-        router.push("/join/success");
-      } else {
-        alert("이미 가입한 계정입니다.");
+        if (res.type === "success") {
+          router.push("/join/success");
+        } else {
+          alert("이미 가입한 계정입니다.");
+        }
+        return res;
+      } catch (e) {
+        console.log(e);
       }
-      return res;
-    } catch (e) {
-      console.log(e);
     }
   };
 
