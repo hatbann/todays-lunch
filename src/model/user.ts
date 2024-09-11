@@ -5,7 +5,10 @@ import { Infer } from "next/dist/compiled/superstruct";
 
 const { Schema } = mongoose;
 const UserSchema = new Schema({
-  password: String,
+  password: {
+    type: String,
+    required: true,
+  },
   nickname: String,
   like: [String],
 });
