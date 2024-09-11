@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { LunchItemType } from "@/types/global.type";
 import { useClickOutside } from "@/hooks/useClickOutSide";
 import Modal from "../common/Modal";
+import { API } from "@/hooks/API";
 
 type LunchProps = {
   item: LunchItemType;
@@ -31,23 +32,14 @@ const Lunch = ({ item, handleDelete, handleEdit }: LunchProps) => {
 
   const handleLike = async () => {
     try {
-      const API_URL = `${process.env.NEXT_PUBLIC_API_URL!}/api`;
-
-      const response = await fetch(
-        `${API_URL}/user/like?userid=${user.user_id}&lunchid=${item._id}`,
+      // lunchid가 pk, userid 가 body
+      const response = await API.put<{ user: any; lunch: any }>(
+        "/user/like",
+        item._id,
         {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          method: "PUT",
+          userid: user.user_id,
         }
-      )
-        .then((res) => {
-          return res.json();
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+      );
 
       console.log(response.user);
       setUser({

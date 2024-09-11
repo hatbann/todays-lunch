@@ -29,6 +29,7 @@ const page = () => {
   const router = useRouter();
 
   const handleSubmit = async () => {
+    // TODO 형식확인해서 회원가입 막기
     try {
       const bodyData = {
         nickname: getValues("nickname"),

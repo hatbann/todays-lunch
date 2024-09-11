@@ -112,14 +112,15 @@ const LunchView = ({
       content: desc,
     };
     const response = await API.put<{ message: string }>(
-      `/lunch/${id}`,
+      `/lunch`,
+      id,
       JSON.stringify(body)
     );
     return { message: response.message };
   };
 
   const handleDelete = async (id: string) => {
-    const response = await API.delete<{ message: string }>(`/lunch/${id}`);
+    const response = await API.delete<{ message: string }>(`/lunch`, id);
     return { message: response.message };
   };
 

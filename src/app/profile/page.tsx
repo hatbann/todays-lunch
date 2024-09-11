@@ -61,6 +61,7 @@ const page = () => {
 
       const response = await API.put<{ message: string; user: any }>(
         "/profile",
+        user.user_id,
         {
           nickname: nickname,
         }

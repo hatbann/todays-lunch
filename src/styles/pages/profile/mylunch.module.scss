@@ -14,13 +14,17 @@
   }
 }
 
-.container {
+.main {
   width: 100%;
-  min-height: calc($dvh * 100 - 80px);
-  height: 1px;
-  padding: 70px 100px;
   @include flex-column(flex-start, center);
-  gap: 30px;
+}
+
+.container {
+  width: 300px;
+  /*   min-height: calc($dvh * 100 - 80px);
+  height: 1px; */
+  @include flex-column(flex-start, center);
+  gap: 40px;
 
   h2 {
     font-size: 20px;
@@ -41,16 +45,10 @@
   }
 }
 
-.lunch-items {
-  width: 300px;
-  @include flex-column(flex-start, center);
-  gap: 20px;
-
-  .wrapper {
-    width: 100%;
-  }
+.wrapper {
+  width: 100%;
+  margin-top: -20px;
 }
-
 .empty-container,
 .error-container {
   @include flex-column(center, center);

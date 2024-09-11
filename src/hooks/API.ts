@@ -37,9 +37,12 @@ export class API {
     return res.data;
   }
 
-  public static async put<T>(url: string, body: any) {
+  public static async put<T>(url: string, pk: string, body: any) {
     const res = await axios.put<T>(url, body, {
       baseURL: API.baseURL,
+      params: {
+        id: pk,
+      },
     });
 
     return res.data;
