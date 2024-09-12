@@ -17,12 +17,11 @@ const page = ({ params }: { params: { id: string } }) => {
   useEffect(() => {
     const getData = async () => {
       const res = (
-        await API.retrieve<{ data: RecipeType }>(`/recipe/`, params.id)
-      ).data;
-
+        await API.get<{ recipe: RecipeType }>(`/recipe/${params.id}`)
+      ).recipe;
       if (res && res.author) {
         const userData = (
-          await API.retrieve<{ data: UserType }>(`/recipe/author/`, res.author)
+          await API.retrieve<{ data: UserType }>(`/author/`, res.author)
         ).data;
 
         const result: RecipeType = {

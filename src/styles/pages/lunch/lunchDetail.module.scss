@@ -1,0 +1,23 @@
+/** @format */
+
+@import "../../layout";
+@import "../../variables";
+@import "../../viewsize";
+
+.loading-container,
+.error {
+  width: 100%;
+  height: calc($dvh * 100 - 80px);
+  @include flex-column(center, center);
+
+  @include mobile {
+    height: calc($dvh * 100 - 60px);
+  }
+}
+
+.img {
+  img {
+    width: 100px;
+    height: 100px;
+  }
+}

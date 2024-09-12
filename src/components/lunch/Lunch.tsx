@@ -109,7 +109,11 @@ const Lunch = ({ item, handleDelete, handleEdit }: LunchProps) => {
           </div>
         </div>
       )}
-      <div className={style["title"]}>
+      <div
+        className={style["title"]}
+        onClick={() => {
+          router.push(`/lunch/${lunchItem._id}`);
+        }}>
         <label htmlFor="title">제목 : </label>
         <input
           id="title"
@@ -123,7 +127,11 @@ const Lunch = ({ item, handleDelete, handleEdit }: LunchProps) => {
       </div>
       <span className={style["author"]}>작성자 : {lunchItem.authorName}</span>
       {lunchItem.img && (
-        <div className={style["img-wrapper"]}>
+        <div
+          className={style["img-wrapper"]}
+          onClick={() => {
+            router.push(`/lunch/${lunchItem._id}`);
+          }}>
           <img src={lunchItem.img} alt="img" />
         </div>
       )}

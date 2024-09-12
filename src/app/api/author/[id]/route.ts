@@ -10,7 +10,8 @@ export async function GET(
 ) {
   try {
     await dbConnect();
-    /*  */
+
+    console.log(params.id);
     const author = await User.findOne({
       _id: params.id,
     });
