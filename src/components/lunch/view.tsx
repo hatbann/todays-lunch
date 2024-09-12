@@ -93,7 +93,12 @@ const LunchView = ({
         };
       }
     } catch (error) {
-      return Promise.reject(error);
+      console.log("error", error);
+      return {
+        lunchRes: [],
+        totalCount: 0,
+      };
+      /*   return Promise.reject(error); */
     }
   };
 

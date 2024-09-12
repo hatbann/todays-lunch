@@ -1,5 +1,5 @@
 /** @format */
-
+export const dynamic = "force-dynamic";
 import User from "@/model/user";
 import dbConnect from "@/utils/database";
 import { NextRequest, NextResponse } from "next/server";
@@ -49,7 +49,6 @@ export async function GET(req: NextRequest) {
   } catch (error) {
     console.log(error);
     if (error instanceof Error) {
-      console.log(error.message, "*********");
       if (error.name === "TokenExpiredError") {
         const body = {
           message: "Token Expired",

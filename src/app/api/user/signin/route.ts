@@ -16,9 +16,9 @@ export async function POST(req: NextRequest) {
 
     const data: UserType = await req.json();
     const password: String = data.password;
+    console.log(data);
     const user: UserType = await User.findOne({ userId: data._id }).exec();
-
-    if (user == null) {
+    if (user === null) {
       return new NextResponse(
         JSON.stringify({ message: "NOTFOUND", result: "" })
       );

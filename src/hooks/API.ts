@@ -25,7 +25,11 @@ export class API {
     const res = await axios.get<T>(url, {
       baseURL: API.baseURL,
       params: query,
+      headers: {
+        "Content-Type": "application/json",
+      },
     });
+
     return res.data;
   }
 

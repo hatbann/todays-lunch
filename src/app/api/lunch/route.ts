@@ -13,7 +13,8 @@ export async function GET(req: NextRequest) {
     const skipNum = (page - 1) * LUNCH_MAX;
     let lunchRes: LunchType[] = [];
     let total = 0;
-    if (userId) {
+
+    if (userId !== null) {
       lunchRes = await Lunch.find({ author: userId })
         .sort({ created_at: -1 })
         .skip(skipNum)
@@ -29,8 +30,6 @@ export async function GET(req: NextRequest) {
       total = await Lunch.countDocuments();
     }
 
-    /*    return NextResponse.json({ lunches, total }, { status: 200 }); */
-
     return new NextResponse(
       JSON.stringify({
         lunches: lunchRes,
@@ -39,7 +38,7 @@ export async function GET(req: NextRequest) {
       { status: 200 }
     );
   } catch (error) {
-    return Response.error();
+    return NextResponse.json({ message: "Failed" }, { status: 201 });
   }
 }
 

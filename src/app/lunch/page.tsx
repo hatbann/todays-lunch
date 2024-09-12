@@ -13,9 +13,26 @@ type Props = {
 
 const getInitialPageData = async () => {
   try {
-    const response = await API.get<{ lunches: LunchType[]; total: number }>(
-      "/lunch?page=1"
-    );
+    /*    const response = await API.get<{ lunches: LunchType[]; total: number }>(
+      "/lunch",
+      {
+        page: 1,
+      }
+    ); */
+    const API_URL = `${process.env.NEXT_PUBLIC_API_URL!}/api`;
+
+    const response = await fetch(`${API_URL}/lunch?page=1`, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "GET",
+    })
+      .then((res) => {
+        return res.json();
+      })
+      .catch((e) => {
+        console.log(e);
+      });
 
     if (response) {
       const lunches = response.lunches;
@@ -72,7 +89,12 @@ const getInitialPageData = async () => {
       };
     }
   } catch (error) {
-    return Promise.reject(error);
+    console.log(error);
+    return {
+      lunchRes: [],
+      totalCount: 0,
+    };
+    /*    return Promise.reject(error); */
   }
 };
 
@@ -86,8 +108,8 @@ export default async function Home() {
   const initialData = await getInitialPageData();
   return (
     <LunchView
-      lunch={initialData.lunchRes}
-      totalCount={initialData.totalCount}
+      lunch={initialData ? initialData.lunchRes : []}
+      totalCount={initialData ? initialData.totalCount : 0}
     />
   );
 }
