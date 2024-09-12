@@ -13,12 +13,6 @@ type Props = {
 
 const getInitialPageData = async () => {
   try {
-    /*    const response = await API.get<{ lunches: LunchType[]; total: number }>(
-      "/lunch",
-      {
-        page: 1,
-      }
-    ); */
     const API_URL = `${process.env.NEXT_PUBLIC_API_URL!}/api`;
 
     const response = await fetch(`${API_URL}/lunch?page=1`, {

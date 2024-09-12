@@ -19,6 +19,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://todayslunch.vercel.app"),
   title: "오늘의 도시락",
   description:
     "맛있는 도시락, 함께 나누는 즐거움 🍱!  나만의 특별한 도시락 레시피를 공유하고, 다른 사람들의 창의적인 아이디어도 만나보세요. 간편하면서도 건강한 도시락 레시피로 매일 새로운 맛을 즐기세요! 여러분의 도시락 이야기를 기다립니다",
@@ -26,7 +27,7 @@ export const metadata: Metadata = {
     title: "Today's lunch",
     description:
       "맛있는 도시락, 함께 나누는 즐거움 🍱!  나만의 특별한 도시락 레시피를 공유하고, 다른 사람들의 창의적인 아이디어도 만나보세요. 간편하면서도 건강한 도시락 레시피로 매일 새로운 맛을 즐기세요! 여러분의 도시락 이야기를 기다립니다",
-    url: "https://todayslunch.vercel.app/",
+    url: "https://todayslunch.vercel.app",
     siteName: "Todays Lunch",
     images: [
       {
@@ -63,7 +64,7 @@ export default function RootLayout({
     name: "todayslunch",
     description:
       "맛있는 도시락, 함께 나누는 즐거움 🍱!  나만의 특별한 도시락 레시피를 공유하고, 다른 사람들의 창의적인 아이디어도 만나보세요. 간편하면서도 건강한 도시락 레시피로 매일 새로운 맛을 즐기세요! 여러분의 도시락 이야기를 기다립니다",
-    url: "https://todayslunch.vercel.app/",
+    url: "https://todayslunch.vercel.app",
     image: "/images/png/logo.png",
     author: {
       "@type": "Hyebin Cho",
@@ -82,7 +83,7 @@ export default function RootLayout({
     headline: "오늘의 도시락",
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": "https://todayslunch.vercel.app/",
+      "@id": "https://todayslunch.vercel.app",
     },
     articleSection: "오늘의 도시락",
     articleBody:
@@ -92,7 +93,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <Head>
-        <link rel="canonical" href="https://todayslunch.vercel.app/" />
+        <link rel="canonical" href="https://todayslunch.vercel.app" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
