@@ -1,8 +1,8 @@
 /** @format */
 
-import Lunch from "@/model/lunch";
-import dbConnect from "@/utils/database";
-import { NextRequest, NextResponse } from "next/server";
+import Lunch from '@/model/lunch';
+import dbConnect from '@/utils/database';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(
   req: NextRequest,
@@ -16,7 +16,7 @@ export async function GET(
 
     return new NextResponse(JSON.stringify({ lunch }), { status: 200 });
   } catch (error) {
-    console.error("Error connecting to MongoDB:", error);
+    console.error('Error connecting to MongoDB:', error);
     return Response.error();
   }
 }
@@ -37,12 +37,12 @@ export async function PUT(
     await lunch.save();
     return new NextResponse(
       JSON.stringify({
-        message: "OK",
+        message: 'OK',
       }),
       { status: 200 }
     );
   } catch (error) {
-    console.error("Error connecting to MongoDB:", error);
+    console.error('Error connecting to MongoDB:', error);
     return Response.error();
   }
 }

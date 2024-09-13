@@ -1,21 +1,29 @@
 /** @format */
 
-import Comment from "@/model/comment";
-import dbConnect from "@/utils/database";
-import { NextRequest, NextResponse } from "next/server";
+import Comment from '@/model/comment';
+import dbConnect from '@/utils/database';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
   try {
     await dbConnect();
-    const org = req.nextUrl.searchParams.get("org");
+    const org = req.nextUrl.searchParams.get('org');
     if (org) {
-      const comment = await Comment.find({ org: org }).sort({ created_at: -1 });
-      return new NextResponse(JSON.stringify(comment), { status: 200 });
+      const comments = await Comment.find({ org: org }).sort({
+        created_at: 1,
+      });
+      return new NextResponse(
+        JSON.stringify({
+          comments,
+          message: 'success',
+        }),
+        { status: 200 }
+      );
     } else {
       return new NextResponse(JSON.stringify([]), { status: 200 });
     }
   } catch (error) {
-    return NextResponse.json({ message: "Failed" }, { status: 201 });
+    return NextResponse.json({ message: 'Failed' }, { status: 201 });
   }
 }
 
@@ -25,9 +33,9 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const newComment = new Comment(body);
     await newComment.save();
-    return NextResponse.json({ message: "success" }, { status: 200 });
+    return NextResponse.json({ message: 'success' }, { status: 200 });
   } catch (error) {
-    return NextResponse.json({ message: "Failed" }, { status: 201 });
+    return NextResponse.json({ message: 'Failed' }, { status: 201 });
   }
 }
 
@@ -36,7 +44,7 @@ export async function PUT(req: NextRequest) {
   try {
     await dbConnect();
     const body = await req.json();
-    const id = req.nextUrl.searchParams.get("id"); // comment _id
+    const id = req.nextUrl.searchParams.get('id'); // comment _id
     const comment = await Comment.findOne({
       _id: id,
     });
@@ -44,17 +52,17 @@ export async function PUT(req: NextRequest) {
       comment.content = body.content;
     }
   } catch {
-    return NextResponse.json({ message: "Failed" }, { status: 201 });
+    return NextResponse.json({ message: 'Failed' }, { status: 201 });
   }
 }
 
 export async function DELETE(req: NextRequest) {
   try {
     await dbConnect();
-    const id = req.nextUrl.searchParams.get("id"); // comment _id
+    const id = req.nextUrl.searchParams.get('id'); // comment _id
     const res = await Comment.deleteOne({ _id: id });
-    return NextResponse.json({ message: "success" }, { status: 200 });
+    return NextResponse.json({ message: 'success' }, { status: 200 });
   } catch {
-    return NextResponse.json({ message: "Failed" }, { status: 201 });
+    return NextResponse.json({ message: 'Failed' }, { status: 201 });
   }
 }

@@ -1,6 +1,6 @@
 /** @format */
 
-import mongoose, { InferSchemaType } from "mongoose";
+import mongoose, { InferSchemaType } from 'mongoose';
 
 const { Schema } = mongoose;
 
@@ -10,6 +10,10 @@ export const ReplySchema = new Schema({
     required: true,
   },
   author: {
+    type: String,
+    required: true,
+  },
+  authorName: {
     type: String,
     required: true,
   },
@@ -31,9 +35,9 @@ const CommentSchema = new Schema({
   },
 });
 
-CommentSchema.set("timestamps", {
-  createdAt: "created_at",
-  updatedAt: "updated_at",
+CommentSchema.set('timestamps', {
+  createdAt: 'created_at',
+  updatedAt: 'updated_at',
 });
 
 type CommentType = InferSchemaType<typeof CommentSchema> & {
@@ -43,7 +47,14 @@ type CommentType = InferSchemaType<typeof CommentSchema> & {
   authorName: string;
 };
 
-export default mongoose.models.Comments ||
-  mongoose.model("Comments", CommentSchema);
+type ReplyType = InferSchemaType<typeof ReplySchema> & {
+  _id: string;
+};
 
-export type { CommentType };
+export default mongoose.models.Comments ||
+  mongoose.model('Comments', CommentSchema);
+
+export const Reply =
+  mongoose.models.Replies || mongoose.model('Replies', ReplySchema);
+
+export type { CommentType, ReplyType };
