@@ -48,8 +48,13 @@ export async function PUT(req: NextRequest) {
     const comment = await Comment.findOne({
       _id: id,
     });
+    console.log(comment);
     if (comment) {
       comment.content = body.content;
+      comment.save();
+      return NextResponse.json({ message: 'success' }, { status: 200 });
+    } else {
+      return NextResponse.json({ message: 'Failed' }, { status: 201 });
     }
   } catch {
     return NextResponse.json({ message: 'Failed' }, { status: 201 });

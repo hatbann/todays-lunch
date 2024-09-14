@@ -18,6 +18,14 @@
       font-size: 15px;
       color: $grayscale-black80;
       width: 100%;
+      resize: none;
+      padding: 5px;
+
+      &:disabled {
+        border: none;
+        padding: 0;
+        background-color: rgb(248, 248, 248);
+      }
     }
 
     .reply-btn {
@@ -27,6 +35,10 @@
       border: 1px solid $grayscale-black60;
       cursor: pointer;
       margin-right: 40px;
+
+      &.edit {
+        display: none;
+      }
     }
   }
 }
@@ -46,6 +58,32 @@
   img {
     width: 15px;
     height: 15px;
+  }
+
+  &.edit {
+    display: none;
+  }
+}
+
+.edit-mode-btn-container {
+  @include flex-row(flex-start, center);
+  gap: 10px;
+
+  button {
+    width: 40px;
+    height: 25px;
+    font-size: 13px;
+    border: 1px solid $grayscale-black60;
+    cursor: pointer;
+    background-color: $grayscale-black20;
+
+    &:hover {
+      background-color: $grayscale-black30;
+    }
+  }
+
+  &.disable {
+    display: none;
   }
 }
 
@@ -92,12 +130,17 @@
     display: inline-block;
   }
 
-  button {
-    width: 40px;
-    height: 25px;
-    font-size: 13px;
-    border: 1px solid $grayscale-black60;
-    cursor: pointer;
+  .reply-write-btn-container {
+    @include flex-row(flex-end, center);
+    gap: 10px;
+
+    button {
+      width: 40px;
+      height: 25px;
+      font-size: 13px;
+      border: 1px solid $grayscale-black60;
+      cursor: pointer;
+    }
   }
 
   textarea {

@@ -14,6 +14,7 @@ import { UserType } from '@/model/user';
 import { useClickOutside } from '@/hooks/useClickOutSide';
 import Reply from '@/components/common/Reply';
 import Comment from '@/components/common/Comment';
+import Modal from '@/components/common/Modal';
 
 const page = ({ params }: { params: { id: string } }) => {
   const [data, setData] = useState<undefined | LunchItemType>(undefined);
@@ -24,85 +25,81 @@ const page = ({ params }: { params: { id: string } }) => {
   const router = useRouter();
   const [comment, setComment] = useState('');
 
-  const [isEditMode, setIsEditMode] = useState(false);
-  const [isDeleteMode, setIsDeleteMode] = useState(false);
-  const [isReplyMode, setIsReplyMode] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await API.get<{ lunch: LunchItemType }>(
-          `/lunch/${params.id}`
-        );
-        const lunch = response.lunch;
-        if (lunch) {
-          const userData = (
-            await API.retrieve<{ data: UserType }>(`/author/`, lunch.author)
-          ).data;
+  const fetchData = async () => {
+    try {
+      const response = await API.get<{ lunch: LunchItemType }>(
+        `/lunch/${params.id}`
+      );
+      const lunch = response.lunch;
+      if (lunch) {
+        const userData = (
+          await API.retrieve<{ data: UserType }>(`/author/`, lunch.author)
+        ).data;
 
-          const result: LunchItemType = {
-            _id: lunch._id,
-            title: lunch.title,
-            content: lunch.content,
-            img: lunch.img,
-            like: lunch.like,
-            author: lunch.author,
-            authorName: userData.nickname ?? '',
-            created_at: lunch.created_at,
-            updated_at: lunch.updated_at,
-          };
+        const result: LunchItemType = {
+          _id: lunch._id,
+          title: lunch.title,
+          content: lunch.content,
+          img: lunch.img,
+          like: lunch.like,
+          author: lunch.author,
+          authorName: userData.nickname ?? '',
+          created_at: lunch.created_at,
+          updated_at: lunch.updated_at,
+        };
 
-          setData(result);
-        } else {
-          setData(undefined);
-        }
-
-        const commentResponse = await API.get<{
-          comments: CommentType[];
-          message: string;
-        }>('/comment', {
-          org: params.id,
-        });
-
-        const comments = commentResponse.comments;
-        if (comments.length !== 0 && commentResponse.message === 'success') {
-          const commentUsers = Array.from(
-            new Set(comments.map((comment) => comment.author))
-          );
-          const userData = await API.get<{
-            data: { id: string; nickname: string }[];
-          }>(`/user/nickname/${commentUsers.join(',')}`);
-          const userArr: { id: string; nickname: string }[] = userData.data;
-
-          const commentsRes: CommentType[] = [];
-
-          comments.map((comment) => {
-            const name = userArr.find(
-              (data) => data.id === comment.author
-            )?.nickname;
-            const temp: CommentType = {
-              _id: comment._id,
-              org: comment.org,
-              author: comment.author,
-              authorName: name ?? '',
-              replies: comment.replies,
-              content: comment.content,
-              created_at: comment.created_at,
-              updated_at: comment.updated_at,
-            };
-            commentsRes.push(temp);
-          });
-          setComments(commentsRes);
-        }
-
-        console.log(commentResponse);
-      } catch (error) {
+        setData(result);
+      } else {
         setData(undefined);
       }
-      setIsLoadingData(false);
-    };
 
+      const commentResponse = await API.get<{
+        comments: CommentType[];
+        message: string;
+      }>('/comment', {
+        org: params.id,
+      });
+
+      const comments = commentResponse.comments;
+      if (comments.length !== 0 && commentResponse.message === 'success') {
+        const commentUsers = Array.from(
+          new Set(comments.map((comment) => comment.author))
+        );
+        const userData = await API.get<{
+          data: { id: string; nickname: string }[];
+        }>(`/user/nickname/${commentUsers.join(',')}`);
+        const userArr: { id: string; nickname: string }[] = userData.data;
+
+        const commentsRes: CommentType[] = [];
+
+        comments.map((comment) => {
+          const name = userArr.find(
+            (data) => data.id === comment.author
+          )?.nickname;
+          const temp: CommentType = {
+            _id: comment._id,
+            org: comment.org,
+            author: comment.author,
+            authorName: name ?? '',
+            replies: comment.replies,
+            content: comment.content,
+            created_at: comment.created_at,
+            updated_at: comment.updated_at,
+          };
+          commentsRes.push(temp);
+        });
+        setComments(commentsRes);
+      }
+
+      console.log(commentResponse);
+    } catch (error) {
+      setData(undefined);
+    }
+    setIsLoadingData(false);
+  };
+  useEffect(() => {
     fetchData();
   }, []);
 
@@ -120,7 +117,7 @@ const page = ({ params }: { params: { id: string } }) => {
 
       if (response.message === 'success') {
         console.log('refresh!');
-        location.reload();
+        fetchData();
       } else {
         alert('에러가 발생했습니다. 잠시후 다시 시도해주세요');
       }
@@ -142,7 +139,42 @@ const page = ({ params }: { params: { id: string } }) => {
       }>(`/comment/${org_comment}`, JSON.stringify(body));
 
       if (response.message === 'success') {
-        location.reload();
+        fetchData();
+      } else {
+        alert('에러가 발생했습니다. 잠시후 다시 시도해주세요');
+      }
+    } catch (error) {
+      alert('에러가 발생했습니다. 잠시후 다시 시도해주세요');
+    }
+  };
+
+  const handleCommentDelete = async (id: string) => {
+    try {
+      const response = await API.delete<{ message: string }>('/comment', id);
+
+      if (response.message === 'success') {
+        fetchData();
+      } else {
+        alert('에러가 발생했습니다. 잠시후 다시 시도해주세요');
+      }
+    } catch (error) {
+      alert('에러가 발생했습니다. 잠시후 다시 시도해주세요');
+    }
+  };
+
+  const handleCommentEdit = async (id: string, content: string) => {
+    try {
+      const body = {
+        content: content,
+      };
+
+      const response = await API.put<{ message: string }>(
+        '/comment',
+        id,
+        JSON.stringify(body)
+      );
+      if (response.message === 'success') {
+        fetchData();
       } else {
         alert('에러가 발생했습니다. 잠시후 다시 시도해주세요');
       }
@@ -171,7 +203,7 @@ const page = ({ params }: { params: { id: string } }) => {
         )}
       </div>
       <div className={style['comment-container']}>
-        <h3>Comment</h3>
+        <h3 className={style['title']}>Comment</h3>
         <div className={style['comment-items']}>
           {comments.length !== 0 ? (
             comments.map((comment) => (
@@ -180,6 +212,8 @@ const page = ({ params }: { params: { id: string } }) => {
                   comment={comment}
                   writeReply={writeReply}
                   setReply={setReply}
+                  handleDelete={handleCommentDelete}
+                  handleEdit={handleCommentEdit}
                 />
                 {comment.replies.length !== 0 && (
                   <div className={style['replies']}>
@@ -209,6 +243,7 @@ const page = ({ params }: { params: { id: string } }) => {
           />
           <button
             onClick={() => {
+              setComment('');
               writeComment();
             }}
           >

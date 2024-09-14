@@ -62,27 +62,28 @@ const Lunch = ({ item, handleDelete, handleEdit }: LunchProps) => {
 
   return (
     <div className={style['lunch-container']}>
-      {isEditMode && (
-        <div className={style['edit-btn-container']}>
-          <button
-            className={style['cancel']}
-            onClick={() => {
-              setIsEditMode(false);
-            }}
-          >
-            취소
-          </button>
-          <button
-            className={style['edit']}
-            onClick={() => {
-              handleEdit(lunchItem._id, tempTitle, tempDesc);
-              setIsEditMode(false);
-            }}
-          >
-            수정
-          </button>
-        </div>
-      )}
+      <div
+        className={style['edit-btn-container']}
+        style={{ display: isEditMode ? 'flex' : 'none' }}
+      >
+        <button
+          className={style['cancel']}
+          onClick={() => {
+            setIsEditMode(false);
+          }}
+        >
+          취소
+        </button>
+        <button
+          className={style['edit']}
+          onClick={() => {
+            handleEdit(lunchItem._id, tempTitle, tempDesc);
+            setIsEditMode(false);
+          }}
+        >
+          수정
+        </button>
+      </div>
       {lunchItem.author === user.user_id && !isEditMode && (
         <div
           className={style['modal-btn']}
@@ -117,10 +118,15 @@ const Lunch = ({ item, handleDelete, handleEdit }: LunchProps) => {
       <div
         className={style['title']}
         onClick={() => {
-          router.push(`/lunch/${lunchItem._id}`);
+          if (!isEditMode) {
+            router.push(`/lunch/${lunchItem._id}`);
+          }
         }}
       >
         <label htmlFor="title">제목 : </label>
+        <span className={isEditMode ? style['edit'] : ''}>
+          {lunchItem.title}
+        </span>
         <input
           id="title"
           className={isEditMode ? style['edit'] : ''}
@@ -128,7 +134,6 @@ const Lunch = ({ item, handleDelete, handleEdit }: LunchProps) => {
           onChange={(e) => {
             setTempTitle(e.target.value);
           }}
-          disabled={!isEditMode}
         />
       </div>
       <span className={style['author']}>작성자 : {lunchItem.authorName}</span>
