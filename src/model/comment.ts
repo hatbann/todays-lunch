@@ -4,21 +4,6 @@ import mongoose, { InferSchemaType } from 'mongoose';
 
 const { Schema } = mongoose;
 
-export const ReplySchema = new Schema({
-  content: {
-    type: String,
-    required: true,
-  },
-  author: {
-    type: String,
-    required: true,
-  },
-  authorName: {
-    type: String,
-    required: true,
-  },
-});
-
 const CommentSchema = new Schema({
   org: {
     type: String,
@@ -28,7 +13,7 @@ const CommentSchema = new Schema({
     type: String,
     required: true,
   },
-  replies: [ReplySchema],
+  replies: [String],
   content: {
     type: String,
     required: true,
@@ -47,14 +32,7 @@ type CommentType = InferSchemaType<typeof CommentSchema> & {
   authorName: string;
 };
 
-type ReplyType = InferSchemaType<typeof ReplySchema> & {
-  _id: string;
-};
-
 export default mongoose.models.Comments ||
   mongoose.model('Comments', CommentSchema);
 
-export const Reply =
-  mongoose.models.Replies || mongoose.model('Replies', ReplySchema);
-
-export type { CommentType, ReplyType };
+export type { CommentType };

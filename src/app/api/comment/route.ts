@@ -1,5 +1,6 @@
 /** @format */
 
+import { Reply } from '@/model/Reply';
 import Comment from '@/model/comment';
 import dbConnect from '@/utils/database';
 import { NextRequest, NextResponse } from 'next/server';
@@ -48,7 +49,7 @@ export async function PUT(req: NextRequest) {
     const comment = await Comment.findOne({
       _id: id,
     });
-    console.log(comment);
+
     if (comment) {
       comment.content = body.content;
       comment.save();
@@ -65,6 +66,14 @@ export async function DELETE(req: NextRequest) {
   try {
     await dbConnect();
     const id = req.nextUrl.searchParams.get('id'); // comment _id
+    const comment = await Comment.findOne({
+      _id: id,
+    });
+
+    const replyIds = comment?.replies;
+    if (replyIds) {
+      const reply = await Reply.deleteMany({ _id: { $in: replyIds } });
+    }
     const res = await Comment.deleteOne({ _id: id });
     return NextResponse.json({ message: 'success' }, { status: 200 });
   } catch {

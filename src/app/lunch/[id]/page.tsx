@@ -2,11 +2,11 @@
 
 'use client';
 
-import { LunchItemType } from '@/types/global.type';
+import { CommentItemType, LunchItemType } from '@/types/global.type';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useRef, useState } from 'react';
 import style from '../../../styles/pages/lunch/lunchDetail.module.scss';
-import { CommentType, ReplyType } from '@/model/comment';
+import { CommentType } from '@/model/comment';
 import { useRecoilValue } from 'recoil';
 import { userState } from '@/states/user';
 import { API } from '@/hooks/API';
@@ -15,11 +15,12 @@ import { useClickOutside } from '@/hooks/useClickOutSide';
 import Reply from '@/components/common/Reply';
 import Comment from '@/components/common/Comment';
 import Modal from '@/components/common/Modal';
+import { ReplyType } from '@/model/Reply';
 
 const page = ({ params }: { params: { id: string } }) => {
   const [data, setData] = useState<undefined | LunchItemType>(undefined);
   const user = useRecoilValue(userState);
-  const [comments, setComments] = useState<CommentType[]>([]);
+  const [comments, setComments] = useState<CommentItemType[]>([]);
   const [reply, setReply] = useState<string>('');
   const [isLoadingData, setIsLoadingData] = useState(true);
   const router = useRouter();
@@ -67,33 +68,60 @@ const page = ({ params }: { params: { id: string } }) => {
         const commentUsers = Array.from(
           new Set(comments.map((comment) => comment.author))
         );
+
+        const replies = Array.from(
+          new Set(comments.flatMap((comment) => comment.replies))
+        );
+
+        const tempReplies: ReplyType[] = [];
+        if (replies.length !== 0) {
+          const replyData = await API.get<{
+            data: ReplyType[];
+            message: string;
+          }>(`/reply/${replies.join(',')}`);
+
+          if (replyData.message === 'OK') {
+            replyData.data.map((reply) => {
+              tempReplies.push(reply);
+            });
+          }
+        }
+
         const userData = await API.get<{
           data: { id: string; nickname: string }[];
         }>(`/user/nickname/${commentUsers.join(',')}`);
         const userArr: { id: string; nickname: string }[] = userData.data;
 
-        const commentsRes: CommentType[] = [];
+        const commentsRes: CommentItemType[] = [];
 
         comments.map((comment) => {
-          const name = userArr.find(
+          const commentUserName = userArr.find(
             (data) => data.id === comment.author
           )?.nickname;
-          const temp: CommentType = {
+
+          const commentReplies = tempReplies.filter(
+            (reply) => reply.org === comment._id
+          );
+
+          console.log(tempReplies);
+          console.log(comment._id);
+
+          const temp: CommentItemType = {
             _id: comment._id,
             org: comment.org,
             author: comment.author,
-            authorName: name ?? '',
-            replies: comment.replies,
+            authorName: commentUserName ?? '',
+            replies: commentReplies,
             content: comment.content,
             created_at: comment.created_at,
             updated_at: comment.updated_at,
           };
           commentsRes.push(temp);
         });
+
+        console.log(commentsRes);
         setComments(commentsRes);
       }
-
-      console.log(commentResponse);
     } catch (error) {
       setData(undefined);
     }
@@ -132,11 +160,12 @@ const page = ({ params }: { params: { id: string } }) => {
         content: reply,
         author: user.user_id,
         authorName: user.username,
+        org: org_comment,
       };
 
       const response = await API.post<{
         message: string;
-      }>(`/comment/${org_comment}`, JSON.stringify(body));
+      }>(`/reply`, JSON.stringify(body));
 
       if (response.message === 'success') {
         fetchData();
@@ -183,6 +212,41 @@ const page = ({ params }: { params: { id: string } }) => {
     }
   };
 
+  const handleReplyEdit = async (id: string, content: string) => {
+    try {
+      const body = {
+        content: content,
+      };
+
+      const response = await API.put<{ message: string }>(
+        '/reply',
+        id,
+        JSON.stringify(body)
+      );
+
+      if (response.message === 'success') {
+        fetchData();
+      } else {
+        alert('에러가 발생했습니다. 잠시후 다시 시도해주세요');
+      }
+    } catch (error) {
+      alert('에러가 발생했습니다. 잠시후 다시 시도해주세요');
+    }
+  };
+
+  const handleReplyDelete = async (id: string) => {
+    const response = await API.delete<{ message: string }>('/reply', id);
+    if (response.message === 'success') {
+      fetchData();
+    } else {
+      alert('에러가 발생했습니다. 잠시후 다시 시도해주세요');
+    }
+    try {
+    } catch (error) {
+      alert('에러가 발생했습니다. 잠시후 다시 시도해주세요');
+    }
+  };
+
   return isLoadingData ? (
     <div className={style['loading-container']}>Loading...</div>
   ) : data ? (
@@ -224,7 +288,13 @@ const page = ({ params }: { params: { id: string } }) => {
                         authorName: reply.authorName,
                         content: reply.content,
                       };
-                      return <Reply reply={replyTemp} />;
+                      return (
+                        <Reply
+                          reply={replyTemp}
+                          handleReplyDelete={handleReplyDelete}
+                          handleReplyEdit={handleReplyEdit}
+                        />
+                      );
                     })}
                   </div>
                 )}

@@ -5,6 +5,7 @@ import { useRecoilValue } from 'recoil';
 import { userState } from '@/states/user';
 import { useClickOutside } from '@/hooks/useClickOutSide';
 import Modal from './Modal';
+import { CommentItemType } from '@/types/global.type';
 
 const Comment = ({
   comment,
@@ -13,7 +14,7 @@ const Comment = ({
   handleEdit,
   handleDelete,
 }: {
-  comment: CommentType;
+  comment: CommentItemType;
   writeReply: (commentid: string) => void;
   setReply: React.Dispatch<React.SetStateAction<string>>;
   handleEdit: (commentid: string, content: string) => void;
@@ -148,6 +149,7 @@ const Comment = ({
         cancel="취소"
         confirmAction={() => {
           handleDelete(comment._id);
+          setIsDeleteMode(false);
         }}
         cancelAction={() => {
           setIsDeleteMode(false);

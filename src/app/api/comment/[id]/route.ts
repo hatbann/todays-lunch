@@ -1,11 +1,11 @@
 /** @format */
 
-import Comment, { Reply } from '@/model/comment';
+import Comment from '@/model/comment';
 import dbConnect from '@/utils/database';
 import { NextRequest, NextResponse } from 'next/server';
 import mongoose, { InferSchemaType } from 'mongoose';
 
-export async function POST(
+/* export async function POST(
   req: NextRequest,
   { params }: { params: { id: string } }
 ) {
@@ -31,9 +31,9 @@ export async function POST(
   } catch (error) {
     return NextResponse.json({ message: 'Failed' }, { status: 201 });
   }
-}
+} */
 
-// comment 수정하는 것
+// reply 수정하는 것
 export async function PUT(
   req: NextRequest,
   { params }: { params: { id: string } }
@@ -62,6 +62,7 @@ export async function PUT(
   }
 }
 
+// 답글 삭제, 댓글에서 comment삭제
 export async function DELETE(
   req: NextRequest,
   { params }: { params: { id: string } }
