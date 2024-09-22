@@ -134,48 +134,62 @@ const page = ({ params }: { params: { id: string } }) => {
   }, []);
 
   const writeComment = async () => {
-    try {
-      const body = {
-        author: user.user_id,
-        org: params.id,
-        content: comment,
-      };
+    if (user.user_id === '') {
+      const result = confirm('로그인 후 이용해주세요');
+      if (result) {
+        router.push('/login');
+      }
+    } else {
+      try {
+        const body = {
+          author: user.user_id,
+          org: params.id,
+          content: comment,
+        };
 
-      const response = await API.post<{
-        message: string;
-      }>('/comment', JSON.stringify(body));
+        const response = await API.post<{
+          message: string;
+        }>('/comment', JSON.stringify(body));
 
-      if (response.message === 'success') {
-        console.log('refresh!');
-        fetchData();
-      } else {
+        if (response.message === 'success') {
+          console.log('refresh!');
+          fetchData();
+        } else {
+          alert('에러가 발생했습니다. 잠시후 다시 시도해주세요');
+        }
+      } catch (error) {
         alert('에러가 발생했습니다. 잠시후 다시 시도해주세요');
       }
-    } catch (error) {
-      alert('에러가 발생했습니다. 잠시후 다시 시도해주세요');
     }
   };
 
   const writeReply = async (org_comment: string) => {
-    try {
-      const body = {
-        content: reply,
-        author: user.user_id,
-        authorName: user.username,
-        org: org_comment,
-      };
+    if (user.user_id === '') {
+      const result = confirm('로그인 후 이용해주세요');
+      if (result) {
+        router.push('/login');
+      }
+    } else {
+      try {
+        const body = {
+          content: reply,
+          author: user.user_id,
+          authorName: user.username,
+          org: org_comment,
+        };
 
-      const response = await API.post<{
-        message: string;
-      }>(`/reply`, JSON.stringify(body));
+        const response = await API.post<{
+          message: string;
+        }>(`/reply`, JSON.stringify(body));
 
-      if (response.message === 'success') {
-        fetchData();
-      } else {
+        if (response.message === 'success') {
+          fetchData();
+        } else {
+          alert('에러가 발생했습니다. 잠시후 다시 시도해주세요');
+        }
+      } catch (error) {
         alert('에러가 발생했습니다. 잠시후 다시 시도해주세요');
       }
-    } catch (error) {
-      alert('에러가 발생했습니다. 잠시후 다시 시도해주세요');
     }
   };
 
