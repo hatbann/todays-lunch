@@ -5,6 +5,7 @@ import LunchView from "@/components/lunch/view";
 import { revalidatePath } from "next/cache";
 import { LunchType } from "@/model/lunch";
 import { LunchItemType } from "@/types/global.type";
+import { API } from "@/hooks/API";
 
 type Props = {
   searchParams: { [key: string]: string | string[] | undefined };
@@ -36,18 +37,10 @@ const getInitialPageData = async () => {
         });
         if (users.length !== 0) {
           const id = String(users);
-          const userData = await fetch(`${API_URL}/user/nickname/${id}`, {
-            headers: {
-              "Content-Type": "application/json",
-            },
-            method: "GET",
-          })
-            .then((res) => {
-              return res.json();
-            })
-            .catch((e) => {
-              console.log(e);
-            });
+          const userData = await API.get<{
+            data: { id: string; nickname: string }[];
+          }>(`/user/nickname/${id}`);
+
           const userArr: { id: string; nickname: string }[] = userData.data;
           const lunchRes: LunchItemType[] = [];
           lunches.map((item: LunchType) => {
@@ -90,7 +83,12 @@ const getInitialPageData = async () => {
       };
     }
   } catch (error) {
-    return Promise.reject(error);
+    console.log(error);
+    return {
+      lunchRes: [],
+      totalCount: 0,
+    };
+    /*    return Promise.reject(error); */
   }
 };
 
@@ -104,8 +102,8 @@ export default async function Home() {
   const initialData = await getInitialPageData();
   return (
     <LunchView
-      lunch={initialData.lunchRes}
-      totalCount={initialData.totalCount}
+      lunch={initialData ? initialData.lunchRes : []}
+      totalCount={initialData ? initialData.totalCount : 0}
     />
   );
 }

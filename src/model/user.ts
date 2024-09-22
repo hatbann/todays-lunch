@@ -5,13 +5,17 @@ import { Infer } from "next/dist/compiled/superstruct";
 
 const { Schema } = mongoose;
 const UserSchema = new Schema({
-  userId: String,
-  password: String,
+  password: {
+    type: String,
+    required: true,
+  },
   nickname: String,
   like: [String],
 });
 
-type UserType = Infer<typeof UserSchema>;
+type UserType = InferSchemaType<typeof UserSchema> & {
+  _id: string;
+};
 
 export default mongoose.models.Users || mongoose.model("Users", UserSchema);
 export type { UserType };

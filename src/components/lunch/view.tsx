@@ -1,17 +1,23 @@
 /** @format */
 
-"use client";
+'use client';
 
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import style from "../../styles/pages/lunch/style.module.scss";
-import { LunchType } from "@/model/lunch";
-import { useRouter } from "next/navigation";
-import Lunch from "./Lunch";
-import { useRecoilValue } from "recoil";
-import { userState } from "@/states/user";
-import { LunchItemType } from "@/types/global.type";
-
-const API_URL = `${process.env.NEXT_PUBLIC_API_URL!}/api`;
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import style from '../../styles/pages/lunch/style.module.scss';
+import { LunchType } from '@/model/lunch';
+import { useRouter } from 'next/navigation';
+import Lunch from './Lunch';
+import { useRecoilValue } from 'recoil';
+import { userState } from '@/states/user';
+import { LunchItemType } from '@/types/global.type';
+import { API } from '@/hooks/API';
+import {
+  InfiniteData,
+  UseInfiniteQueryResult,
+  useInfiniteQuery,
+  useSuspenseInfiniteQuery,
+} from '@tanstack/react-query';
+import { AxiosError } from 'axios';
 
 const LunchView = ({
   lunch,
@@ -33,18 +39,12 @@ const LunchView = ({
 
   const fetchData = async (page: number) => {
     try {
-      const response = await fetch(`${API_URL}/lunch?page=${page}`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        method: "GET",
-      })
-        .then((res) => {
-          return res.json();
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+      const response = await API.get<{ lunches: LunchType[]; total: number }>(
+        '/lunch',
+        {
+          page: page,
+        }
+      );
       const lunches = response.lunches;
       const totalCount = response.total;
       if (lunches) {
@@ -53,18 +53,10 @@ const LunchView = ({
         });
         if (users.length !== 0) {
           const id = String(users);
-          const userData = await fetch(`${API_URL}/user/nickname/${id}`, {
-            headers: {
-              "Content-Type": "application/json",
-            },
-            method: "GET",
-          })
-            .then((res) => {
-              return res.json();
-            })
-            .catch((e) => {
-              console.log(e);
-            });
+          const userData = await API.get<{
+            data: { id: string; nickname: string }[];
+          }>(`/user/nickname/${id}`);
+
           const userArr: { id: string; nickname: string }[] = userData.data;
           const lunchRes: LunchItemType[] = [];
           lunches.map((item: LunchType) => {
@@ -73,12 +65,12 @@ const LunchView = ({
             )?.nickname;
             const temp: LunchItemType = {
               _id: item._id,
-              title: item.title ?? "",
-              content: item.content ?? "",
-              img: item.img ?? "",
+              title: item.title ?? '',
+              content: item.content ?? '',
+              img: item.img ?? '',
               like: item.like,
-              author: item.author ?? "",
-              authorName: name ?? "",
+              author: item.author ?? '',
+              authorName: name ?? '',
               created_at: item.created_at,
               updated_at: item.updated_at,
             };
@@ -101,7 +93,12 @@ const LunchView = ({
         };
       }
     } catch (error) {
-      return Promise.reject(error);
+      console.log('error', error);
+      return {
+        lunchRes: [],
+        totalCount: 0,
+      };
+      /*   return Promise.reject(error); */
     }
   };
 
@@ -119,36 +116,17 @@ const LunchView = ({
       title,
       content: desc,
     };
-    const response = await fetch(`${API_URL}/lunch/${id}`, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "PUT",
-      body: JSON.stringify(body),
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-    return response;
+    const response = await API.put<{ message: string }>(
+      `/lunch`,
+      id,
+      JSON.stringify(body)
+    );
+    return { message: response.message };
   };
 
   const handleDelete = async (id: string) => {
-    const response = await fetch(`${API_URL}/lunch/${id}`, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "DELETE",
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-    return response;
+    const response = await API.delete<{ message: string }>(`/lunch`, id);
+    return { message: response.message };
   };
 
   const handleObserver = useCallback(
@@ -163,27 +141,21 @@ const LunchView = ({
   );
 
   const handleRoute = () => {
-    if (user.user_id !== "") {
-      router.push("/upload/lunch");
+    if (user.user_id !== '') {
+      router.push('/upload/lunch');
     } else {
-      router.push("/login");
+      router.push('/login');
     }
   };
 
   const loadAgain = async () => {
     try {
-      const response = await fetch(`${API_URL}/lunch/loadagain?page=${page}`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        method: "GET",
-      })
-        .then((res) => {
-          return res.json();
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+      const response = await API.get<{ lunches: LunchType[]; total: number }>(
+        '/lunch/loadagain',
+        {
+          page: page,
+        }
+      );
       const lunches = response.lunches;
       const totalCount = response.total;
       if (lunches) {
@@ -192,18 +164,9 @@ const LunchView = ({
         });
         if (users.length !== 0) {
           const id = String(users);
-          const userData = await fetch(`${API_URL}/user/nickname/${id}`, {
-            headers: {
-              "Content-Type": "application/json",
-            },
-            method: "GET",
-          })
-            .then((res) => {
-              return res.json();
-            })
-            .catch((e) => {
-              console.log(e);
-            });
+          const userData = await API.get<{
+            data: { id: string; nickname: string }[];
+          }>(`/user/nickname/${id}`);
           const userArr: { id: string; nickname: string }[] = userData.data;
           const lunchRes: LunchItemType[] = [];
           lunches.map((item: LunchType) => {
@@ -212,12 +175,12 @@ const LunchView = ({
             )?.nickname;
             const temp: LunchItemType = {
               _id: item._id,
-              title: item.title ?? "",
-              content: item.content ?? "",
-              img: item.img ?? "",
+              title: item.title ?? '',
+              content: item.content ?? '',
+              img: item.img ?? '',
               like: item.like,
-              author: item.author ?? "",
-              authorName: name ?? "",
+              author: item.author ?? '',
+              authorName: name ?? '',
               created_at: item.created_at,
               updated_at: item.updated_at,
             };
@@ -246,7 +209,7 @@ const LunchView = ({
 
   useEffect(() => {
     observerRef.current = new IntersectionObserver(handleObserver, {
-      rootMargin: "20px",
+      rootMargin: '20px',
     });
 
     if (loadMoreRef.current) {
@@ -261,26 +224,26 @@ const LunchView = ({
   }, [handleObserver]);
 
   return (
-    <main className={style["main"]}>
+    <main className={style['main']}>
       {!isLoadAgain ? (
         lunch.length !== 0 ? (
-          <section className={style["container"]}>
-            <h2 className={style["title"]}>도시락통</h2>
-            <div className={style["upload-button"]}>
+          <section className={style['container']}>
+            <h2 className={style['title']}>도시락통</h2>
+            <div className={style['upload-button']}>
               <button onClick={handleRoute}>도시락 올리기</button>
             </div>
             {lunchItems.map((item, idx) => {
               return (
                 <div
                   key={`${idx}-${item.title}`}
-                  className={style["lunch-item"]}
+                  className={style['lunch-item']}
                   /*    ref={lunchItems.length === idx + 1 ? loadMoreRef : null} */
                 >
                   <Lunch
                     item={item}
                     handleDelete={async (id) => {
                       const res = await handleDelete(id);
-                      if (res.message === "OK") {
+                      if (res.message === 'OK') {
                         setIsLoadAgain(true);
                         const loadData = await loadAgain();
                         setLunchItems(loadData.lunchRes);
@@ -290,7 +253,7 @@ const LunchView = ({
                     }}
                     handleEdit={async (id, title, desc) => {
                       const res = await handleEdit(id, title, desc);
-                      if (res.message === "OK") {
+                      if (res.message === 'OK') {
                         setIsLoadAgain(true);
                         const loadData = await loadAgain();
                         setLunchItems(loadData.lunchRes);
@@ -304,30 +267,31 @@ const LunchView = ({
             })}
             <div
               ref={loadMoreRef}
-              style={{ height: "20px", backgroundColor: "transparent" }}
+              style={{ height: '20px', backgroundColor: 'transparent' }}
             />
-            {isLoading && <div className={style["loading"]}>Loading...</div>}
+            {isLoading && <div className={style['loading']}>Loading...</div>}
           </section>
         ) : (
-          <div className={style["empty-container"]}>
+          <div className={style['empty-container']}>
             <h3>글이 없습니다</h3>
             <button
               onClick={() => {
-                if (user.user_id === "") {
-                  const result = confirm("로그인 후 이용해주세요");
+                if (user.user_id === '') {
+                  const result = confirm('로그인 후 이용해주세요');
                   if (result) {
-                    router.push("/login");
+                    router.push('/login');
                   }
                 } else {
-                  router.push("/upload/lunch");
+                  router.push('/upload/lunch');
                 }
-              }}>
+              }}
+            >
               도시락 올리기
             </button>
           </div>
         )
       ) : (
-        <div className={style["load-again-container"]}>Loading...</div>
+        <div className={style['load-again-container']}>Loading...</div>
       )}
     </main>
   );

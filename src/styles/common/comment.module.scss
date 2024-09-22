@@ -1,0 +1,168 @@
+@import '../layout';
+@import '../variables';
+@import '../viewsize';
+
+.comment-wrapper {
+  width: 100%;
+  @include flex-row(flex-start, flex-start);
+  position: relative;
+  gap: 10px;
+  padding-bottom: 10px;
+
+  .comment-content {
+    width: calc(100% - 100px);
+    @include flex-column(flex-start, flex-end);
+    gap: 15px;
+
+    .content {
+      font-size: 15px;
+      color: $grayscale-black80;
+      width: 100%;
+      resize: none;
+      padding: 5px;
+
+      &:disabled {
+        border: none;
+        padding: 0;
+        background-color: rgb(248, 248, 248);
+      }
+
+      @include mobile {
+        font-size: 13px;
+      }
+    }
+
+    .reply-btn {
+      width: 40px;
+      height: 25px;
+      font-size: 13px;
+      border: 1px solid $grayscale-black60;
+      cursor: pointer;
+      margin-right: 40px;
+
+      &.edit {
+        display: none;
+      }
+    }
+
+    @include mobile {
+      width: calc(100% - 70px);
+    }
+  }
+}
+
+.comment-author {
+  font-size: 15px;
+  font-weight: 600;
+  color: $grayscale-black80;
+  width: 100px;
+
+  @include mobile {
+    font-size: 13px;
+    width: 70px;
+  }
+}
+
+.modal-btn {
+  position: absolute;
+  top: 0px;
+  right: 10px;
+  cursor: pointer;
+  img {
+    width: 15px;
+    height: 15px;
+  }
+
+  &.edit {
+    display: none;
+  }
+}
+
+.edit-mode-btn-container {
+  @include flex-row(flex-start, center);
+  gap: 10px;
+
+  button {
+    width: 40px;
+    height: 25px;
+    font-size: 13px;
+    border: 1px solid $grayscale-black60;
+    cursor: pointer;
+    background-color: $grayscale-black20;
+
+    &:hover {
+      background-color: $grayscale-black30;
+    }
+  }
+
+  &.disable {
+    display: none;
+  }
+}
+
+.author-btn-container {
+  position: absolute;
+  top: 20px;
+  right: 10px;
+  background-color: white;
+  box-shadow: $shadow-2xl;
+  border: 1px solid $grayscale-black30;
+  width: 100px;
+  @include flex-column(flex-start, flex-start);
+  z-index: 10;
+
+  .btn {
+    cursor: pointer;
+    width: 100%;
+    font-size: 13px;
+    padding: 5px;
+    background-color: white;
+    cursor: pointer;
+
+    &:nth-child(1) {
+      border-bottom: 1px solid $grayscale-black30;
+    }
+
+    &:hover {
+      background-color: #f8f8f8;
+    }
+  }
+}
+
+.reply-container {
+  @include flex-column(flex-start, flex-end);
+  gap: 10px;
+  width: 100%;
+  background-color: $grayscale-black20;
+  border-top: 1px solid $grayscale-black60;
+  margin-top: 10px;
+  padding: 10px;
+
+  .comment-author {
+    width: 100% !important;
+    display: inline-block;
+  }
+
+  .reply-write-btn-container {
+    @include flex-row(flex-end, center);
+    gap: 10px;
+
+    button {
+      width: 40px;
+      height: 25px;
+      font-size: 13px;
+      border: 1px solid $grayscale-black60;
+      cursor: pointer;
+    }
+  }
+
+  textarea {
+    width: 100%;
+    padding: 5px;
+    background-color: white;
+
+    &:focus {
+      outline: none;
+    }
+  }
+}

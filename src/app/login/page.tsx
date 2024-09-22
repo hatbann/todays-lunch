@@ -8,6 +8,7 @@ import style from "../../styles/pages/login/style.module.scss";
 import { useRecoilState } from "recoil";
 import { userState } from "@/states/user";
 import { useRouter } from "next/navigation";
+import { API } from "@/hooks/API";
 
 const page = () => {
   const {
@@ -25,24 +26,15 @@ const page = () => {
   const handleSubmit = async () => {
     try {
       const bodyData = {
-        userId: getValues("userId"),
+        _id: getValues("userId"),
         password: getValues("password"),
       };
 
-      const API_URL = `${process.env.NEXT_PUBLIC_API_URL!}/api`;
+      const res = await API.post<{ user: any; token: any; message: any }>(
+        "/user/signin",
+        JSON.stringify(bodyData)
+      );
 
-      const res: { user: any; token: any; message: any } = await fetch(
-        `${API_URL}/user/signin`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(bodyData),
-        }
-      ).then((res) => {
-        return res.json();
-      });
       if (res.message === "OK") {
         setUser({
           username: res.user.nickname,

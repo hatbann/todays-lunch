@@ -8,8 +8,10 @@ import { NextRequest, NextResponse } from "next/server";
 export async function PUT(req: NextRequest) {
   try {
     await dbConnect();
-    const userid = req.nextUrl.searchParams.get("userid");
-    const lunchid = req.nextUrl.searchParams.get("lunchid");
+    // lunchid가 pk, userId가 body
+    const body = await req.json();
+    const userid = body.userid;
+    const lunchid = req.nextUrl.searchParams.get("id");
     const user = await User.findOne({
       _id: userid,
     });

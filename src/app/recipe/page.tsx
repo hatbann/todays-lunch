@@ -1,33 +1,26 @@
 /** @format */
 
 /* "use client"; */
-'use server';
+"use server";
 
-import { RecipeType } from '@/model/recipe';
-import React from 'react';
-import RecipeView from '@/components/recipe/view';
-import { revalidatePath } from 'next/cache';
+import { RecipeType } from "@/model/recipe";
+import React from "react";
+import RecipeView from "@/components/recipe/view";
+import { revalidatePath } from "next/cache";
+import { API } from "@/hooks/API";
 type Props = {
   searchParams: { [key: string]: string | string[] | undefined };
 };
 
 const getInitialPageData = async ({ searchParams }: Props) => {
-  const page = searchParams.page ?? '1';
+  const page = searchParams.page ?? "1";
   try {
-    const API_URL = `${process.env.NEXT_PUBLIC_API_URL!}/api`;
-
-    const response = await fetch(`${API_URL}/recipe?page=${page}`, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      method: 'GET',
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    const response = await API.get<{ recipes: RecipeType[]; total: number }>(
+      `/recipe`,
+      {
+        page: page,
+      }
+    );
 
     if (response) {
       const recipes = response.recipes;
@@ -38,12 +31,11 @@ const getInitialPageData = async ({ searchParams }: Props) => {
         });
         if (users.length !== 0) {
           const id = String(users);
-          const userData = await fetch(`${API_URL}/user/nickname/${id}`, {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            method: 'GET',
-          }).then((res) => res.json());
+
+          const userData = await API.get<{
+            data: { id: string; nickname: string }[];
+          }>(`/user/nickname/${id}`);
+
           const userArr: { id: string; nickname: string }[] = userData.data;
           const recipeRes: RecipeType[] = [];
           recipes.map((item: RecipeType) => {
@@ -93,8 +85,8 @@ const getInitialPageData = async ({ searchParams }: Props) => {
 
 export default async function ({ searchParams }: Props) {
   async function revalidate() {
-    'use server';
-    revalidatePath('/recipe');
+    "use server";
+    revalidatePath("/recipe");
   }
 
   revalidate();

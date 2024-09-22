@@ -1,14 +1,15 @@
 /** @format */
 
-import { LunchType } from "@/model/lunch";
-import React, { useRef, useState } from "react";
-import style from "../../styles/pages/lunch/lunch.module.scss";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { userState } from "@/states/user";
-import { useRouter } from "next/navigation";
-import { LunchItemType } from "@/types/global.type";
-import { useClickOutside } from "@/hooks/useClickOutSide";
-import Modal from "../common/Modal";
+import { LunchType } from '@/model/lunch';
+import React, { useRef, useState } from 'react';
+import style from '../../styles/pages/lunch/lunch.module.scss';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { userState } from '@/states/user';
+import { useRouter } from 'next/navigation';
+import { LunchItemType } from '@/types/global.type';
+import { useClickOutside } from '@/hooks/useClickOutSide';
+import Modal from '../common/Modal';
+import { API } from '@/hooks/API';
 
 type LunchProps = {
   item: LunchItemType;
@@ -31,23 +32,14 @@ const Lunch = ({ item, handleDelete, handleEdit }: LunchProps) => {
 
   const handleLike = async () => {
     try {
-      const API_URL = `${process.env.NEXT_PUBLIC_API_URL!}/api`;
-
-      const response = await fetch(
-        `${API_URL}/user/like?userid=${user.user_id}&lunchid=${item._id}`,
+      // lunchid가 pk, userid 가 body
+      const response = await API.put<{ user: any; lunch: any }>(
+        '/user/like',
+        item._id,
         {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          method: "PUT",
+          userid: user.user_id,
         }
-      )
-        .then((res) => {
-          return res.json();
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+      );
 
       console.log(response.user);
       setUser({
@@ -69,85 +61,105 @@ const Lunch = ({ item, handleDelete, handleEdit }: LunchProps) => {
   });
 
   return (
-    <div className={style["lunch-container"]}>
-      {isEditMode && (
-        <div className={style["edit-btn-container"]}>
-          <button
-            className={style["cancel"]}
-            onClick={() => {
-              setIsEditMode(false);
-            }}>
-            취소
-          </button>
-          <button
-            className={style["edit"]}
-            onClick={() => {
-              handleEdit(lunchItem._id, tempTitle, tempDesc);
-              setIsEditMode(false);
-            }}>
-            수정
-          </button>
-        </div>
-      )}
+    <div className={style['lunch-container']}>
+      <div
+        className={style['edit-btn-container']}
+        style={{ display: isEditMode ? 'flex' : 'none' }}
+      >
+        <button
+          className={style['cancel']}
+          onClick={() => {
+            setIsEditMode(false);
+          }}
+        >
+          취소
+        </button>
+        <button
+          className={style['edit']}
+          onClick={() => {
+            handleEdit(lunchItem._id, tempTitle, tempDesc);
+            setIsEditMode(false);
+          }}
+        >
+          수정
+        </button>
+      </div>
       {lunchItem.author === user.user_id && !isEditMode && (
         <div
-          className={style["modal-btn"]}
+          className={style['modal-btn']}
           onClick={() => {
             setIsOpenModal((prev) => !prev);
-          }}>
+          }}
+        >
           <img src="/images/png/menu.png" />
         </div>
       )}
       {isOpenModal && (
-        <div className={style["modal"]} ref={ref}>
+        <div className={style['modal']} ref={ref}>
           <div
-            className={style["modal-item"]}
+            className={style['modal-item']}
             onClick={() => {
               setIsOpenModal(false);
               setIsEditMode(true);
-            }}>
+            }}
+          >
             수정
           </div>
           <div
-            className={style["modal-item"]}
+            className={style['modal-item']}
             onClick={() => {
               setIsDeleteMode(true);
-            }}>
+            }}
+          >
             삭제
           </div>
         </div>
       )}
-      <div className={style["title"]}>
+      <div
+        className={style['title']}
+        onClick={() => {
+          if (!isEditMode) {
+            router.push(`/lunch/${lunchItem._id}`);
+          }
+        }}
+      >
         <label htmlFor="title">제목 : </label>
+        <span className={isEditMode ? style['edit'] : ''}>
+          {lunchItem.title}
+        </span>
         <input
           id="title"
-          className={isEditMode ? style["edit"] : ""}
+          className={isEditMode ? style['edit'] : ''}
           value={tempTitle}
           onChange={(e) => {
             setTempTitle(e.target.value);
           }}
-          disabled={!isEditMode}
         />
       </div>
-      <span className={style["author"]}>작성자 : {lunchItem.authorName}</span>
+      <span className={style['author']}>작성자 : {lunchItem.authorName}</span>
       {lunchItem.img && (
-        <div className={style["img-wrapper"]}>
+        <div
+          className={style['img-wrapper']}
+          onClick={() => {
+            router.push(`/lunch/${lunchItem._id}`);
+          }}
+        >
           <img src={lunchItem.img} alt="img" />
         </div>
       )}
-      <div className={style["heart"]}>
+      <div className={style['heart']}>
         <span>좋아요 {lunchItem.like}</span>
         {isFill ? (
           <img
             src="/images/png/fillheart.png"
             alt="liked"
             onClick={() => {
-              if (user.user_id !== "") {
+              if (user.user_id !== '') {
                 handleLike();
               } else {
-                const result = confirm("로그인 후 이용해주세요");
+                const result = confirm('로그인 후 이용해주세요');
                 if (result) {
-                  router.push("/login");
+                  router.push('/login');
                 }
               }
             }}
@@ -157,37 +169,38 @@ const Lunch = ({ item, handleDelete, handleEdit }: LunchProps) => {
             src="/images/png/emptyheart.png"
             alt="not liked"
             onClick={() => {
-              if (user.user_id !== "") {
+              if (user.user_id !== '') {
                 handleLike();
               } else {
-                const result = confirm("로그인 후 이용해주세요");
+                const result = confirm('로그인 후 이용해주세요');
                 if (result) {
-                  router.push("/login");
+                  router.push('/login');
                 }
               }
             }}
           />
         )}
       </div>
-      <div className={style["desc-container"]}>
+      <div className={style['desc-container']}>
         <div
-          className={style["open-btn"]}
+          className={style['open-btn']}
           onClick={() => {
             setIsOpen((prev) => !prev);
-          }}>
-          <span className={style["open-desc"]}>설명</span>
+          }}
+        >
+          <span className={style['open-desc']}>설명</span>
           <img
             src="/images/png/opendesc.png"
             className={
               isOpen
-                ? `${style["arrow"]} ${style["open"]}`
-                : `${style["arrow"]} ${style["close"]}`
+                ? `${style['arrow']} ${style['open']}`
+                : `${style['arrow']} ${style['close']}`
             }
           />
         </div>
         {isOpen && (
           <textarea
-            className={style["desc"]}
+            className={style['desc']}
             value={tempDesc}
             onChange={(e) => {
               setTempDesc(e.target.value);

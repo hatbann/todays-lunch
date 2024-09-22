@@ -1,13 +1,14 @@
 /** @format */
 
-'use client';
+"use client";
 
-import React from 'react';
-import { FieldValues, useForm } from 'react-hook-form';
-import style from '../../styles/pages/join/style.module.scss';
-import { useSignupForm } from '@/form/useSignupForm';
-import { useRouter } from 'next/navigation';
-import { userState } from '@/states/user';
+import React from "react";
+import { FieldValues, useForm } from "react-hook-form";
+import style from "../../styles/pages/join/style.module.scss";
+import { useSignupForm } from "@/form/useSignupForm";
+import { useRouter } from "next/navigation";
+import { userState } from "@/states/user";
+import { API } from "@/hooks/API";
 
 export interface JoinFormValue {
   email: string;
@@ -21,46 +22,44 @@ const page = () => {
       setError,
       setValue,
       getValues,
-      formState: { errors },
+      formState: { errors, isValid },
     },
     r,
   } = useSignupForm();
   const router = useRouter();
 
   const handleSubmit = async () => {
-    try {
-      const bodyData = {
-        nickname: getValues('nickname'),
-        userId: getValues('userId'),
-        password: getValues('password'),
-      };
+    if (isValid) {
+      try {
+        const bodyData = {
+          nickname: getValues("nickname"),
+          userId: getValues("userId"),
+          password: getValues("password"),
+        };
 
-      const API_URL = `${process.env.NEXT_PUBLIC_API_URL!}/api`;
-      const res = await fetch(`${API_URL}/user/signup`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(bodyData),
-      }).then((res) => {
-        return res.json();
-      });
+        const res = await API.post<{ type: string; message: string }>(
+          "/user/signup",
+          JSON.stringify(bodyData)
+        );
 
-      if (res.type === 'success') {
-        router.push('/join/success');
+        if (res.type === "success") {
+          router.push("/join/success");
+        } else {
+          alert("이미 가입한 계정입니다.");
+        }
+        return res;
+      } catch (e) {
+        console.log(e);
       }
-      return res;
-    } catch (e) {
-      console.log(e);
     }
   };
 
   return (
-    <div className={style['container']}>
+    <div className={style["container"]}>
       <h1>회원가입</h1>
-      <div className={style['form-section']}>
-        <form className={style['form-container']}>
-          <div className={style['form-item']}>
+      <div className={style["form-section"]}>
+        <form className={style["form-container"]}>
+          <div className={style["form-item"]}>
             <label htmlFor="userId">아이디</label>
             <input
               type="text"
@@ -70,7 +69,7 @@ const page = () => {
             />
           </div>
           {errors.userId && <p>{errors.userId.message}</p>}
-          <div className={style['form-item']}>
+          <div className={style["form-item"]}>
             <label htmlFor="password">비밀번호</label>
             <input
               type="password"
@@ -80,7 +79,7 @@ const page = () => {
             />
           </div>
           {errors.password && <p>{errors.password.message}</p>}
-          <div className={style['form-item']}>
+          <div className={style["form-item"]}>
             <label htmlFor="re_password">비밀번호 확인</label>
             <input
               type="password"
@@ -90,18 +89,17 @@ const page = () => {
             />
           </div>
           {errors.re_password && <p>{errors.re_password.message}</p>}
-          <div className={style['form-item']}>
+          <div className={style["form-item"]}>
             <label htmlFor="nickname">닉네임</label>
             <input type="text" id="nickname" {...r.nickname} />
           </div>
           {errors.nickname && <p>{errors.nickname.message}</p>}
         </form>
-        <div className={style['btn-container']}>
+        <div className={style["btn-container"]}>
           <button
             type="button"
             onClick={handleSubmit}
-            className={style['submit-btn']}
-          >
+            className={style["submit-btn"]}>
             회원가입
           </button>
         </div>

@@ -1,26 +1,26 @@
 /** @format */
 
-import { signIn } from 'next-auth/react';
+import { signIn } from "next-auth/react";
 /** @format */
 
-import { UserType } from '@/model/user';
-import dbConnect from '@/utils/database';
-import User from '@/model/user';
-import { NextRequest, NextResponse } from 'next/server';
+import { UserType } from "@/model/user";
+import dbConnect from "@/utils/database";
+import User from "@/model/user";
+import { NextRequest, NextResponse } from "next/server";
 
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 export async function POST(req: NextRequest) {
   try {
     await dbConnect();
 
     const data: UserType = await req.json();
     const password: String = data.password;
-    const user: UserType = await User.findOne({ userId: data.userId }).exec();
-
-    if (user == null) {
+    console.log(data);
+    const user: UserType = await User.findOne({ userId: data._id }).exec();
+    if (user === null) {
       return new NextResponse(
-        JSON.stringify({ message: 'NOTFOUND', result: '' })
+        JSON.stringify({ message: "NOTFOUND", result: "" })
       );
     }
 
@@ -34,11 +34,11 @@ export async function POST(req: NextRequest) {
     };
     // json web token 생성하여 send 해주기
     const token = await jwt.sign(payload, process.env.TOKEN_SECRET!, {
-      expiresIn: '1d',
+      expiresIn: "1d",
     });
 
     const body = {
-      message: isMatched ? 'OK' : 'WRONG',
+      message: isMatched ? "OK" : "WRONG",
       /*       token: {
         accessToken: isMatched && token,
       }, */
@@ -50,10 +50,7 @@ export async function POST(req: NextRequest) {
 
     // Set the token as an HTTP-only cookie
     // cookie 값 client 접근 불가능
-    response.cookies.set('token', token, {
-      httpOnly: true,
-    });
-
+    response.cookies.set("token", token);
     return response;
   } catch (error) {
     return Response.error();

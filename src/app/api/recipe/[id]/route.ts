@@ -16,7 +16,7 @@ export async function GET(
 
     recipe.views += 1;
     await recipe.save();
-    return new NextResponse(JSON.stringify(recipe), { status: 200 });
+    return new NextResponse(JSON.stringify({ recipe }), { status: 200 });
   } catch (error) {
     return Response.error();
   }
