@@ -26,6 +26,10 @@
         padding: 0;
         background-color: rgb(248, 248, 248);
       }
+
+      @include mobile {
+        font-size: 13px;
+      }
     }
 
     .reply-btn {
@@ -40,6 +44,10 @@
         display: none;
       }
     }
+
+    @include mobile {
+      width: calc(100% - 70px);
+    }
   }
 }
 
@@ -48,6 +56,11 @@
   font-weight: 600;
   color: $grayscale-black80;
   width: 100px;
+
+  @include mobile {
+    font-size: 13px;
+    width: 70px;
+  }
 }
 
 .modal-btn {

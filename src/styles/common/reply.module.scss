@@ -30,6 +30,14 @@
         padding: 0;
         background-color: $grayscale-black20;
       }
+
+      @include mobile {
+        font-size: 13px;
+      }
+    }
+
+    @include mobile {
+      width: calc(100% - 70px);
     }
   }
 
