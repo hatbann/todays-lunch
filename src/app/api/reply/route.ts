@@ -54,6 +54,21 @@ export async function DELETE(req: NextRequest) {
     await dbConnect();
     const id = req.nextUrl.searchParams.get('id'); // comment _id
 
+    const reply = await Reply.findOne({
+      _id: id,
+    });
+
+    const org = reply?.org;
+    if (org) {
+      const orgComment = await Comment.findOne({ _id: org });
+      if (orgComment) {
+        orgComment.replies = orgComment.replies.filter(
+          (replyId: string) => replyId !== id
+        );
+        await orgComment.save();
+      }
+    }
+
     const res = await Reply.deleteOne({ _id: id });
     return NextResponse.json({ message: 'success' }, { status: 200 });
   } catch {

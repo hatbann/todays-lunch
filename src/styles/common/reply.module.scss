@@ -14,6 +14,23 @@
   .reply-content {
     font-size: 15px;
     color: $grayscale-black80;
+    width: calc(100% - 100px);
+    @include flex-column(flex-start, flex-end);
+    gap: 15px;
+
+    .content {
+      font-size: 15px;
+      color: $grayscale-black80;
+      width: 100%;
+      resize: none;
+      padding: 5px;
+
+      &:disabled {
+        border: none;
+        padding: 0;
+        background-color: $grayscale-black20;
+      }
+    }
   }
 
   .modal-btn {
@@ -65,5 +82,27 @@
         background-color: #f8f8f8;
       }
     }
+  }
+}
+
+.edit-mode-btn-container {
+  @include flex-row(flex-start, center);
+  gap: 10px;
+
+  button {
+    width: 40px;
+    height: 25px;
+    font-size: 13px;
+    border: 1px solid $grayscale-black60;
+    cursor: pointer;
+    background-color: $grayscale-black20;
+
+    &:hover {
+      background-color: $grayscale-black30;
+    }
+  }
+
+  &.disable {
+    display: none;
   }
 }

@@ -23,6 +23,7 @@ const Reply = ({
 
   const [isEditMode, setIsEditMode] = useState(false);
   const [isDeleteMode, setIsDeleteMode] = useState(false);
+  const [content, setContent] = useState(reply.content);
 
   useClickOutside(ref, () => {
     setIsReplyModalOpen(false);
@@ -31,7 +32,44 @@ const Reply = ({
   return (
     <div className={style['reply']} key={String(reply._id)}>
       <div className={style['comment-author']}>{reply.authorName}</div>
-      <div className={style['reply-content']}>{reply.content}</div>
+      <div className={style['reply-content']}>
+        <textarea
+          disabled={!isEditMode}
+          onChange={(e) => {
+            setContent(e.target.value);
+          }}
+          value={content}
+          className={style['content']}
+        >
+          {reply.content}
+        </textarea>
+        <div
+          className={
+            !isEditMode
+              ? `${style['edit-mode-btn-container']} ${style['disable']}`
+              : style['edit-mode-btn-container']
+          }
+        >
+          <button
+            className={style['cancel']}
+            onClick={() => {
+              setIsEditMode(false);
+              setContent(reply.content);
+            }}
+          >
+            취소
+          </button>
+          <button
+            className={style['edit']}
+            onClick={() => {
+              handleReplyEdit(reply._id, content);
+              setIsEditMode(false);
+            }}
+          >
+            수정
+          </button>
+        </div>
+      </div>
       {user.user_id === reply.author && (
         <div
           className={style['modal-btn']}
@@ -48,6 +86,7 @@ const Reply = ({
             className={style['btn']}
             onClick={() => {
               setIsEditMode(true);
+              setIsReplyModalOpen(false);
             }}
           >
             수정
@@ -56,6 +95,7 @@ const Reply = ({
             className={style['btn']}
             onClick={() => {
               setIsDeleteMode(true);
+              setIsReplyModalOpen(false);
             }}
           >
             삭제

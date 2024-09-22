@@ -121,6 +121,8 @@ const page = ({ params }: { params: { id: string } }) => {
 
         console.log(commentsRes);
         setComments(commentsRes);
+      } else {
+        setComments([]);
       }
     } catch (error) {
       setData(undefined);
@@ -310,6 +312,7 @@ const page = ({ params }: { params: { id: string } }) => {
             onChange={(e) => {
               setComment(e.target.value);
             }}
+            value={comment}
           />
           <button
             onClick={() => {

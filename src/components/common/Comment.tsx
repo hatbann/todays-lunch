@@ -43,6 +43,7 @@ const Comment = ({
             setContent(e.target.value);
           }}
           className={style['content']}
+          value={content}
         >
           {comment.content}
         </textarea>
@@ -69,6 +70,8 @@ const Comment = ({
             className={style['cancel']}
             onClick={() => {
               setIsEditMode(false);
+              console.log('here');
+              setContent(comment.content);
             }}
           >
             취소
