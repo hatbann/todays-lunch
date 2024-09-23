@@ -70,6 +70,23 @@
   }
 }
 
+.auto-signin {
+  width: 300px;
+  @include flex-row(flex-start, center);
+  gap: 10px;
+  margin-top: -10px;
+
+  input,
+  label {
+    cursor: pointer;
+  }
+
+  label {
+    font-size: 13px;
+    color: $grayscale-black70;
+  }
+}
+
 .btn-container {
   width: 100%;
   @include flex-row(center, center);

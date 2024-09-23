@@ -3,7 +3,7 @@
 "use client";
 
 import { useSinginForm } from "@/form/useLoginForm";
-import React from "react";
+import React, { useState } from "react";
 import style from "../../styles/pages/login/style.module.scss";
 import { useRecoilState } from "recoil";
 import { userState } from "@/states/user";
@@ -22,12 +22,14 @@ const page = () => {
   } = useSinginForm();
   const [user, setUser] = useRecoilState(userState);
   const router = useRouter();
+  const [isChecked, setIsChecked] = useState(false);
 
   const handleSubmit = async () => {
     try {
       const bodyData = {
         _id: getValues("userId"),
         password: getValues("password"),
+        checked: isChecked,
       };
 
       const res = await API.post<{ user: any; token: any; message: any }>(
@@ -87,6 +89,17 @@ const page = () => {
             )}
           </div>
         </form>
+        <div className={style["auto-signin"]}>
+          <input
+            type="checkbox"
+            id="auto-signin"
+            checked={isChecked}
+            onChange={(e) => {
+              setIsChecked(e.target.checked);
+            }}
+          />
+          <label htmlFor="auto-signin">로그인 상태 유지</label>
+        </div>
         <div className={style["btn-container"]}>
           <button type="button" onClick={handleSubmit}>
             로그인
